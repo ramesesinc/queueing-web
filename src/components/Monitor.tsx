@@ -27,14 +27,14 @@ const Monitor = () => {
 
   let title = "";
 
-  if (data?.group === "bpls") {
+  if (group === "bpls") {
     title = "Business Permit and Licensing System";
-  } else if (data?.group === "rpt") {
+  } else if (group === "rpt") {
     title = "Real Property Tax";
-  } else if (data?.group === "tc") {
+  } else if (group === "tc") {
     title = "Treasury and Collections"; // Assign the value directly
   } else {
-    title = `${data?.group || "Unknown Group"}`;
+    title = `${group || "Unknown Group"}`;
   }
 
   return (
