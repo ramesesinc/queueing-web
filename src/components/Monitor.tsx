@@ -6,14 +6,7 @@ import Header from "./layouts/Header";
 import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
-import Button from "./ui/Button";
 import ToggleBtn from "./ui/ToggleBtn";
-
-interface Message {
-  group: string;
-  section: string;
-  ticket: string;
-}
 
 const Monitor = () => {
   const router = useRouter();
@@ -64,8 +57,8 @@ const Monitor = () => {
         queueCounter={data?.countercode}
       />
       <QueueTv
-        src={""}
-        componentType="main-right"
+        src={"/videos/video.mp4"}
+        componentType={showVideo ? "main-right" : "none"} // Changed based on showVideo state
         layoutType="default" //there a two layouts. { default and custom }. To change the layout replace the layoutType=" " to default or custom.
       />
       <ToggleBtn
