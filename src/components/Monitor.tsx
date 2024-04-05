@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
+import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
+import Header from "./layouts/Header";
 import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
-import { useRouter } from "next/router";
-import Header from "./layouts/Header";
-import SocketContext from "../stores/socket";
 import Button from "./ui/Button";
 import ToggleBtn from "./ui/ToggleBtn";
 
@@ -18,15 +18,8 @@ interface Message {
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
-  const [messages, setMessages] = useState<Message[]>([]);
   const { data } = useContext<any>(SocketContext);
   const [showVideo, setShowVideo] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (Array.isArray(data)) {
-      setMessages((prevMessages) => [...prevMessages, ...data]);
-    }
-  }, [data]);
 
   useEffect(() => {
     const storedShowVideo = localStorage.getItem("showVideo");
@@ -61,17 +54,18 @@ const Monitor = () => {
     >
       <Header componentType="header" />
       <QueueGroup
-        numberOfItems={4}
+        numberOfItems={8}
         componentType="main-left"
-        orientation="vertical" // available properties horizontal and vertical
-        verticalRows={2}
-        horizontalCols={0}
-        queueSections={data?.section}
+        orientation="horizontal" // available properties horizontal and vertical
+        verticalRows={0}
+        horizontalCols={4}
+        queueType={data?.type}
         queueTicket={data?.ticket}
+        queueCounter={data?.countercode}
       />
       <QueueTv
-        src={"/videos/video.mp4"}
-        componentType={showVideo ? "main-right" : "none"} // Changed based on showVideo state
+        src={""}
+        componentType="main-right"
         layoutType="default" //there a two layouts. { default and custom }. To change the layout replace the layoutType=" " to default or custom.
       />
       <ToggleBtn
