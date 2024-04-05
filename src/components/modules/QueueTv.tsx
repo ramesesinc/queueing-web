@@ -48,14 +48,14 @@ const Video: React.FC<VideoProps> = ({
           <video
             ref={videoRef}
             controls={controls}
-            className="rounded-md"
+            className="rounded-t-md"
             width={1000}
             height={500}
           >
             <source src={src} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <div className=" absolute right-3 top-2">
+          <div className=" absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">
             <TimeDate componentType={undefined} />
           </div>
 

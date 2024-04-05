@@ -29,7 +29,7 @@ const Template: React.FC<TemplateProps> = ({
       justifyContent: "justify-start",
       flexDirection: "",
       header: "hidden",
-      footer: " absolute top-5 left-60",
+      footer: "absolute top-5 left-60",
       textColor: "text-white",
     },
   };
@@ -67,22 +67,39 @@ const Template: React.FC<TemplateProps> = ({
       <header className={`${justifyContent} ${header} flex p-4 bg-[#0a5366]`}>
         {renderMainContent("header")}
       </header>
+      {/* video switch to hide and show the video */}
+      {renderMainContent("videoswitch")}
 
       {/* Main Content */}
-      <main
-        className={`flex flex-1 items-center justify-center gap-10 p-4 ${flexDirection}`}
+      <div
+        className={`flex flex-1 items-center justify-center gap-10 p-4 ${
+          flexDirection || "flex-row"
+        }`}
       >
-        <div className=" basis-[30%] w-full ">
-          <SubTitle
-            text="now serving"
-            className={`text-[15px] leading-3 pl-6 uppercase ${textColor}`}
-          />
-          {renderMainContent("main-left")}
-        </div>
-        <div className=" basis-[70%] w-full relative">
-          {renderMainContent("main-right")}
-        </div>
-      </main>
+        {renderMainContent("main-left") && (
+          <div
+            className={`${
+              !renderMainContent("main-right") && "flex justify-center"
+            }`}
+          >
+            <SubTitle
+              text="now serving"
+              className={`text-[15px] leading-3 pl-6 uppercase ${textColor} `}
+            />
+            {renderMainContent("main-left")}
+          </div>
+        )}
+        {children &&
+          !React.Children.toArray(children).some(
+            (child) =>
+              React.isValidElement(child) &&
+              child.props.componentType === "none"
+          ) && (
+            <div className="basis-[70%] w-full relative">
+              {renderMainContent("main-right")}
+            </div>
+          )}
+      </div>
 
       {/* Footer */}
       <footer

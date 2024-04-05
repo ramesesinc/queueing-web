@@ -6,6 +6,8 @@ import QueueTv from "./modules/QueueTv";
 import { useRouter } from "next/router";
 import Header from "./layouts/Header";
 import SocketContext from "../stores/socket";
+import Button from "./ui/Button";
+import ToggleBtn from "./ui/ToggleBtn";
 
 interface Message {
   group: string;
@@ -18,12 +20,26 @@ const Monitor = () => {
   const group = router.query.group;
   const [messages, setMessages] = useState<Message[]>([]);
   const { data } = useContext<any>(SocketContext);
+  const [showVideo, setShowVideo] = useState<boolean>(true);
 
   useEffect(() => {
     if (Array.isArray(data)) {
       setMessages((prevMessages) => [...prevMessages, ...data]);
     }
   }, [data]);
+
+  useEffect(() => {
+    const storedShowVideo = localStorage.getItem("showVideo");
+    if (storedShowVideo !== null) {
+      setShowVideo(storedShowVideo === "true");
+    }
+  }, []);
+
+  const toggleVideo = () => {
+    const newShowVideo = !showVideo;
+    setShowVideo(newShowVideo);
+    localStorage.setItem("showVideo", newShowVideo.toString());
+  };
 
   let title = "";
 
@@ -32,7 +48,7 @@ const Monitor = () => {
   } else if (group === "rpt") {
     title = "Real Property Tax";
   } else if (group === "tc") {
-    title = "Treasury and Collections"; // Assign the value directly
+    title = "Treasury and Collections";
   } else {
     title = `${group || "Unknown Group"}`;
   }
@@ -55,10 +71,16 @@ const Monitor = () => {
       />
       <QueueTv
         src={"/videos/video.mp4"}
-        componentType="main-right"
+        componentType={showVideo ? "main-right" : "none"} // Changed based on showVideo state
         layoutType="default" //there a two layouts. { default and custom }. To change the layout replace the layoutType=" " to default or custom.
       />
-
+      <ToggleBtn
+        componentType="videoswitch"
+        onClick={toggleVideo}
+        isActive={showVideo}
+        className=" !absolute top-2 right-2"
+        text={showVideo ? "hide video" : "show video"}
+      />
       <Footer
         componentType="footer"
         groupName={title}
