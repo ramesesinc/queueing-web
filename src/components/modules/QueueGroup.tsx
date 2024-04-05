@@ -1,7 +1,6 @@
 // QueueGroup.tsx
-import React from "react";
-import QueueItem, { QueueItemProps } from "./QueueItem";
-import { items } from "../../stores/queueitems";
+import React, { useEffect, useState } from "react";
+import QueueItem from "./QueueItem";
 
 interface QueueGroupsProps {
   numberOfItems: number;
@@ -9,8 +8,9 @@ interface QueueGroupsProps {
   orientation: "vertical" | "horizontal";
   verticalRows: number;
   horizontalCols: number;
-  queueSections?: number;
-  queueTicket?: number;
+  queueType: string;
+  queueCounter: string;
+  queueTicket: string;
 }
 
 const QueueGroups: React.FC<QueueGroupsProps> = ({
@@ -19,17 +19,10 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   orientation = "vertical",
   verticalRows,
   horizontalCols,
-  queueSections,
+  queueType,
+  queueCounter,
   queueTicket,
 }) => {
-  const itemsToDisplay: QueueItemProps[] = Array.from(
-    { length: numberOfItems },
-    (_, index) => ({
-      data: items[index] || { subtitle: "" },
-      counter: index + 1,
-    })
-  );
-
   const containerStyle: React.CSSProperties = {
     display: "grid",
     gap: "10px",
@@ -42,15 +35,75 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
     gridAutoFlow: orientation === "horizontal" ? "column" : undefined,
   };
 
+  const [windowTickets, setWindowTickets] = useState<string[]>(
+    Array(numberOfItems).fill("")
+  );
+
+  useEffect(() => {
+    if (queueType && queueCounter && queueTicket) {
+      const windowIndex = parseInt(queueCounter.substring(1)) - 1; // Extract window number from queueCounter
+      const newWindowTickets = [...windowTickets];
+
+      switch (queueType) {
+        case "TAKE_NUMBER":
+          newWindowTickets[windowIndex] = queueTicket;
+
+          const intervalId = setInterval(() => {
+            setWindowTickets((prevWindowTickets) => {
+              const newWindowTickets = [...prevWindowTickets];
+              newWindowTickets[windowIndex] =
+                newWindowTickets[windowIndex] === "" ? queueTicket : "";
+              return newWindowTickets;
+            });
+          }, 300);
+
+          setTimeout(() => {
+            clearInterval(intervalId);
+          }, 3000);
+          break;
+
+        case "BUZZ_NUMBER":
+          // Blink the ticket number if it matches the counter code
+          if (newWindowTickets[windowIndex] === queueTicket) {
+            const buzzIntervalId = setInterval(() => {
+              setWindowTickets((prevWindowTickets) => {
+                const newWindowTickets = [...prevWindowTickets];
+                newWindowTickets[windowIndex] =
+                  newWindowTickets[windowIndex] === "" ? queueTicket : "";
+                return newWindowTickets;
+              });
+            }, 300);
+
+            setTimeout(() => {
+              clearInterval(buzzIntervalId);
+            }, 3000);
+          }
+          break;
+
+        case "CONSUME_NUMBER":
+          // Delete the ticket number if it matches the counter code
+          if (newWindowTickets[windowIndex] === queueTicket) {
+            newWindowTickets[windowIndex] = "";
+          }
+          break;
+
+        default:
+          // Unknown type, do nothing
+          break;
+      }
+
+      setWindowTickets(newWindowTickets);
+    }
+  }, [queueType, queueCounter, queueTicket]);
+
   return (
     <div id={componentType} className="p-5 flex flex-col gap-10">
       <div style={containerStyle}>
-        {itemsToDisplay.map((item, index) => (
+        {windowTickets.map((ticket, index) => (
           <QueueItem
-            key={index + 1}
-            {...item}
-            queueSection={queueSections}
-            queueTicket={queueTicket}
+            key={index}
+            counter={`W${index + 1}`}
+            queueTicket={ticket}
           />
         ))}
       </div>

@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
+import Header from "./layouts/Header";
 import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
-import { useRouter } from "next/router";
-import Header from "./layouts/Header";
-import SocketContext from "../stores/socket";
 
 interface Message {
   group: string;
@@ -16,14 +16,7 @@ interface Message {
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
-  const [messages, setMessages] = useState<Message[]>([]);
   const { data } = useContext<any>(SocketContext);
-
-  useEffect(() => {
-    if (Array.isArray(data)) {
-      setMessages((prevMessages) => [...prevMessages, ...data]);
-    }
-  }, [data]);
 
   let title = "";
 
@@ -45,16 +38,17 @@ const Monitor = () => {
     >
       <Header componentType="header" />
       <QueueGroup
-        numberOfItems={4}
+        numberOfItems={8}
         componentType="main-left"
-        orientation="vertical" // available properties horizontal and vertical
-        verticalRows={2}
-        horizontalCols={0}
-        queueSections={data?.section}
+        orientation="horizontal" // available properties horizontal and vertical
+        verticalRows={0}
+        horizontalCols={4}
+        queueType={data?.type}
         queueTicket={data?.ticket}
+        queueCounter={data?.countercode}
       />
       <QueueTv
-        src={"/videos/video.mp4"}
+        src={""}
         componentType="main-right"
         layoutType="default" //there a two layouts. { default and custom }. To change the layout replace the layoutType=" " to default or custom.
       />

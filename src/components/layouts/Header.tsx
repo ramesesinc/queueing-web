@@ -1,5 +1,5 @@
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 type HeaderProps = {
   componentType?: string | undefined;
@@ -11,9 +11,11 @@ const Header: React.FC<HeaderProps> = ({ componentType }) => {
       <Image
         src={"/images/etracs-logo.png"}
         alt={"etracs logo"}
-        width={150}
-        height={150}
-        quality={100}
+        width={0}
+        height={0}
+        style={{ width: 150, height: 50 }}
+        priority
+        unoptimized
       />
     </div>
   );
