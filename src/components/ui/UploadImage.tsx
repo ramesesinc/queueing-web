@@ -26,7 +26,7 @@ const ImageUpload = ({
   };
 
   return (
-    <div className="flex flex-col items-center text-[12px] pl-5 p-5">
+    <div className="flex flex-col items-center text-[12px] p-2">
       <input
         type="file"
         accept="image/*"

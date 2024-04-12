@@ -93,17 +93,17 @@ export const Settings: React.FC<SettingProps> = ({
       <ColorPicker
         className="header"
         onChangeColor={handleHeaderColorChange}
-        label="header"
+        label="header background color"
       />
       <ColorPicker
         className="header"
         onChangeColor={handleMainColorChange}
-        label="main"
+        label="main background color"
       />
       <ColorPicker
         className="footer"
         onChangeColor={handleFooterColorChange}
-        label="footer"
+        label="footer background color"
       />
       <Title text={"Windows"} className="text-lg uppercase" />
       <Button
@@ -170,6 +170,10 @@ export const Settings: React.FC<SettingProps> = ({
         }}
         text="Save"
         className="text-[10px] !px-3 !py-1 !rounded leading-none absolute bottom-2 right-2 hover:bg-slate-500 transition duration-200"
+      />
+      <Title
+        text={"background image"}
+        className="text-[16px] leading-none uppercase"
       />
       <ImageUpload onImageUploaded={handleImageUploaded} />
       {children}
