@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 function Button({
@@ -10,6 +10,7 @@ function Button({
   display,
   value,
   icon,
+  componentType,
 }: {
   text?: string;
   onClick?: () => void;
@@ -19,7 +20,20 @@ function Button({
   display?: string;
   value?: string;
   icon?: React.ReactNode;
+  componentType?: string;
 }) {
+  const [clicked, setClicked] = useState(false);
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    setClicked(true);
+    setTimeout(() => {
+      setClicked(false);
+    }, 350);
+  };
+
   if (href) {
     return (
       <Link
@@ -33,8 +47,11 @@ function Button({
 
   return (
     <button
-      className={`text-2xl px-20 py-4 rounded-xl border border-gray-400 uppercase ${className} ${display}`}
-      onClick={onClick}
+      id={componentType}
+      className={`text-2xl px-20 py-4 rounded-xl border border-gray-400 uppercase ${className} ${display} ${
+        clicked ? "transform scale-90 transition-transform duration-300" : ""
+      }`}
+      onClick={handleClick}
     >
       {icon}
       {text}

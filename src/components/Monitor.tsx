@@ -1,31 +1,36 @@
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
 import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
-import ToggleBtn from "./ui/ToggleBtn";
+import { Settings, OpenSettings } from "./layouts/Settings";
+import { useColorContext } from "../service/context/color-context";
+import { useWindowContext } from "../service/context/window-context";
+import { useVideoContext } from "../service/context/video-context";
+import { useBackgroundImageContext } from "../service/context/image-context";
 
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
   const { data } = useContext<any>(SocketContext);
-  const [showVideo, setShowVideo] = useState<boolean>(true);
+  const [isOpenSettings, setIsOpenSettings] = useState(false);
+  const {
+    sentNumberOfWindows,
+    sentNumberOfVerticalRows,
+    sentNumberOfHorizontalCols,
+    orientation,
+  } = useWindowContext();
+  const { headerColor, mainColor, footerColor } = useColorContext();
+  const { showVideo } = useVideoContext();
 
-  useEffect(() => {
-    const storedShowVideo = localStorage.getItem("showVideo");
-    if (storedShowVideo !== null) {
-      setShowVideo(storedShowVideo === "true");
-    }
-  }, []);
-
-  const toggleVideo = () => {
-    const newShowVideo = !showVideo;
-    setShowVideo(newShowVideo);
-    localStorage.setItem("showVideo", newShowVideo.toString());
+  const toggleSettings = () => {
+    setIsOpenSettings(!isOpenSettings);
   };
+
+  const { mainBackground } = useBackgroundImageContext();
 
   let title = "";
 
@@ -43,36 +48,54 @@ const Monitor = () => {
     <Template
       title="Home Page"
       description="Welcome to our website!"
-      templateType="template1" //there a two templates. { template1 and template2 }. To change the template replace the templateType=" " to template1 or template2.
+      templateType="template1"
+      headerStyle={{ backgroundColor: headerColor }}
+      mainStyle={{
+        backgroundColor: mainColor,
+        backgroundImage: mainBackground ? `url(${mainBackground})` : undefined,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+      }}
+      footerStyle={{ backgroundColor: footerColor }}
+      headerClass="header"
+      mainClass="main"
+      footerClass="footer"
     >
-      <Header componentType="header" />
-      <QueueGroup
-        numberOfItems={8}
-        componentType="main-left"
-        orientation="horizontal" // available properties horizontal and vertical
-        verticalRows={0}
-        horizontalCols={4}
-        queueType={data?.type}
-        queueTicket={data?.ticket}
-        queueCounter={data?.countercode}
-      />
-      <QueueTv
-        src={"/videos/video.mp4"}
-        componentType={showVideo ? "main-right" : "none"} // Changed based on showVideo state
-        layoutType="default" //there a two layouts. { default and custom }. To change the layout replace the layoutType=" " to default or custom.
-      />
-      <ToggleBtn
-        componentType="videoswitch"
-        onClick={toggleVideo}
-        isActive={showVideo}
-        className=" !absolute top-2 right-2"
-        text={showVideo ? "hide video" : "show video"}
-      />
-      <Footer
-        componentType="footer"
+      <Header
+        componentType="header"
         groupName={title}
         groupAddr={"Cebu City"}
       />
+      {sentNumberOfWindows !== null &&
+      sentNumberOfHorizontalCols !== null &&
+      sentNumberOfVerticalRows !== null ? (
+        <QueueGroup
+          numberOfItems={Math.max(sentNumberOfWindows || 0)}
+          componentType="main-left"
+          orientation={orientation}
+          verticalRows={Math.max(sentNumberOfVerticalRows || 0)}
+          horizontalCols={Math.max(sentNumberOfHorizontalCols || 0)}
+          queueType={data?.type}
+          queueTicket={data?.ticket}
+          queueCounter={data?.countercode}
+        />
+      ) : null}
+
+      <QueueTv
+        src={"/videos/video.mp4"}
+        componentType={showVideo ? "main-right" : "none"}
+        layoutType="default"
+      />
+      <Footer componentType="footer" />
+      <Settings
+        isOpen={isOpenSettings}
+        toggleSidebar={toggleSettings}
+        componentType="settings"
+      />
+      <OpenSettings componentType="settings" onClick={toggleSettings}>
+        {isOpenSettings ? "Close" : "Open"}
+      </OpenSettings>
     </Template>
   );
 };

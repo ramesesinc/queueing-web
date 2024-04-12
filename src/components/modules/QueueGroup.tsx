@@ -35,8 +35,10 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
     gridAutoFlow: orientation === "horizontal" ? "column" : undefined,
   };
 
+  const numItems = typeof numberOfItems === "number" ? numberOfItems : 0;
+
   const [windowTickets, setWindowTickets] = useState<string[]>(
-    Array(numberOfItems).fill("")
+    Array(numItems).fill("")
   );
 
   useEffect(() => {

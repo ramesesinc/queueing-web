@@ -4,7 +4,7 @@ interface ToggleButtonProps {
   text?: string;
   isActive: boolean;
   onClick: () => void;
-  componentType: string;
+  componentType?: string;
   className?: string | undefined;
 }
 
@@ -56,7 +56,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
         </span>
       </button>
       <p
-        className={`text-[6px] uppercase pt-1 ${
+        className={`text-[7px] uppercase pt-1 ${
           isActive ? "text-sky-300" : "text-gray-200"
         }`}
       >

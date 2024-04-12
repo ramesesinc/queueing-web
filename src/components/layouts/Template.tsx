@@ -6,7 +6,13 @@ interface TemplateProps {
   title: string;
   description?: string;
   templateType: "template1" | "template2";
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  headerStyle?: React.CSSProperties;
+  mainStyle?: React.CSSProperties;
+  footerStyle?: React.CSSProperties;
+  headerClass?: string;
+  mainClass?: string;
+  footerClass?: string;
 }
 
 const Template: React.FC<TemplateProps> = ({
@@ -14,10 +20,16 @@ const Template: React.FC<TemplateProps> = ({
   description,
   templateType,
   children,
+  headerStyle,
+  mainStyle,
+  footerStyle,
+  headerClass,
+  mainClass,
+  footerClass,
 }) => {
   const templateStyles = {
     template1: {
-      bgColor: "bg-white",
+      bgColors: "bg-white",
       justifyContent: "justify-center",
       flexDirection: "flex-row",
       header: "",
@@ -25,7 +37,7 @@ const Template: React.FC<TemplateProps> = ({
       textColor: "text-black",
     },
     template2: {
-      bgColor: "bg-[#0a5366]",
+      bgColors: "bg-[#0a5366]",
       justifyContent: "justify-start",
       flexDirection: "",
       header: "hidden",
@@ -34,7 +46,7 @@ const Template: React.FC<TemplateProps> = ({
     },
   };
 
-  const { bgColor, justifyContent, flexDirection, header, footer, textColor } =
+  const { bgColors, justifyContent, flexDirection, header, footer, textColor } =
     templateStyles[templateType] || templateStyles.template1;
 
   const renderMainContent = (type: string) => {
@@ -57,25 +69,42 @@ const Template: React.FC<TemplateProps> = ({
   };
 
   return (
-    <div className={`min-h-screen ${bgColor} flex flex-col`}>
+    <div className={`min-h-screen ${bgColors}  flex flex-col`}>
       <Head>
         <title>{title}</title>
         {description && <meta name="description" content={description} />}
       </Head>
 
       {/* Header */}
-      <header className={`${justifyContent} ${header} flex p-4 bg-[#0a5366]`}>
+      <header
+        className={`${justifyContent} ${headerClass} flex p-4 bg-[#0a5366]`}
+        style={headerStyle}
+      >
         {renderMainContent("header")}
       </header>
       {/* video switch to hide and show the video */}
       {renderMainContent("videoswitch")}
 
       {/* Main Content */}
+
       <div
-        className={`flex flex-1 items-center justify-center gap-10 p-4 ${
+        className={`flex flex-1 items-center justify-center gap-10 p-4 ${mainClass} ${
           flexDirection || "flex-row"
         }`}
+        style={mainStyle}
       >
+        {children &&
+          !React.Children.toArray(children).some(
+            (child) =>
+              React.isValidElement(child) &&
+              child.props.componentType === "none"
+          ) && (
+            <div className="basis-[70%] w-full relative">
+              {renderMainContent("main-right")}
+            </div>
+          )}
+
+        {/* main-left */}
         {renderMainContent("main-left") && (
           <div
             className={`${
@@ -89,23 +118,15 @@ const Template: React.FC<TemplateProps> = ({
             {renderMainContent("main-left")}
           </div>
         )}
-        {children &&
-          !React.Children.toArray(children).some(
-            (child) =>
-              React.isValidElement(child) &&
-              child.props.componentType === "none"
-          ) && (
-            <div className="basis-[70%] w-full relative">
-              {renderMainContent("main-right")}
-            </div>
-          )}
       </div>
 
       {/* Footer */}
       <footer
-        className={`${justifyContent} ${footer} flex p-4 text-center bg-[#0a5366]`}
+        style={footerStyle}
+        className={`${justifyContent} ${footerClass} relative flex p-4 text-center bg-[#0a5366]`}
       >
         {renderMainContent("footer")}
+        {renderMainContent("settings")}
       </footer>
     </div>
   );

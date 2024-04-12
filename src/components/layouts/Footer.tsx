@@ -1,30 +1,24 @@
+import Image from "next/image";
 import React from "react";
-import Title from "../ui/Title";
-import SubTitle from "../ui/SubTitle";
 
-type FooterProps = {
+type HeaderProps = {
   componentType?: string | undefined;
-  groupName: string | string[] | undefined;
-  groupAddr: string | undefined;
 };
 
-const Footer: React.FC<FooterProps> = ({
-  componentType,
-  groupName,
-  groupAddr,
-}) => {
+const Header: React.FC<HeaderProps> = ({ componentType }) => {
   return (
-    <div id={componentType} className="text-white">
-      <Title
-        text={groupName || ""}
-        className="uppercase text-[18px] leading-[15px]"
-      />
-      <SubTitle
-        text={groupAddr || ""}
-        className="font-normal uppercase text-[14px] leading-[20px]"
+    <div id={componentType}>
+      <Image
+        src={"/images/etracs-logo.png"}
+        alt={"etracs logo"}
+        width={0}
+        height={0}
+        style={{ width: 150, height: 50 }}
+        priority
+        unoptimized
       />
     </div>
   );
 };
 
-export default Footer;
+export default Header;
