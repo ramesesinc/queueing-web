@@ -41,7 +41,10 @@ const Video: React.FC<VideoProps> = ({
             <source src={src} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <TimeDate componentType={undefined} />
+          <TimeDate
+            componentType={undefined}
+            className="bg-gray-200 bg-opacity-50 rounded px-2"
+          />
         </div>
       ) : (
         <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg ">

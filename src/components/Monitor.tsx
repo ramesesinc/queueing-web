@@ -30,7 +30,7 @@ const Monitor = () => {
     setIsOpenSettings(!isOpenSettings);
   };
 
-  const { mainBackground } = useBackgroundImageContext();
+  const { mainBackground, backgroundSize } = useBackgroundImageContext();
 
   let title = "";
 
@@ -55,7 +55,7 @@ const Monitor = () => {
         backgroundImage: mainBackground ? `url(${mainBackground})` : undefined,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        backgroundSize: "contain",
+        backgroundSize: backgroundSize,
       }}
       footerStyle={{ backgroundColor: footerColor }}
       headerClass="header"

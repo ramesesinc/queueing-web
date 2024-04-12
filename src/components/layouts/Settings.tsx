@@ -11,6 +11,9 @@ import ImageUpload from "../ui/UploadImage";
 import ColorPicker from "./ColorPicker";
 import Button from "../ui/Button";
 import { useBackgroundImageContext } from "../../service/context/image-context";
+import { IoClose } from "react-icons/io5";
+import Flex from "../ui/Flex";
+import SubTitle from "../ui/SubTitle";
 
 interface SettingProps {
   isOpen: boolean;
@@ -28,6 +31,7 @@ interface OpenSettingsProps {
 export const Settings: React.FC<SettingProps> = ({
   isOpen,
   componentType,
+  toggleSidebar,
   children,
 }) => {
   const {
@@ -58,7 +62,17 @@ export const Settings: React.FC<SettingProps> = ({
 
   const { showVideo, toggleVideo, savedShowVideo } = useVideoContext();
 
-  const { mainBackground, handleImageUploaded } = useBackgroundImageContext();
+  const {
+    mainBackground,
+    handleImageUploaded,
+    setBackgroundSize,
+    fillClicked,
+    setFillClicked,
+    containClicked,
+    setContainClicked,
+    coverClicked,
+    setCoverClicked,
+  } = useBackgroundImageContext();
 
   const saveSettingsToLocalStorage = () => {
     localStorage.setItem("headerColor", headerColor);
@@ -82,6 +96,10 @@ export const Settings: React.FC<SettingProps> = ({
     window.location.reload();
   };
 
+  const setBackgroundSizeHandler = (size: string) => {
+    setBackgroundSize(size);
+  };
+
   return (
     <div
       id={componentType}
@@ -89,7 +107,17 @@ export const Settings: React.FC<SettingProps> = ({
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      <Title text={"Colors"} className="text-lg uppercase" />
+      <button
+        onClick={toggleSidebar}
+        className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition duration-300"
+      >
+        <IoClose size={20} />
+      </button>
+
+      <Title
+        text={"Colors"}
+        className="text-lg uppercase border-b-2 px-2 py-1 leading-none"
+      />
       <ColorPicker
         className="header"
         onChangeColor={handleHeaderColorChange}
@@ -105,21 +133,27 @@ export const Settings: React.FC<SettingProps> = ({
         onChangeColor={handleFooterColorChange}
         label="footer background color"
       />
-      <Title text={"Windows"} className="text-lg uppercase" />
-      <Button
-        text="vertical"
-        className={`!p-1 !px-5 rounded-sm text-[8px] leading-none ${
-          isVerticalClicked ? "bg-slate-500" : ""
-        }`}
-        onClick={handleVerticalClick}
+      <Title
+        text={"Windows"}
+        className="text-lg uppercase border-b-2 px-2 py-1 leading-none"
       />
-      <Button
-        text="horizontal"
-        className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
-          isHorizontalClicked ? "bg-slate-500" : ""
-        }`}
-        onClick={handleHorizontalClick}
-      />
+      <Flex className="gap-2">
+        <Button
+          text="vertical"
+          className={`!p-1 !px-5 rounded-sm text-[8px] leading-none ${
+            isVerticalClicked ? "bg-slate-500" : ""
+          }`}
+          onClick={handleVerticalClick}
+        />
+        <Button
+          text="horizontal"
+          className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
+            isHorizontalClicked ? "bg-slate-500" : ""
+          }`}
+          onClick={handleHorizontalClick}
+        />
+      </Flex>
+
       <TextBox
         value={sentNumberOfWindows}
         label="number of windows"
@@ -156,7 +190,10 @@ export const Settings: React.FC<SettingProps> = ({
         disabled={isVerticalClicked}
       />
 
-      <Title text={"video"} className="text-lg uppercase" />
+      <Title
+        text={"video"}
+        className="text-lg uppercase border-b-2 px-2 leading-none py-1"
+      />
       <ToggleBtn
         onClick={toggleVideo}
         isActive={showVideo}
@@ -173,8 +210,50 @@ export const Settings: React.FC<SettingProps> = ({
       />
       <Title
         text={"background image"}
-        className="text-[16px] leading-none uppercase"
+        className="text-[16px] leading-none uppercase border-b-2 px-2 py-1"
       />
+      <SubTitle
+        text={"background size"}
+        className="uppercase text-[8px] leading-none !p-0"
+      />
+      <Flex className="gap-2">
+        <Button
+          text="fill"
+          className={`!p-1 !px-5 rounded-sm text-[8px] leading-none ${
+            fillClicked ? "bg-slate-500" : ""
+          }`}
+          onClick={() => {
+            setBackgroundSizeHandler("fill");
+            setFillClicked(true);
+            setContainClicked(false);
+            setCoverClicked(false);
+          }}
+        />
+        <Button
+          text="contain"
+          className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
+            containClicked ? "bg-slate-500" : ""
+          }`}
+          onClick={() => {
+            setBackgroundSizeHandler("contain");
+            setFillClicked(false);
+            setContainClicked(true);
+            setCoverClicked(false);
+          }}
+        />
+        <Button
+          text="cover"
+          className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
+            coverClicked ? "bg-slate-500" : ""
+          }`}
+          onClick={() => {
+            setBackgroundSizeHandler("cover");
+            setFillClicked(false);
+            setContainClicked(false);
+            setCoverClicked(true);
+          }}
+        />
+      </Flex>
       <ImageUpload onImageUploaded={handleImageUploaded} />
       {children}
     </div>

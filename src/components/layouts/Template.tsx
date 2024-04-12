@@ -40,8 +40,8 @@ const Template: React.FC<TemplateProps> = ({
       bgColors: "bg-[#0a5366]",
       justifyContent: "justify-start",
       flexDirection: "",
-      header: "hidden",
-      footer: "absolute top-5 left-60",
+      header: "",
+      footer: "",
       textColor: "text-white",
     },
   };
@@ -77,7 +77,7 @@ const Template: React.FC<TemplateProps> = ({
 
       {/* Header */}
       <header
-        className={`${justifyContent} ${headerClass} flex p-4 bg-[#0a5366]`}
+        className={`${justifyContent} ${headerClass} ${header} flex p-4 bg-[#0a5366]`}
         style={headerStyle}
       >
         {renderMainContent("header")}
@@ -113,7 +113,7 @@ const Template: React.FC<TemplateProps> = ({
           >
             <SubTitle
               text="now serving"
-              className={`text-[15px] leading-3 pl-6 uppercase ${textColor} `}
+              className={`text-[15px] leading-3 ml-5 !font-bold uppercase w-[20%] text-center ${textColor} bg-gray-200 bg-opacity-50 rounded p-2`}
             />
             {renderMainContent("main-left")}
           </div>
@@ -123,7 +123,7 @@ const Template: React.FC<TemplateProps> = ({
       {/* Footer */}
       <footer
         style={footerStyle}
-        className={`${justifyContent} ${footerClass} relative flex p-4 text-center bg-[#0a5366]`}
+        className={`${justifyContent} ${footerClass} ${footer} relative flex p-4 text-center bg-[#0a5366]`}
       >
         {renderMainContent("footer")}
         {renderMainContent("settings")}
