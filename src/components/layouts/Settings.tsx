@@ -146,16 +146,19 @@ export const Settings: React.FC<SettingProps> = ({
             className="header"
             onChangeColor={handleHeaderColorChange}
             label="header background color"
+            initialColor={headerColor}
           />
           <ColorPicker
             className="header"
             onChangeColor={handleMainColorChange}
             label="main background color"
+            initialColor={mainColor}
           />
           <ColorPicker
             className="footer"
             onChangeColor={handleFooterColorChange}
             label="footer background color"
+            initialColor={footerColor}
           />
         </div>
 
