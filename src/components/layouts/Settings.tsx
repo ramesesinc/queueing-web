@@ -1,5 +1,5 @@
 // components/Sidebar.tsx
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useColorContext } from "../../service/context/color-context";
 import { useWindowContext } from "../../service/context/window-context";
@@ -52,7 +52,6 @@ export const Settings: React.FC<SettingProps> = ({
     handleVerticalClick,
     handleHorizontalClick,
   } = useWindowContext();
-
   const {
     headerColor,
     mainColor,
@@ -61,9 +60,9 @@ export const Settings: React.FC<SettingProps> = ({
     handleMainColorChange,
     handleFooterColorChange,
   } = useColorContext();
-
   const { showVideo, toggleVideo, savedShowVideo } = useVideoContext();
-
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const { handleImageLogoUploaded } = useLogoImageContext();
   const {
     mainBackground,
     handleImageUploaded,
@@ -76,7 +75,26 @@ export const Settings: React.FC<SettingProps> = ({
     setCoverClicked,
   } = useBackgroundImageContext();
 
-  const { handleImageLogoUploaded } = useLogoImageContext();
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        toggleSidebar(); // Close the sidebar if clicked outside
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpen, toggleSidebar]);
 
   const saveSettingsToLocalStorage = () => {
     localStorage.setItem("headerColor", headerColor);
@@ -106,8 +124,9 @@ export const Settings: React.FC<SettingProps> = ({
 
   return (
     <div
+      ref={sidebarRef}
       id={componentType}
-      className={`h-screen w-[25%] bg-gray-600 text-white flex flex-col gap-2 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
+      className={`h-screen w-[25%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -140,7 +159,7 @@ export const Settings: React.FC<SettingProps> = ({
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-2 bg-gray-800 p-2 rounded ">
+        <div className="flex flex-col items-center justify-center w-[170px] gap-2 bg-gray-800 p-2 rounded ">
           <Title
             text={"Windows"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
@@ -173,7 +192,7 @@ export const Settings: React.FC<SettingProps> = ({
           />
           <TextBox
             value={sentNumberOfVerticalRows}
-            label="vertical rows"
+            label="vertical columns"
             placeholder={`${
               orientation === "horizontal"
                 ? `${sentNumberOfVerticalRows}`
@@ -185,7 +204,7 @@ export const Settings: React.FC<SettingProps> = ({
           />
           <TextBox
             value={sentNumberOfHorizontalCols}
-            label="horizontal columns"
+            label="horizontal rows"
             placeholder={` ${
               orientation === "vertical"
                 ? `${sentNumberOfHorizontalCols}`
@@ -197,8 +216,8 @@ export const Settings: React.FC<SettingProps> = ({
           />
         </div>
       </div>
-      <div className="flex gap-5">
-        <div className="bg-gray-800 flex w-[170px] flex-col gap-2 p-2 justify-center items-center rounded">
+      <div className="flex items-start gap-4">
+        <div className="bg-gray-800 flex w-[170px] h-[195px] flex-col gap-2 p-2 justify-start items-center rounded">
           <Title
             text={"background image"}
             className="text-[12px] leading-none uppercase border-b-2 px-2 py-1"
@@ -249,7 +268,7 @@ export const Settings: React.FC<SettingProps> = ({
           </Flex>
         </div>
 
-        <div className="bg-gray-800 w-[170px] flex flex-col gap-2 p-2 justify-start items-center rounded">
+        <div className="bg-gray-800 w-[170px] h-[195px] flex flex-col gap-2 p-2 justify-start items-center rounded">
           <Title
             text={"Logo"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
