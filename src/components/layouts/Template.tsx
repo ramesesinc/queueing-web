@@ -77,7 +77,7 @@ const Template: React.FC<TemplateProps> = ({
 
       {/* Header */}
       <header
-        className={`${justifyContent} ${headerClass} ${header} flex p-4 bg-[#0a5366]`}
+        className={`${justifyContent} ${headerClass} ${header} py-2 bg-[#0a5366]`}
         style={headerStyle}
       >
         {renderMainContent("header")}
@@ -123,7 +123,7 @@ const Template: React.FC<TemplateProps> = ({
       {/* Footer */}
       <footer
         style={footerStyle}
-        className={`${justifyContent} ${footerClass} ${footer} relative flex p-4 text-center bg-[#0a5366]`}
+        className={`${justifyContent} ${footerClass} ${footer} relative flex p-2 text-center bg-[#0a5366]`}
       >
         {renderMainContent("footer")}
         {renderMainContent("settings")}

@@ -66,16 +66,16 @@ const Video: React.FC<VideoProps> = ({
             <Image
               src={"/images/etracs-logo.png"}
               alt={"etracs logo"}
-              width={150}
-              height={150}
+              width={130}
+              height={130}
               quality={100}
             />
             <div className="bg-[#0a5366] rounded-lg p-2">
               <Image
                 src={"/images/rameses-logo.png"}
                 alt={"etracs logo"}
-                width={130}
-                height={130}
+                width={110}
+                height={110}
                 quality={100}
               />
             </div>

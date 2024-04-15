@@ -7,13 +7,15 @@ import { useVideoContext } from "../../service/context/video-context";
 import TextBox from "../ui/TextBox";
 import Title from "../ui/Title";
 import ToggleBtn from "../ui/ToggleBtn";
-import ImageUpload from "../ui/UploadImage";
+import UploadImage from "../ui/UploadBgImage";
 import ColorPicker from "./ColorPicker";
 import Button from "../ui/Button";
-import { useBackgroundImageContext } from "../../service/context/image-context";
+import { useBackgroundImageContext } from "../../service/context/bgimage-context";
+import { useLogoImageContext } from "../../service/context/logo-context";
 import { IoClose } from "react-icons/io5";
 import Flex from "../ui/Flex";
 import SubTitle from "../ui/SubTitle";
+import UploadLogo from "../ui/UploadLogo";
 
 interface SettingProps {
   isOpen: boolean;
@@ -66,13 +68,15 @@ export const Settings: React.FC<SettingProps> = ({
     mainBackground,
     handleImageUploaded,
     setBackgroundSize,
-    fillClicked,
-    setFillClicked,
+    autoClicked,
+    setAutoClicked,
     containClicked,
     setContainClicked,
     coverClicked,
     setCoverClicked,
   } = useBackgroundImageContext();
+
+  const { handleImageLogoUploaded } = useLogoImageContext();
 
   const saveSettingsToLocalStorage = () => {
     localStorage.setItem("headerColor", headerColor);
@@ -103,7 +107,7 @@ export const Settings: React.FC<SettingProps> = ({
   return (
     <div
       id={componentType}
-      className={`h-screen w-[20%] bg-gray-800 text-white flex flex-col gap-2 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
+      className={`h-screen w-[25%] bg-gray-600 text-white flex flex-col gap-2 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -113,94 +117,160 @@ export const Settings: React.FC<SettingProps> = ({
       >
         <IoClose size={20} />
       </button>
+      <div className="flex items-start gap-4 pt-5">
+        <div className="flex flex-col items-center justify-start gap-1 h-[195px] w-[170px] bg-gray-800 p-2 rounded">
+          <Title
+            text={"Colors"}
+            className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
+          />
+          <ColorPicker
+            className="header"
+            onChangeColor={handleHeaderColorChange}
+            label="header background color"
+          />
+          <ColorPicker
+            className="header"
+            onChangeColor={handleMainColorChange}
+            label="main background color"
+          />
+          <ColorPicker
+            className="footer"
+            onChangeColor={handleFooterColorChange}
+            label="footer background color"
+          />
+        </div>
 
-      <Title
-        text={"Colors"}
-        className="text-lg uppercase border-b-2 px-2 py-1 leading-none"
-      />
-      <ColorPicker
-        className="header"
-        onChangeColor={handleHeaderColorChange}
-        label="header background color"
-      />
-      <ColorPicker
-        className="header"
-        onChangeColor={handleMainColorChange}
-        label="main background color"
-      />
-      <ColorPicker
-        className="footer"
-        onChangeColor={handleFooterColorChange}
-        label="footer background color"
-      />
-      <Title
-        text={"Windows"}
-        className="text-lg uppercase border-b-2 px-2 py-1 leading-none"
-      />
-      <Flex className="gap-2">
-        <Button
-          text="vertical"
-          className={`!p-1 !px-5 rounded-sm text-[8px] leading-none ${
-            isVerticalClicked ? "bg-slate-500" : ""
-          }`}
-          onClick={handleVerticalClick}
-        />
-        <Button
-          text="horizontal"
-          className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
-            isHorizontalClicked ? "bg-slate-500" : ""
-          }`}
-          onClick={handleHorizontalClick}
-        />
-      </Flex>
+        <div className="flex flex-col items-center justify-center gap-2 bg-gray-800 p-2 rounded ">
+          <Title
+            text={"Windows"}
+            className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
+          />
+          <Flex className="gap-2">
+            <Button
+              text="vertical"
+              className={`!p-1 !px-5 rounded-sm text-[8px] leading-none ${
+                isVerticalClicked ? "bg-slate-500" : ""
+              }`}
+              onClick={handleVerticalClick}
+            />
+            <Button
+              text="horizontal"
+              className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
+                isHorizontalClicked ? "bg-slate-500" : ""
+              }`}
+              onClick={handleHorizontalClick}
+            />
+          </Flex>
+          <TextBox
+            value={sentNumberOfWindows}
+            label="number of windows"
+            placeholder={` ${
+              orientation === "vertical"
+                ? ` ${sentNumberOfWindows}`
+                : `${sentNumberOfWindows}`
+            }`}
+            onChange={handleWindowChange}
+          />
+          <TextBox
+            value={sentNumberOfVerticalRows}
+            label="vertical rows"
+            placeholder={`${
+              orientation === "horizontal"
+                ? `${sentNumberOfVerticalRows}`
+                : `${sentNumberOfVerticalRows}`
+            }`}
+            onChange={handleVerticalChange}
+            className={isHorizontalClicked ? "bg-gray-500" : ""}
+            disabled={isHorizontalClicked}
+          />
+          <TextBox
+            value={sentNumberOfHorizontalCols}
+            label="horizontal columns"
+            placeholder={` ${
+              orientation === "vertical"
+                ? `${sentNumberOfHorizontalCols}`
+                : `${sentNumberOfHorizontalCols}`
+            }`}
+            onChange={handleHorizontalChange}
+            className={isVerticalClicked ? "bg-gray-500" : ""}
+            disabled={isVerticalClicked}
+          />
+        </div>
+      </div>
+      <div className="flex gap-5">
+        <div className="bg-gray-800 flex w-[170px] flex-col gap-2 p-2 justify-center items-center rounded">
+          <Title
+            text={"background image"}
+            className="text-[12px] leading-none uppercase border-b-2 px-2 py-1"
+          />
 
-      <TextBox
-        value={sentNumberOfWindows}
-        label="number of windows"
-        placeholder={` ${
-          orientation === "vertical"
-            ? ` ${sentNumberOfWindows}`
-            : `${sentNumberOfWindows}`
-        }`}
-        onChange={handleWindowChange}
-      />
-      <TextBox
-        value={sentNumberOfVerticalRows}
-        label="vertical rows"
-        placeholder={`${
-          orientation === "horizontal"
-            ? `${sentNumberOfVerticalRows}`
-            : `${sentNumberOfVerticalRows}`
-        }`}
-        onChange={handleVerticalChange}
-        className={isHorizontalClicked ? "bg-gray-500" : ""}
-        disabled={isHorizontalClicked}
-      />
+          <UploadImage onImageUploaded={handleImageUploaded} />
+          <SubTitle
+            text={"background size"}
+            className="uppercase text-[8px] leading-none !p-0"
+          />
+          <Flex className="gap-2">
+            <Button
+              text="auto"
+              className={`!p-1 !px-2 rounded-sm text-[8px] leading-none ${
+                autoClicked ? "bg-slate-500" : ""
+              }`}
+              onClick={() => {
+                setBackgroundSizeHandler("auto");
+                setAutoClicked(true);
+                setContainClicked(false);
+                setCoverClicked(false);
+              }}
+            />
+            <Button
+              text="contain"
+              className={`!p-1 !px-2 rounded-sm text-[8px] leading-none ${
+                containClicked ? "bg-slate-500" : ""
+              }`}
+              onClick={() => {
+                setBackgroundSizeHandler("contain");
+                setAutoClicked(false);
+                setContainClicked(true);
+                setCoverClicked(false);
+              }}
+            />
+            <Button
+              text="cover"
+              className={`!p-1 !px-2 rounded-sm text-[8px] leading-none ${
+                coverClicked ? "bg-slate-500" : ""
+              }`}
+              onClick={() => {
+                setBackgroundSizeHandler("cover");
+                setAutoClicked(false);
+                setContainClicked(false);
+                setCoverClicked(true);
+              }}
+            />
+          </Flex>
+        </div>
 
-      <TextBox
-        value={sentNumberOfHorizontalCols}
-        label="horizontal columns"
-        placeholder={` ${
-          orientation === "vertical"
-            ? `${sentNumberOfHorizontalCols}`
-            : `${sentNumberOfHorizontalCols}`
-        }`}
-        onChange={handleHorizontalChange}
-        className={isVerticalClicked ? "bg-gray-500" : ""}
-        disabled={isVerticalClicked}
-      />
-
-      <Title
-        text={"video"}
-        className="text-lg uppercase border-b-2 px-2 leading-none py-1"
-      />
-      <ToggleBtn
-        onClick={toggleVideo}
-        isActive={showVideo}
-        className=" "
-        text={showVideo ? "hide video" : "show video"}
-      />
-
+        <div className="bg-gray-800 w-[170px] flex flex-col gap-2 p-2 justify-start items-center rounded">
+          <Title
+            text={"Logo"}
+            className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
+          />
+          <UploadLogo onLogoUploaded={handleImageLogoUploaded} />
+        </div>
+      </div>
+      <div className=" absolute bottom-2 left-2 ">
+        <div className="flex flex-col gap-2">
+          <Title
+            text={"video"}
+            className="text-[12px] uppercase border-b-2 px-2 leading-none py-1"
+          />
+          <ToggleBtn
+            onClick={toggleVideo}
+            isActive={showVideo}
+            className=" "
+            text={showVideo ? "hide video" : "show video"}
+          />
+        </div>
+      </div>
       <Button
         onClick={() => {
           saveSettingsToLocalStorage();
@@ -208,53 +278,6 @@ export const Settings: React.FC<SettingProps> = ({
         text="Save"
         className="text-[10px] !px-3 !py-1 !rounded leading-none absolute bottom-2 right-2 hover:bg-slate-500 transition duration-200"
       />
-      <Title
-        text={"background image"}
-        className="text-[16px] leading-none uppercase border-b-2 px-2 py-1"
-      />
-      <SubTitle
-        text={"background size"}
-        className="uppercase text-[8px] leading-none !p-0"
-      />
-      <Flex className="gap-2">
-        <Button
-          text="fill"
-          className={`!p-1 !px-5 rounded-sm text-[8px] leading-none ${
-            fillClicked ? "bg-slate-500" : ""
-          }`}
-          onClick={() => {
-            setBackgroundSizeHandler("fill");
-            setFillClicked(true);
-            setContainClicked(false);
-            setCoverClicked(false);
-          }}
-        />
-        <Button
-          text="contain"
-          className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
-            containClicked ? "bg-slate-500" : ""
-          }`}
-          onClick={() => {
-            setBackgroundSizeHandler("contain");
-            setFillClicked(false);
-            setContainClicked(true);
-            setCoverClicked(false);
-          }}
-        />
-        <Button
-          text="cover"
-          className={`!p-1 !px-[13px] rounded-sm text-[8px] leading-none ${
-            coverClicked ? "bg-slate-500" : ""
-          }`}
-          onClick={() => {
-            setBackgroundSizeHandler("cover");
-            setFillClicked(false);
-            setContainClicked(false);
-            setCoverClicked(true);
-          }}
-        />
-      </Flex>
-      <ImageUpload onImageUploaded={handleImageUploaded} />
       {children}
     </div>
   );

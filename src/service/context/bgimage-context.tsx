@@ -7,27 +7,29 @@ interface BackgroundImage {
 interface BackgroundImageContextType {
   mainBackground: string | null;
   backgroundSize: string;
-  fillClicked: boolean;
+  autoClicked: boolean;
   containClicked: boolean;
   coverClicked: boolean;
   handleImageUploaded: (image: string) => void;
   setBackgroundSize: (size: string) => void;
-  setFillClicked: (clicked: boolean) => void;
+  setAutoClicked: (clicked: boolean) => void;
   setContainClicked: (clicked: boolean) => void;
   setCoverClicked: (clicked: boolean) => void;
+  removeBackgroundImage: () => void;
 }
 
 const BackgroundImageContext = createContext<BackgroundImageContextType>({
   mainBackground: null,
   backgroundSize: "contain",
-  fillClicked: false,
+  autoClicked: false,
   containClicked: false,
   coverClicked: false,
   handleImageUploaded: () => {},
   setBackgroundSize: () => {},
-  setFillClicked: () => {},
+  setAutoClicked: () => {},
   setContainClicked: () => {},
   setCoverClicked: () => {},
+  removeBackgroundImage: () => {},
 });
 
 export const useBackgroundImageContext = () =>
@@ -38,10 +40,9 @@ export const BackgroundImageProvider: React.FC<BackgroundImage> = ({
 }) => {
   const [mainBackground, setMainBackground] = useState<string | null>(null);
   const [backgroundSize, setBackgroundSize] = useState("contain");
-  const [fillClicked, setFillClicked] = useState(false);
+  const [autoClicked, setAutoClicked] = useState(false);
   const [containClicked, setContainClicked] = useState(false);
   const [coverClicked, setCoverClicked] = useState(false);
-
   useEffect(() => {
     const storedBackgroundImage = localStorage.getItem("backgroundImage");
     const storedBackgroundSize = localStorage.getItem("backgroundSize");
@@ -50,6 +51,19 @@ export const BackgroundImageProvider: React.FC<BackgroundImage> = ({
     }
     if (storedBackgroundSize) {
       setBackgroundSize(storedBackgroundSize);
+      if (storedBackgroundSize === "auto") {
+        setAutoClicked(true);
+        setContainClicked(false);
+        setCoverClicked(false);
+      } else if (storedBackgroundSize === "contain") {
+        setAutoClicked(false);
+        setContainClicked(true);
+        setCoverClicked(false);
+      } else if (storedBackgroundSize === "cover") {
+        setAutoClicked(false);
+        setContainClicked(false);
+        setCoverClicked(true);
+      }
     }
   }, []);
 
@@ -63,6 +77,11 @@ export const BackgroundImageProvider: React.FC<BackgroundImage> = ({
     setBackgroundSize(size);
   };
 
+  const removeBackgroundImage = () => {
+    localStorage.removeItem("backgroundImage");
+    setMainBackground(null);
+  };
+
   return (
     <BackgroundImageContext.Provider
       value={{
@@ -70,12 +89,13 @@ export const BackgroundImageProvider: React.FC<BackgroundImage> = ({
         backgroundSize,
         handleImageUploaded,
         setBackgroundSize: handleBackgroundSizeChange,
-        fillClicked,
+        autoClicked,
         containClicked,
         coverClicked,
-        setFillClicked,
+        setAutoClicked,
         setContainClicked,
         setCoverClicked,
+        removeBackgroundImage,
       }}
     >
       {children}

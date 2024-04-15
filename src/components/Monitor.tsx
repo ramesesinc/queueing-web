@@ -10,7 +10,8 @@ import { Settings, OpenSettings } from "./layouts/Settings";
 import { useColorContext } from "../service/context/color-context";
 import { useWindowContext } from "../service/context/window-context";
 import { useVideoContext } from "../service/context/video-context";
-import { useBackgroundImageContext } from "../service/context/image-context";
+import { useBackgroundImageContext } from "../service/context/bgimage-context";
+import { useLogoImageContext } from "../service/context/logo-context";
 
 const Monitor = () => {
   const router = useRouter();
@@ -31,6 +32,7 @@ const Monitor = () => {
   };
 
   const { mainBackground, backgroundSize } = useBackgroundImageContext();
+  const { logo } = useLogoImageContext();
 
   let title = "";
 
@@ -66,6 +68,7 @@ const Monitor = () => {
         componentType="header"
         groupName={title}
         groupAddr={"Cebu City"}
+        src={logo}
       />
       {sentNumberOfWindows !== null &&
       sentNumberOfHorizontalCols !== null &&

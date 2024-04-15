@@ -1,24 +1,19 @@
-import Image from "next/image";
 import React from "react";
+import Title from "../ui/Title";
 
-type HeaderProps = {
+type FooterProps = {
   componentType?: string | undefined;
 };
 
-const Header: React.FC<HeaderProps> = ({ componentType }) => {
+const Footer: React.FC<FooterProps> = ({ componentType }) => {
   return (
     <div id={componentType}>
-      <Image
-        src={"/images/etracs-logo.png"}
-        alt={"etracs logo"}
-        width={0}
-        height={0}
-        style={{ width: 150, height: 50 }}
-        priority
-        unoptimized
+      <Title
+        text="QueueEtracs is a complete enterprise software system for customer queue management system."
+        className="text-[20px] p-2 text-center text-white"
       />
     </div>
   );
 };
 
-export default Header;
+export default Footer;
