@@ -8,7 +8,7 @@ const LguLogoUpload = ({
   onLogoUploaded: (lguLogo: string) => void;
 }) => {
   const [lguLogo, setLguLogo] = useState<File | null>(null);
-
+  const { logo, removeLogoImage } = useLogoImageContext();
   const handleLguLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
@@ -26,8 +26,6 @@ const LguLogoUpload = ({
       reader.readAsDataURL(lguLogo);
     }
   };
-
-  const { logo, removeLogoImage } = useLogoImageContext();
 
   return (
     <div className="flex flex-col items-center text-[10px] p-2">

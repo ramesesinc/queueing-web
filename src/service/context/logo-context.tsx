@@ -30,7 +30,6 @@ export const LogoImageProvider: React.FC<LogoImage> = ({ children }) => {
   }, []);
 
   const handleImageLogoUploaded = (image: string) => {
-    localStorage.setItem("logoImage", image);
     setLogo(image);
   };
 

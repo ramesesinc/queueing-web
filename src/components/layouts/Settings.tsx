@@ -16,6 +16,8 @@ import { IoClose } from "react-icons/io5";
 import Flex from "../ui/Flex";
 import SubTitle from "../ui/SubTitle";
 import UploadLogo from "../ui/UploadLogo";
+import FontFamilyPicker from "./FontFamilyPicker";
+import { useFontFamilyContext } from "../../service/context/font-context";
 
 interface SettingProps {
   isOpen: boolean;
@@ -56,13 +58,15 @@ export const Settings: React.FC<SettingProps> = ({
     headerColor,
     mainColor,
     footerColor,
+    windowColor,
     handleHeaderColorChange,
     handleMainColorChange,
     handleFooterColorChange,
+    handleWindowColorChange,
   } = useColorContext();
   const { showVideo, toggleVideo, savedShowVideo } = useVideoContext();
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const { handleImageLogoUploaded } = useLogoImageContext();
+  const { handleImageLogoUploaded, logo } = useLogoImageContext();
   const {
     mainBackground,
     handleImageUploaded,
@@ -73,7 +77,10 @@ export const Settings: React.FC<SettingProps> = ({
     setContainClicked,
     coverClicked,
     setCoverClicked,
+    backgroundSize,
   } = useBackgroundImageContext();
+
+  const { handleFontFamilyChange, fontFamily } = useFontFamilyContext();
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -81,7 +88,7 @@ export const Settings: React.FC<SettingProps> = ({
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target as Node)
       ) {
-        toggleSidebar(); // Close the sidebar if clicked outside
+        toggleSidebar();
       }
     };
 
@@ -100,6 +107,8 @@ export const Settings: React.FC<SettingProps> = ({
     localStorage.setItem("headerColor", headerColor);
     localStorage.setItem("mainColor", mainColor);
     localStorage.setItem("footerColor", footerColor);
+    localStorage.setItem("windowColor", windowColor);
+    localStorage.setItem("fontFamily", fontFamily);
     localStorage.setItem("showVideo", savedShowVideo.toString());
     localStorage.setItem("sentNumber", JSON.stringify(numberOfWindows));
     localStorage.setItem(
@@ -110,16 +119,42 @@ export const Settings: React.FC<SettingProps> = ({
       "sentHorizontalCols",
       JSON.stringify(numberOfHorizontalCols)
     );
-
+    if (logo != null) {
+      localStorage.setItem("logoImage", logo);
+    }
     if (mainBackground !== null) {
       localStorage.setItem("backgroundImage", mainBackground);
     }
-
+    localStorage.setItem("backgroundSize", backgroundSize);
     window.location.reload();
   };
-
   const setBackgroundSizeHandler = (size: string) => {
     setBackgroundSize(size);
+  };
+
+  const resetSettings = () => {
+    const defaultHeaderColor = "#0a5366";
+    const defaultMainColor = "#ffffff";
+    const defaultFooterColor = "#0a5366";
+    const defaultWindowColor = "#ffffff";
+    const defaultFontFamily = "Arial";
+    const defaultNumberOfWindows = 4;
+    const defaultLogo = "/images/lgu-logo.png";
+    const defaultNumberOfVerticalRows = 2;
+    const defaultNumberOfHorizontalCols = 2;
+    const defaultBackgroundImage = "";
+    const defaultBackgroundSize = "auto";
+    handleHeaderColorChange(defaultHeaderColor);
+    handleMainColorChange(defaultMainColor);
+    handleFooterColorChange(defaultFooterColor);
+    handleWindowColorChange(defaultWindowColor);
+    handleFontFamilyChange(defaultFontFamily);
+    handleWindowChange(defaultNumberOfWindows);
+    handleImageLogoUploaded(defaultLogo);
+    handleVerticalChange(defaultNumberOfVerticalRows);
+    handleHorizontalChange(defaultNumberOfHorizontalCols);
+    handleImageUploaded(defaultBackgroundImage);
+    setBackgroundSize(defaultBackgroundSize);
   };
 
   return (
@@ -139,29 +174,30 @@ export const Settings: React.FC<SettingProps> = ({
       <div className="flex items-start gap-4 pt-5">
         <div className="flex flex-col items-center justify-start gap-1 h-[195px] w-[170px] bg-gray-800 p-2 rounded">
           <Title
-            text={"Colors"}
+            text={"Background Colors"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
           />
           <ColorPicker
-            className="header"
             onChangeColor={handleHeaderColorChange}
-            label="header background color"
+            label="header color"
             initialColor={headerColor}
           />
           <ColorPicker
-            className="header"
             onChangeColor={handleMainColorChange}
-            label="main background color"
+            label="main color"
             initialColor={mainColor}
           />
           <ColorPicker
-            className="footer"
             onChangeColor={handleFooterColorChange}
-            label="footer background color"
+            label="footer color"
             initialColor={footerColor}
           />
+          <ColorPicker
+            onChangeColor={handleWindowColorChange}
+            label="window color"
+            initialColor={windowColor}
+          />
         </div>
-
         <div className="flex flex-col items-center justify-center w-[170px] gap-2 bg-gray-800 p-2 rounded ">
           <Title
             text={"Windows"}
@@ -225,7 +261,6 @@ export const Settings: React.FC<SettingProps> = ({
             text={"background image"}
             className="text-[12px] leading-none uppercase border-b-2 px-2 py-1"
           />
-
           <UploadImage onImageUploaded={handleImageUploaded} />
           <SubTitle
             text={"background size"}
@@ -277,6 +312,11 @@ export const Settings: React.FC<SettingProps> = ({
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
           />
           <UploadLogo onLogoUploaded={handleImageLogoUploaded} />
+          <Title
+            text={"Font Family"}
+            className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
+          />
+          <FontFamilyPicker onChangeFontFamily={handleFontFamilyChange} />
         </div>
       </div>
       <div className=" absolute bottom-2 left-2 ">
@@ -299,6 +339,13 @@ export const Settings: React.FC<SettingProps> = ({
         }}
         text="Save"
         className="text-[10px] !px-3 !py-1 !rounded leading-none absolute bottom-2 right-2 hover:bg-slate-500 transition duration-200"
+      />
+      <Button
+        onClick={() => {
+          resetSettings();
+        }}
+        text="Reset to Default"
+        className="text-[10px] !px-3 !py-1 !rounded leading-none absolute bottom-2 right-16 hover:bg-slate-500 transition duration-200"
       />
       {children}
     </div>

@@ -13,6 +13,7 @@ interface TemplateProps {
   headerClass?: string;
   mainClass?: string;
   footerClass?: string;
+  fontFamily?: string;
 }
 
 const Template: React.FC<TemplateProps> = ({
@@ -26,6 +27,7 @@ const Template: React.FC<TemplateProps> = ({
   headerClass,
   mainClass,
   footerClass,
+  fontFamily,
 }) => {
   const templateStyles = {
     template1: {
@@ -111,10 +113,13 @@ const Template: React.FC<TemplateProps> = ({
               !renderMainContent("main-right") && "flex justify-center"
             }`}
           >
-            <SubTitle
-              text="now serving"
-              className={`text-[15px] leading-3 ml-5 !font-bold uppercase w-[20%] text-center ${textColor} bg-gray-200 bg-opacity-50 rounded p-2`}
-            />
+            <div style={{ fontFamily: fontFamily }}>
+              <SubTitle
+                text="now serving"
+                className={`text-[15px] leading-3 ml-5 !font-bold uppercase w-[20%] text-center ${textColor} bg-gray-200 bg-opacity-50 rounded p-2`}
+              />
+            </div>
+
             {renderMainContent("main-left")}
           </div>
         )}

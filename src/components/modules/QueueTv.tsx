@@ -9,6 +9,7 @@ interface VideoProps {
   componentType?: string | undefined;
   type?: string | undefined;
   layoutType?: "default" | "custom";
+  fontFamily?: string;
 }
 
 const Video: React.FC<VideoProps> = ({
@@ -17,6 +18,7 @@ const Video: React.FC<VideoProps> = ({
   componentType,
   type,
   layoutType = "default",
+  fontFamily,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -44,6 +46,7 @@ const Video: React.FC<VideoProps> = ({
           <TimeDate
             componentType={undefined}
             className="bg-gray-200 bg-opacity-50 rounded px-2"
+            fontFamily={fontFamily}
           />
         </div>
       ) : (

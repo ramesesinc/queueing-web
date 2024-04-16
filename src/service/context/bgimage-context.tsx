@@ -68,12 +68,10 @@ export const BackgroundImageProvider: React.FC<BackgroundImage> = ({
   }, []);
 
   const handleImageUploaded = (image: string) => {
-    localStorage.setItem("backgroundImage", image);
     setMainBackground(image);
   };
 
   const handleBackgroundSizeChange = (size: string) => {
-    localStorage.setItem("backgroundSize", size);
     setBackgroundSize(size);
   };
 

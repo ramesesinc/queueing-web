@@ -11,6 +11,8 @@ interface QueueGroupsProps {
   queueType: string;
   queueCounter: string;
   queueTicket: string;
+  bgColor: React.CSSProperties;
+  fontFamily?: string;
 }
 
 const QueueGroups: React.FC<QueueGroupsProps> = ({
@@ -22,6 +24,8 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   queueType,
   queueCounter,
   queueTicket,
+  bgColor,
+  fontFamily,
 }) => {
   const containerStyle: React.CSSProperties = {
     display: "grid",
@@ -106,6 +110,8 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
             key={index}
             counter={`W${index + 1}`}
             queueTicket={ticket}
+            bgColor={bgColor}
+            fontFamily={fontFamily}
           />
         ))}
       </div>

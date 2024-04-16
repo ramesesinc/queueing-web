@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { FontFamily, getFontFamily } from "../../stores/fontfamily-items";
 
 type FontFamilyPickerProps = {
   className?: string;
@@ -11,37 +12,26 @@ const FontFamilyPicker: React.FC<FontFamilyPickerProps> = ({
   onChangeFontFamily,
   label,
 }) => {
-  const [selectedFont, setSelectedFont] = useState("Arial");
+  const [fontFamily, setFontFamily] = useState<FontFamily[]>([]);
+  const [selectedFont, setSelectedFont] = useState<string>("Arial");
+
+  useEffect(() => {
+    const storedFontFamily = localStorage.getItem("selectedFontFamily");
+    setSelectedFont(storedFontFamily || "Arial");
+    async function fetchData() {
+      const data = await getFontFamily();
+      setFontFamily(data);
+    }
+
+    fetchData();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFontFamily = e.target.value;
-    console.log("New font family:", newFontFamily);
     setSelectedFont(newFontFamily);
+    localStorage.setItem("selectedFontFamily", newFontFamily);
     if (onChangeFontFamily) onChangeFontFamily(newFontFamily);
   };
-
-  const fontFamilies = [
-    "Arial",
-    "Helvetica",
-    "Times New Roman",
-    "Courier New",
-    "Verdana",
-    "Georgia",
-    "Palatino",
-    "Garamond",
-    "Bookman",
-    "Comic Sans MS",
-    "Trebuchet MS",
-    "Arial Black",
-    "Impact",
-    "Lucida Sans Unicode",
-    "Tahoma",
-    "Geneva",
-    "Courier",
-    "Lucida Console",
-    "Monaco",
-    "Copperplate",
-  ];
 
   return (
     <div className={`font-family-picker flex ${className} text-black`}>
@@ -50,17 +40,28 @@ const FontFamilyPicker: React.FC<FontFamilyPickerProps> = ({
         <select
           value={selectedFont}
           onChange={handleChange}
-          className="px-2 py-1 border border-gray-300 rounded-md"
+          className="w-[140px] border border-gray-300 rounded"
         >
-          {fontFamilies.map((fontFamily) => (
-            <option key={fontFamily} value={fontFamily}>
-              {fontFamily}
-            </option>
-          ))}
+          {fontFamily &&
+            fontFamily.map((fontitem) => (
+              <option key={fontitem.id} value={fontitem.id}>
+                {fontitem.family}
+              </option>
+            ))}
         </select>
       </label>
     </div>
   );
 };
+
+export async function getStaticProps() {
+  const fontFamily = await getFontFamily();
+
+  return {
+    props: {
+      fontFamily,
+    },
+  };
+}
 
 export default FontFamilyPicker;

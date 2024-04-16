@@ -10,9 +10,11 @@ interface ColorContextType {
   headerColor: string;
   mainColor: string;
   footerColor: string;
+  windowColor: string;
   handleHeaderColorChange: (color: string) => void;
   handleMainColorChange: (color: string) => void;
   handleFooterColorChange: (color: string) => void;
+  handleWindowColorChange: (color: string) => void;
 }
 
 interface ColorProviderProps {
@@ -23,15 +25,18 @@ const ColorContext = createContext<ColorContextType>({
   headerColor: "#0a5366",
   mainColor: "#ffffff",
   footerColor: "#0a5366",
+  windowColor: "#ffffff",
   handleHeaderColorChange: () => {},
   handleMainColorChange: () => {},
   handleFooterColorChange: () => {},
+  handleWindowColorChange: () => {},
 });
 
 export const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
   const [headerColor, setHeaderColor] = useState("#0a5366");
   const [mainColor, setMainColor] = useState("#ffffff");
   const [footerColor, setFooterColor] = useState("#0a5366");
+  const [windowColor, setWindowColor] = useState("#ffffff");
 
   const handleHeaderColorChange = (color: string) => {
     setHeaderColor(color);
@@ -45,10 +50,15 @@ export const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
     setFooterColor(color);
   };
 
+  const handleWindowColorChange = (color: string) => {
+    setWindowColor(color);
+  };
+
   useEffect(() => {
     const storedHeaderColor = localStorage.getItem("headerColor");
     const storedMainColor = localStorage.getItem("mainColor");
     const storedFooterColor = localStorage.getItem("footerColor");
+    const storedWindowColor = localStorage.getItem("windowColor");
 
     if (storedHeaderColor !== null) {
       setHeaderColor(storedHeaderColor);
@@ -59,6 +69,9 @@ export const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
     if (storedFooterColor !== null) {
       setFooterColor(storedFooterColor);
     }
+    if (storedWindowColor !== null) {
+      setWindowColor(storedWindowColor);
+    }
   }, []);
 
   return (
@@ -67,9 +80,11 @@ export const ColorProvider: React.FC<ColorProviderProps> = ({ children }) => {
         headerColor,
         mainColor,
         footerColor,
+        windowColor,
         handleHeaderColorChange,
         handleMainColorChange,
         handleFooterColorChange,
+        handleWindowColorChange,
       }}
     >
       {children}

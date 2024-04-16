@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
@@ -12,6 +12,7 @@ import { useWindowContext } from "../service/context/window-context";
 import { useVideoContext } from "../service/context/video-context";
 import { useBackgroundImageContext } from "../service/context/bgimage-context";
 import { useLogoImageContext } from "../service/context/logo-context";
+import { useFontFamilyContext } from "../service/context/font-context";
 
 const Monitor = () => {
   const router = useRouter();
@@ -24,8 +25,10 @@ const Monitor = () => {
     sentNumberOfHorizontalCols,
     orientation,
   } = useWindowContext();
-  const { headerColor, mainColor, footerColor } = useColorContext();
+  const { headerColor, mainColor, footerColor, windowColor } =
+    useColorContext();
   const { showVideo } = useVideoContext();
+  const { fontFamily } = useFontFamilyContext();
 
   const toggleSettings = () => {
     setIsOpenSettings(!isOpenSettings);
@@ -63,12 +66,14 @@ const Monitor = () => {
       headerClass="header"
       mainClass="main"
       footerClass="footer"
+      fontFamily={fontFamily}
     >
       <Header
         componentType="header"
         groupName={title}
         groupAddr={"Cebu City"}
         src={logo}
+        fontFamily={fontFamily}
       />
       {sentNumberOfWindows !== null &&
       sentNumberOfHorizontalCols !== null &&
@@ -82,6 +87,8 @@ const Monitor = () => {
           queueType={data?.type}
           queueTicket={data?.ticket}
           queueCounter={data?.countercode}
+          bgColor={{ backgroundColor: windowColor }}
+          fontFamily={fontFamily}
         />
       ) : null}
 
@@ -89,13 +96,15 @@ const Monitor = () => {
         src={"/videos/video.mp4"}
         componentType={showVideo ? "main-right" : "none"}
         layoutType="default"
+        fontFamily={fontFamily}
       />
-      <Footer componentType="footer" />
+      <Footer componentType="footer" fontFamily={fontFamily} />
       <Settings
         isOpen={isOpenSettings}
         toggleSidebar={toggleSettings}
         componentType="settings"
       />
+
       <OpenSettings componentType="settings" onClick={toggleSettings}>
         {isOpenSettings ? "Close" : "Open"}
       </OpenSettings>

@@ -9,6 +9,7 @@ type HeaderProps = {
   groupName: string | string[] | undefined;
   groupAddr: string | undefined;
   src: string | StaticImport | null | undefined;
+  fontFamily?: string;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -16,6 +17,7 @@ const Header: React.FC<HeaderProps> = ({
   groupName,
   groupAddr,
   src,
+  fontFamily,
 }) => {
   const defaultLogo = "/images/lgu-logo.png";
 
@@ -38,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({
           />
         )}
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col" style={{ fontFamily: fontFamily }}>
         <Title
           text={groupName || ""}
           className="uppercase text-[18px] leading-[15px]"
