@@ -16,7 +16,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   const [color, setColor] = useState(initialColor);
 
   useEffect(() => {
-    setColor(initialColor); // Set initial color when initialColor prop changes
+    setColor(initialColor);
   }, [initialColor]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
