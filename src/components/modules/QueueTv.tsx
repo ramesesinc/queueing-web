@@ -4,7 +4,7 @@ import SubTitle from "../ui/SubTitle";
 import Image from "next/image";
 
 interface VideoProps {
-  src: string;
+  src: string | null;
   controls?: boolean;
   componentType?: string | undefined;
   type?: string | undefined;
@@ -24,8 +24,6 @@ const Video: React.FC<VideoProps> = ({
 
   useEffect(() => {
     if (videoRef.current) {
-      // Access videoRef.current to get the underlying video element
-      // You can perform additional setup, event binding, etc. here
     }
   }, []);
 
@@ -40,9 +38,13 @@ const Video: React.FC<VideoProps> = ({
             width={900}
             height={500}
           >
-            <source src={src} type="video/mp4" />
+            {!src && <source src="/videos/video.mp4" type="video/mp4" />}
+            {src && typeof src === "string" && (
+              <source src={src} type="video/mp4" />
+            )}
             Your browser does not support the video tag.
           </video>
+
           <TimeDate
             componentType={undefined}
             className="bg-gray-200 bg-opacity-50 rounded px-2"
@@ -58,7 +60,10 @@ const Video: React.FC<VideoProps> = ({
             width={1000}
             height={500}
           >
-            <source src={src} type="video/mp4" />
+            {!src && <source src="/videos/video.mp4" type="video/mp4" />}
+            {src && typeof src === "string" && (
+              <source src={src} type="video/mp4" />
+            )}
             Your browser does not support the video tag.
           </video>
           <div className=" absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">

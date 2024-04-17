@@ -8,7 +8,7 @@ import TextBox from "../ui/TextBox";
 import Title from "../ui/Title";
 import ToggleBtn from "../ui/ToggleBtn";
 import UploadImage from "../ui/UploadBgImage";
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "../ui/ColorPicker";
 import Button from "../ui/Button";
 import { useBackgroundImageContext } from "../../service/context/bgimage-context";
 import { useLogoImageContext } from "../../service/context/logo-context";
@@ -16,8 +16,9 @@ import { IoClose } from "react-icons/io5";
 import Flex from "../ui/Flex";
 import SubTitle from "../ui/SubTitle";
 import UploadLogo from "../ui/UploadLogo";
-import FontFamilyPicker from "./FontFamilyPicker";
+import FontFamilyPicker from "../ui/FontFamilyPicker";
 import { useFontFamilyContext } from "../../service/context/font-context";
+import UploadVideo from "../ui/UploadVideo";
 
 interface SettingProps {
   isOpen: boolean;
@@ -64,7 +65,7 @@ export const Settings: React.FC<SettingProps> = ({
     handleFooterColorChange,
     handleWindowColorChange,
   } = useColorContext();
-  const { showVideo, toggleVideo, savedShowVideo } = useVideoContext();
+  const { showVideo, toggleVideo, handleVideoUpload } = useVideoContext();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { handleImageLogoUploaded, logo } = useLogoImageContext();
   const {
@@ -109,7 +110,7 @@ export const Settings: React.FC<SettingProps> = ({
     localStorage.setItem("footerColor", footerColor);
     localStorage.setItem("windowColor", windowColor);
     localStorage.setItem("fontFamily", fontFamily);
-    localStorage.setItem("showVideo", savedShowVideo.toString());
+
     localStorage.setItem("sentNumber", JSON.stringify(numberOfWindows));
     localStorage.setItem(
       "sentVerticalRows",
@@ -122,6 +123,7 @@ export const Settings: React.FC<SettingProps> = ({
     if (logo != null) {
       localStorage.setItem("logoImage", logo);
     }
+
     if (mainBackground !== null) {
       localStorage.setItem("backgroundImage", mainBackground);
     }
@@ -140,8 +142,8 @@ export const Settings: React.FC<SettingProps> = ({
     const defaultFontFamily = "Arial";
     const defaultNumberOfWindows = 4;
     const defaultLogo = "/images/lgu-logo.png";
-    const defaultNumberOfVerticalRows = 2;
-    const defaultNumberOfHorizontalCols = 2;
+    const defaultNumberOfVerticalRows = 1;
+    const defaultNumberOfHorizontalCols = 1;
     const defaultBackgroundImage = "";
     const defaultBackgroundSize = "auto";
     handleHeaderColorChange(defaultHeaderColor);
@@ -161,7 +163,7 @@ export const Settings: React.FC<SettingProps> = ({
     <div
       ref={sidebarRef}
       id={componentType}
-      className={`h-screen w-[25%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
+      className={`h-screen w-[25%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-start pt-3 pl-2 fixed top-0 left-0 transition-all duration-500 z-[1] ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -221,7 +223,7 @@ export const Settings: React.FC<SettingProps> = ({
           </Flex>
           <TextBox
             value={sentNumberOfWindows}
-            label="number of windows"
+            label="Number of Windows"
             placeholder={` ${
               orientation === "vertical"
                 ? ` ${sentNumberOfWindows}`
@@ -231,7 +233,7 @@ export const Settings: React.FC<SettingProps> = ({
           />
           <TextBox
             value={sentNumberOfVerticalRows}
-            label="vertical columns"
+            label="Vertical Rows"
             placeholder={`${
               orientation === "horizontal"
                 ? `${sentNumberOfVerticalRows}`
@@ -243,7 +245,7 @@ export const Settings: React.FC<SettingProps> = ({
           />
           <TextBox
             value={sentNumberOfHorizontalCols}
-            label="horizontal rows"
+            label="Horizontal Columns"
             placeholder={` ${
               orientation === "vertical"
                 ? `${sentNumberOfHorizontalCols}`
@@ -312,6 +314,7 @@ export const Settings: React.FC<SettingProps> = ({
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
           />
           <UploadLogo onLogoUploaded={handleImageLogoUploaded} />
+
           <Title
             text={"Font Family"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
@@ -319,19 +322,18 @@ export const Settings: React.FC<SettingProps> = ({
           <FontFamilyPicker onChangeFontFamily={handleFontFamilyChange} />
         </div>
       </div>
-      <div className=" absolute bottom-2 left-2 ">
-        <div className="flex flex-col gap-2">
-          <Title
-            text={"video"}
-            className="text-[12px] uppercase border-b-2 px-2 leading-none py-1"
-          />
-          <ToggleBtn
-            onClick={toggleVideo}
-            isActive={showVideo}
-            className=" "
-            text={showVideo ? "hide video" : "show video"}
-          />
-        </div>
+      <div className="bg-gray-800 w-[170px] h-[195px] flex flex-col gap-2 p-2 justify-start items-center rounded ">
+        <Title
+          text={"video"}
+          className="text-[12px] uppercase border-b-2 px-2 leading-none py-1"
+        />
+        <UploadVideo onVideoUploaded={handleVideoUpload} />
+        <ToggleBtn
+          onClick={toggleVideo}
+          isActive={showVideo}
+          className=" "
+          text={showVideo ? "hide video" : "show video"}
+        />
       </div>
       <Button
         onClick={() => {

@@ -27,7 +27,7 @@ const Monitor = () => {
   } = useWindowContext();
   const { headerColor, mainColor, footerColor, windowColor } =
     useColorContext();
-  const { showVideo } = useVideoContext();
+  const { showVideo, videoUpload } = useVideoContext();
   const { fontFamily } = useFontFamilyContext();
 
   const toggleSettings = () => {
@@ -93,11 +93,13 @@ const Monitor = () => {
       ) : null}
 
       <QueueTv
-        src={"/videos/video.mp4"}
+        key={videoUpload}
+        src={videoUpload}
         componentType={showVideo ? "main-right" : "none"}
         layoutType="default"
         fontFamily={fontFamily}
       />
+
       <Footer componentType="footer" fontFamily={fontFamily} />
       <Settings
         isOpen={isOpenSettings}
