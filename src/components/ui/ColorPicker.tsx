@@ -11,9 +11,13 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   className,
   onChangeColor,
   label,
-  initialColor = "#ffffff", // Default initial color to white if not provided
+  initialColor = "",
 }) => {
   const [color, setColor] = useState(initialColor);
+
+  useEffect(() => {
+    setColor(initialColor); // Set initial color when initialColor prop changes
+  }, [initialColor]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newColor = e.target.value;
@@ -27,7 +31,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         <p className="leading-none text-[12px] pb-1">{label}</p>
         <input
           type="color"
-          defaultValue={initialColor} // Use defaultValue instead of value
+          value={color} // Use value instead of defaultValue
           onChange={handleChange}
           className="h-3 w-28 cursor-pointer text-black"
         />
