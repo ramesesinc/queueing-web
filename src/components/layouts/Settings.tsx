@@ -163,7 +163,7 @@ export const Settings: React.FC<SettingProps> = ({
     <div
       ref={sidebarRef}
       id={componentType}
-      className={`h-screen w-[25%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-start pt-3 pl-2 fixed top-0 left-0 transition-all duration-500 z-[1] ${
+      className={`h-screen w-[23%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-start pt-3 pl-2 fixed top-0 left-0 transition-all duration-500 z-[1] ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
