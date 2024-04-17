@@ -27,7 +27,7 @@ const QueueItem: React.FC<QueueItemProps> = ({
 
   return (
     <div
-      className={`bg-white w-[300px] rounded-xl shadow-md border-2 p-2 max-md:w-[200px] `}
+      className={`bg-white w-[300px] rounded-xl shadow-md border-2 p-2 max-xl:w-[250px] max-lg:w-[200px] `}
       style={bgColor}
     >
       <div
@@ -37,7 +37,7 @@ const QueueItem: React.FC<QueueItemProps> = ({
         <div className="flex flex-col justify-center items-center text-center p-1">
           <Number
             number={counter}
-            className="text-5xl max-xl:text-3xl max-md:text-4xl"
+            className="text-5xl max-xl:text-3xl max-lg:text-2xl"
           />
         </div>
         <div className="border border-black border-solid m-2"></div>
@@ -47,7 +47,7 @@ const QueueItem: React.FC<QueueItemProps> = ({
         >
           <Number
             number={queueTicket}
-            className="text-5xl max-xl:text-3xl max-md:text-4xl"
+            className="text-5xl max-xl:text-3xl max-lg:text-3xl"
           />
         </div>
       </div>

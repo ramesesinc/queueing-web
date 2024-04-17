@@ -162,7 +162,7 @@ export const Settings: React.FC<SettingProps> = ({
   return (
     <div
       id={componentType}
-      className={`h-screen w-[25%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
+      className={`h-screen w-[25%] max-xl:w-[40%] max-md:w-[55%] max-sm:w-[75%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >

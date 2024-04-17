@@ -116,7 +116,7 @@ const Template: React.FC<TemplateProps> = ({
             <div style={{ fontFamily: fontFamily }}>
               <SubTitle
                 text="now serving"
-                className={`text-[15px] leading-3 ml-5 !font-bold uppercase w-[20%] text-center ${textColor} bg-gray-200 bg-opacity-50 rounded p-2`}
+                className={`text-[18px] leading-3 ml-5 !font-bold uppercase  text-start ${textColor}  p-2`}
               />
             </div>
 
