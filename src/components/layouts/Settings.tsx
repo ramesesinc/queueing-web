@@ -66,7 +66,7 @@ export const Settings: React.FC<SettingProps> = ({
     handleWindowColorChange,
   } = useColorContext();
   const { showVideo, toggleVideo, handleVideoUpload } = useVideoContext();
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  // const sidebarRef = useRef<HTMLDivElement>(null);
   const { handleImageLogoUploaded, logo } = useLogoImageContext();
   const {
     mainBackground,
@@ -83,26 +83,26 @@ export const Settings: React.FC<SettingProps> = ({
 
   const { handleFontFamilyChange, fontFamily } = useFontFamilyContext();
 
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node)
-      ) {
-        toggleSidebar();
-      }
-    };
+  // useEffect(() => {
+  //   const handleOutsideClick = (event: MouseEvent) => {
+  //     if (
+  //       sidebarRef.current &&
+  //       !sidebarRef.current.contains(event.target as Node)
+  //     ) {
+  //       toggleSidebar();
+  //     }
+  //   };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    } else {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    }
+  //   if (isOpen) {
+  //     document.addEventListener("mousedown", handleOutsideClick);
+  //   } else {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [isOpen, toggleSidebar]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   };
+  // }, [isOpen, toggleSidebar]);
 
   const saveSettingsToLocalStorage = () => {
     localStorage.setItem("headerColor", headerColor);
@@ -161,9 +161,8 @@ export const Settings: React.FC<SettingProps> = ({
 
   return (
     <div
-      ref={sidebarRef}
       id={componentType}
-      className={`h-screen w-[23%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-start pt-3 pl-2 fixed top-0 left-0 transition-all duration-500 z-[1] ${
+      className={`h-screen w-[25%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -363,7 +362,7 @@ export const OpenSettings: React.FC<OpenSettingsProps> = ({
     <button
       id={componentType}
       onClick={onClick}
-      className=" absolute bottom-2 right-2 text-gray-400"
+      className=" absolute bottom-2 right-2 text-gray-400 z-10"
     >
       <div className="flex items-center justify-center text-center flex-col hover:text-gray-100">
         <IoSettingsOutline size={18} />
