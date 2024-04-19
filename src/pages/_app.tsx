@@ -7,6 +7,7 @@ import type { AppProps } from "next/app";
 import { LogoImageProvider } from "../service/context/logo-context";
 import { FontFamilyProvider } from "../service/context/font-context";
 import { ColorsProvider } from "../service/context/colors-context";
+import { DataProvider } from "../service/context/data-context";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -17,7 +18,9 @@ export default function App({ Component, pageProps }: AppProps) {
             <LogoImageProvider>
               <FontFamilyProvider>
                 <ColorsProvider>
-                  <Component {...pageProps} />
+                  <DataProvider>
+                    <Component {...pageProps} />
+                  </DataProvider>
                 </ColorsProvider>
               </FontFamilyProvider>
             </LogoImageProvider>

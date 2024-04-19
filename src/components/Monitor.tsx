@@ -14,6 +14,7 @@ import { useBackgroundImageContext } from "../service/context/bgimage-context";
 import { useLogoImageContext } from "../service/context/logo-context";
 import { useFontFamilyContext } from "../service/context/font-context";
 import { useColorsContext } from "../service/context/colors-context";
+import { useData } from "../service/context/data-context";
 
 const Monitor = () => {
   const router = useRouter();
@@ -38,6 +39,8 @@ const Monitor = () => {
   const { hfcolors, addColor, deleteColor, newHfColor, setNewHfColor } =
     useColorsContext();
 
+  const { datas, handleChange, handleSubmit, handleGetData } = useData();
+
   const { mainBackground, backgroundSize } = useBackgroundImageContext();
   const { logo } = useLogoImageContext();
 
@@ -61,7 +64,7 @@ const Monitor = () => {
       description="Welcome to our website!"
       templateType="template1"
       headerStyle={{
-        backgroundColor: hfcolors.length > 0 ? hfcolors[0].hfcolor : "initial",
+        backgroundColor: datas.color,
       }}
       mainStyle={{
         backgroundColor: mainColor,
@@ -71,7 +74,7 @@ const Monitor = () => {
         backgroundSize: backgroundSize,
       }}
       footerStyle={{
-        backgroundColor: hfcolors.length > 0 ? hfcolors[0].hfcolor : "initial",
+        backgroundColor: datas.color,
       }}
       headerClass="header"
       mainClass="main"

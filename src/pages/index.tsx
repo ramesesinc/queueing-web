@@ -1,36 +1,52 @@
-import React from "react";
-import { useColorsContext } from "../service/context/colors-context";
+// pages/index.js
+import { useData } from "../service/context/data-context";
 
-const IndexPage = () => {
-  const { colors, addColor, deleteColor, newColor, setNewColor } =
-    useColorsContext();
+export default function Home() {
+  const { datas, handleChange, handleSubmit, handleGetData } = useData();
 
   return (
-    <div className="flex flex-col items-center p-5 gap-5">
-      <h1>Queue App</h1>
-      <input
-        type="color"
-        value={newColor}
-        onChange={(e) => setNewColor(e.target.value)}
-      />
-      &nbsp;
-      <button onClick={() => addColor(newColor)}>Add Color</button>
-      {colors.map((color) => (
-        <p key={color.id}>
-          <b>*{color.color}</b>&nbsp;
-          <button onClick={() => deleteColor(color.id)}>Delete Color</button>
-        </p>
-      ))}
-      <header
-        className="w-full h-[100px]"
-        style={{
-          backgroundColor: colors.length > 0 ? colors[0].color : "initial",
-        }} // Set background color dynamically
-      >
-        this is head
-      </header>
+    <div>
+      <h1>JSON Data Example</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Color:
+          <input
+            type="text"
+            name="color"
+            value={datas.color}
+            onChange={handleChange}
+            className="border border-blue-500"
+          />
+        </label>
+        <br />
+        <label>
+          Font Family:
+          <input
+            type="text"
+            name="fontFamily"
+            value={datas.fontFamily}
+            onChange={handleChange}
+            className="border border-blue-500"
+          />
+        </label>
+        <br />
+        <label>
+          Window Count:
+          <input
+            type="number"
+            name="windowCount"
+            value={datas.windowCount}
+            onChange={handleChange}
+            className="border border-blue-500"
+          />
+        </label>
+        <br />
+        <button type="submit">Update</button>
+        <button onClick={handleGetData}>Get Data</button>
+      </form>
+      <p>Current Value: {datas.color}</p>
+      <p>Current Font Family: {datas.fontFamily}</p>
+      <p>Current Window Count: {datas.windowCount}</p>
     </div>
   );
-};
-
-export default IndexPage;
+}
