@@ -13,6 +13,7 @@ import { useVideoContext } from "../service/context/video-context";
 import { useBackgroundImageContext } from "../service/context/bgimage-context";
 import { useLogoImageContext } from "../service/context/logo-context";
 import { useFontFamilyContext } from "../service/context/font-context";
+import { useColorsContext } from "../service/context/colors-context";
 
 const Monitor = () => {
   const router = useRouter();
@@ -34,6 +35,9 @@ const Monitor = () => {
     setIsOpenSettings(!isOpenSettings);
   };
 
+  const { hfcolors, addColor, deleteColor, newHfColor, setNewHfColor } =
+    useColorsContext();
+
   const { mainBackground, backgroundSize } = useBackgroundImageContext();
   const { logo } = useLogoImageContext();
 
@@ -49,12 +53,16 @@ const Monitor = () => {
     title = `${group || "Unknown Group"}`;
   }
 
+  console.log("hfcolors", hfcolors);
+
   return (
     <Template
       title="Home Page"
       description="Welcome to our website!"
       templateType="template1"
-      headerStyle={{ backgroundColor: headerColor }}
+      headerStyle={{
+        backgroundColor: hfcolors.length > 0 ? hfcolors[0].hfcolor : "initial",
+      }}
       mainStyle={{
         backgroundColor: mainColor,
         backgroundImage: mainBackground ? `url(${mainBackground})` : undefined,
@@ -62,7 +70,9 @@ const Monitor = () => {
         backgroundPosition: "center",
         backgroundSize: backgroundSize,
       }}
-      footerStyle={{ backgroundColor: footerColor }}
+      footerStyle={{
+        backgroundColor: hfcolors.length > 0 ? hfcolors[0].hfcolor : "initial",
+      }}
       headerClass="header"
       mainClass="main"
       footerClass="footer"
@@ -101,7 +111,7 @@ const Monitor = () => {
       />
 
       <Footer componentType="footer" fontFamily={fontFamily} />
-      <Settings
+      {/* <Settings
         isOpen={isOpenSettings}
         toggleSidebar={toggleSettings}
         componentType="settings"
@@ -109,7 +119,7 @@ const Monitor = () => {
 
       <OpenSettings componentType="settings" onClick={toggleSettings}>
         {isOpenSettings ? "Close" : "Open"}
-      </OpenSettings>
+      </OpenSettings> */}
     </Template>
   );
 };

@@ -6,6 +6,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { LogoImageProvider } from "../service/context/logo-context";
 import { FontFamilyProvider } from "../service/context/font-context";
+import { ColorsProvider } from "../service/context/colors-context";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -15,7 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <BackgroundImageProvider>
             <LogoImageProvider>
               <FontFamilyProvider>
-                <Component {...pageProps} />
+                <ColorsProvider>
+                  <Component {...pageProps} />
+                </ColorsProvider>
               </FontFamilyProvider>
             </LogoImageProvider>
           </BackgroundImageProvider>

@@ -1,5 +1,5 @@
 // components/Sidebar.tsx
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useColorContext } from "../../service/context/color-context";
 import { useWindowContext } from "../../service/context/window-context";
@@ -19,11 +19,12 @@ import UploadLogo from "../ui/UploadLogo";
 import FontFamilyPicker from "../ui/FontFamilyPicker";
 import { useFontFamilyContext } from "../../service/context/font-context";
 import UploadVideo from "../ui/UploadVideo";
+import { useColorsContext } from "../../service/context/colors-context";
 
 interface SettingProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   componentType?: string;
-  toggleSidebar: () => void;
+  toggleSidebar?: () => void;
   children?: React.ReactNode;
 }
 
@@ -68,6 +69,8 @@ export const Settings: React.FC<SettingProps> = ({
   const { showVideo, toggleVideo, handleVideoUpload } = useVideoContext();
   // const sidebarRef = useRef<HTMLDivElement>(null);
   const { handleImageLogoUploaded, logo } = useLogoImageContext();
+  const { hfcolors, addColor, deleteColor, newHfColor, setNewHfColor } =
+    useColorsContext();
   const {
     mainBackground,
     handleImageUploaded,
@@ -105,7 +108,6 @@ export const Settings: React.FC<SettingProps> = ({
   // }, [isOpen, toggleSidebar]);
 
   const saveSettingsToLocalStorage = () => {
-    localStorage.setItem("headerColor", headerColor);
     localStorage.setItem("mainColor", mainColor);
     localStorage.setItem("footerColor", footerColor);
     localStorage.setItem("windowColor", windowColor);
@@ -116,6 +118,8 @@ export const Settings: React.FC<SettingProps> = ({
       "sentVerticalRows",
       JSON.stringify(numberOfVerticalRows)
     );
+
+    addColor(newHfColor);
     localStorage.setItem(
       "sentHorizontalCols",
       JSON.stringify(numberOfHorizontalCols)
@@ -160,12 +164,7 @@ export const Settings: React.FC<SettingProps> = ({
   };
 
   return (
-    <div
-      id={componentType}
-      className={`h-screen w-[25%] max-xl:w-[40%] max-md:w-[55%] max-sm:w-[75%] bg-gray-700 text-white flex flex-col gap-3 justify-start items-center pt-3 fixed top-0 left-0 transition-all duration-500 z-[1] ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
-    >
+    <div id={componentType} className="flex flex-col gap-5 text-white">
       <button
         onClick={toggleSidebar}
         className="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition duration-300"
@@ -173,33 +172,41 @@ export const Settings: React.FC<SettingProps> = ({
         <IoClose size={20} />
       </button>
       <div className="flex items-start gap-4 pt-5">
-        <div className="flex flex-col items-center justify-start gap-1 h-[195px] w-[170px] bg-gray-800 p-2 rounded">
+        <div className="flex flex-col items-center justify-start gap-1 h-[250px] w-[170px] bg-gray-800 p-2 rounded">
           <Title
             text={"Background Colors"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
           />
           <ColorPicker
-            onChangeColor={handleHeaderColorChange}
-            label="header color"
-            initialColor={headerColor}
+            onChangeColor={(hfcolor) => setNewHfColor(hfcolor)}
+            label="header and footer color"
+            initialColor={hfcolors.length > 0 ? hfcolors[0].hfcolor : ""}
           />
+          {hfcolors.map((hfcolor) => (
+            <p key={hfcolor.id} className="text-[8px] leading-none">
+              <b>{hfcolor.hfcolor}</b>&nbsp;
+              <button
+                onClick={() => deleteColor(hfcolor.id)}
+                className="border hover:bg-gray-500 p-1 rounded text-"
+              >
+                remove
+              </button>
+            </p>
+          ))}
+
           <ColorPicker
             onChangeColor={handleMainColorChange}
             label="main color"
             initialColor={mainColor}
           />
-          <ColorPicker
-            onChangeColor={handleFooterColorChange}
-            label="footer color"
-            initialColor={footerColor}
-          />
+
           <ColorPicker
             onChangeColor={handleWindowColorChange}
             label="window color"
             initialColor={windowColor}
           />
         </div>
-        <div className="flex flex-col items-center justify-center w-[170px] gap-2 bg-gray-800 p-2 rounded ">
+        <div className="flex flex-col items-center justify-start w-[170px] gap-2 bg-gray-800 p-2 rounded h-[250px]">
           <Title
             text={"Windows"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
@@ -257,7 +264,7 @@ export const Settings: React.FC<SettingProps> = ({
         </div>
       </div>
       <div className="flex items-start gap-4">
-        <div className="bg-gray-800 flex w-[170px] h-[195px] flex-col gap-2 p-2 justify-start items-center rounded">
+        <div className="bg-gray-800 flex w-[170px] h-[250px] flex-col gap-2 p-2 justify-start items-center rounded">
           <Title
             text={"background image"}
             className="text-[12px] leading-none uppercase border-b-2 px-2 py-1"
@@ -307,7 +314,7 @@ export const Settings: React.FC<SettingProps> = ({
           </Flex>
         </div>
 
-        <div className="bg-gray-800 w-[170px] h-[195px] flex flex-col gap-2 p-2 justify-start items-center rounded">
+        <div className="bg-gray-800 w-[170px] h-[250px] flex flex-col gap-2 p-2 justify-start items-center rounded">
           <Title
             text={"Logo"}
             className="text-[12px] uppercase border-b-2 px-2 py-1 leading-none"
@@ -321,7 +328,7 @@ export const Settings: React.FC<SettingProps> = ({
           <FontFamilyPicker onChangeFontFamily={handleFontFamilyChange} />
         </div>
       </div>
-      <div className="bg-gray-800 w-[170px] h-[195px] flex flex-col gap-2 p-2 justify-start items-center rounded ">
+      <div className="bg-gray-800 w-[170px] h-[250px] flex flex-col gap-2 p-2 justify-start items-center rounded ">
         <Title
           text={"video"}
           className="text-[12px] uppercase border-b-2 px-2 leading-none py-1"
