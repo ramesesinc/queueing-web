@@ -6,8 +6,8 @@ interface QueueGroupsProps {
   numberOfItems: number;
   componentType?: string | undefined;
   orientation: "vertical" | "horizontal";
-  verticalRows: number;
-  horizontalCols: number;
+  verticalRows: number | string;
+  horizontalCols: number | string;
   queueType: string;
   queueCounter: string;
   queueTicket: string;

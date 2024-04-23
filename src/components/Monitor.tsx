@@ -2,10 +2,8 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import { useBackgroundImageContext } from "../service/context/bgimage-context";
 import { useColorContext } from "../service/context/color-context";
-import { useFontFamilyContext } from "../service/context/font-context";
 import { useLogoImageContext } from "../service/context/logo-context";
 import { useVideoContext } from "../service/context/video-context";
-import { useWindowContext } from "../service/context/window-context";
 import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
@@ -13,20 +11,22 @@ import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
 
+import { useData } from "../service/context/data-context";
+
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
   const { data } = useContext<any>(SocketContext);
-  const {
-    sentNumberOfWindows,
-    sentNumberOfVerticalRows,
-    sentNumberOfHorizontalCols,
-    orientation,
-  } = useWindowContext();
+
   const { headerColor, mainColor, footerColor, windowColor } =
     useColorContext();
   const { showVideo, videoUpload } = useVideoContext();
-  const { fontFamily } = useFontFamilyContext();
+
+  // const toggleSettings = () => {
+  //   setIsOpenSettings(!isOpenSettings);
+  // };
+
+  const { datas } = useData();
 
   const { mainBackground, backgroundSize } = useBackgroundImageContext();
   const { logo } = useLogoImageContext();
@@ -49,7 +49,7 @@ const Monitor = () => {
       description="Welcome to our website!"
       templateType="template1"
       headerStyle={{
-        backgroundColor: "datas.color",
+        backgroundColor: datas.color,
       }}
       mainStyle={{
         backgroundColor: mainColor,
@@ -59,46 +59,47 @@ const Monitor = () => {
         backgroundSize: backgroundSize,
       }}
       footerStyle={{
-        backgroundColor: "datas.color",
+        backgroundColor: datas.color,
       }}
       headerClass="header"
       mainClass="main"
       footerClass="footer"
-      fontFamily={fontFamily}
+      fontFamily={datas.fontFamily}
     >
       <Header
         componentType="header"
         groupName={title}
         groupAddr={"Cebu City"}
         src={logo}
-        fontFamily={fontFamily}
+        fontFamily={datas.fontFamily}
       />
-      {sentNumberOfWindows !== null &&
-      sentNumberOfHorizontalCols !== null &&
-      sentNumberOfVerticalRows !== null ? (
+
+      {datas.windowCount !== 0 &&
+      datas.verticalRowsCount != 0 &&
+      datas.horizontalColsCount != 0 ? (
         <QueueGroup
-          numberOfItems={Math.max(sentNumberOfWindows || 0)}
+          numberOfItems={Math.max(datas.windowCount || 0)}
           componentType="main-left"
-          orientation={orientation}
-          verticalRows={Math.max(sentNumberOfVerticalRows || 0)}
-          horizontalCols={Math.max(sentNumberOfHorizontalCols || 0)}
+          orientation={datas.xyAxis === "vertical" ? "vertical" : "horizontal"}
+          verticalRows={Math.max(datas.verticalRowsCount || 0)}
+          horizontalCols={Math.max(datas.horizontalColsCount || 0)}
           queueType={data.type}
           queueTicket={data.ticketno}
           queueCounter={data.countercode}
           bgColor={{ backgroundColor: windowColor }}
-          fontFamily={fontFamily}
+          fontFamily={datas.fontFamily}
         />
-      ) : null}
-
+      ) : (
+        0
+      )}
       <QueueTv
         key={"videoUpload"}
         src={"videoUpload"}
         componentType={showVideo ? "main-right" : "none"}
         layoutType="default"
-        fontFamily={fontFamily}
+        fontFamily={datas.fontFamily}
       />
-
-      <Footer componentType="footer" fontFamily={fontFamily} />
+      <Footer componentType="footer" fontFamily={datas.fontFamily} />
       {/* <Settings
         isOpen={isOpenSettings}
         toggleSidebar={toggleSettings}
