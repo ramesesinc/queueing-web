@@ -38,7 +38,6 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
         : undefined,
     gridAutoFlow: orientation === "horizontal" ? "column" : undefined,
   };
-
   const numItems = typeof numberOfItems === "number" ? numberOfItems : 0;
 
   const [windowTickets, setWindowTickets] = useState<string[]>(

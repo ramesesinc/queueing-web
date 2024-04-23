@@ -1,18 +1,35 @@
 //pages/api/socket.tsx
+import { Server } from "socket.io";
 
 const SocketHandler = (req: any, res: any) => {
-  const { type, countercode, groupid, ticketno } = req.body;
-  if (!type || !countercode || !groupid || !ticketno) {
-    res.status(400).json({ error: "Invalid data provided" });
-    return;
-  }
-  const group = groupid.toLowerCase();
-  const ticket = ticketno;
-  req.socket.server.io
-    .to(group)
-    .emit("update", { type, countercode, group, ticket });
+  if (!res.socket.server.io) {
+    console.log("Socket is initializing");
+    const io = new Server(res.socket.server);
+    res.socket.server.io = io;
 
-  res.end();
+    io.on("connection", (socket) => {
+      socket.on("join-room", (data) => {
+        const { group } = data;
+        socket.join(group);
+        console.log(`Socket joined room: ${group}`);
+      });
+    });
+  }
+
+  if (req.method === "POST") {
+    const { type, groupid, countercode, ticketno } = req.body;
+    const group = groupid.toLowerCase();
+    res.socket.server.io.to(group).emit("update", {
+      type,
+      groupid,
+      countercode,
+      ticketno,
+    });
+
+    res.status(200).json({ message: "Data received and emitted successfully" });
+  } else {
+    res.status(405).json({ error: "Method not allowed" });
+  }
 };
 
 export default SocketHandler;

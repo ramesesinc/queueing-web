@@ -1,26 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { useBackgroundImageContext } from "../service/context/bgimage-context";
+import { useColorContext } from "../service/context/color-context";
+import { useFontFamilyContext } from "../service/context/font-context";
+import { useLogoImageContext } from "../service/context/logo-context";
+import { useVideoContext } from "../service/context/video-context";
+import { useWindowContext } from "../service/context/window-context";
 import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
-import { Settings, OpenSettings } from "./layouts/Settings";
-import { useColorContext } from "../service/context/color-context";
-import { useWindowContext } from "../service/context/window-context";
-import { useVideoContext } from "../service/context/video-context";
-import { useBackgroundImageContext } from "../service/context/bgimage-context";
-import { useLogoImageContext } from "../service/context/logo-context";
-import { useFontFamilyContext } from "../service/context/font-context";
-import { useColorsContext } from "../service/context/colors-context";
-import { useData } from "../service/context/data-context";
 
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
   const { data } = useContext<any>(SocketContext);
-  const [isOpenSettings, setIsOpenSettings] = useState(false);
   const {
     sentNumberOfWindows,
     sentNumberOfVerticalRows,
@@ -31,15 +27,6 @@ const Monitor = () => {
     useColorContext();
   const { showVideo, videoUpload } = useVideoContext();
   const { fontFamily } = useFontFamilyContext();
-
-  const toggleSettings = () => {
-    setIsOpenSettings(!isOpenSettings);
-  };
-
-  const { hfcolors, addColor, deleteColor, newHfColor, setNewHfColor } =
-    useColorsContext();
-
-  const { datas, handleChange, handleSubmit, handleGetData } = useData();
 
   const { mainBackground, backgroundSize } = useBackgroundImageContext();
   const { logo } = useLogoImageContext();
@@ -56,15 +43,13 @@ const Monitor = () => {
     title = `${group || "Unknown Group"}`;
   }
 
-  console.log("hfcolors", hfcolors);
-
   return (
     <Template
       title="Home Page"
       description="Welcome to our website!"
       templateType="template1"
       headerStyle={{
-        backgroundColor: datas.color,
+        backgroundColor: "datas.color",
       }}
       mainStyle={{
         backgroundColor: mainColor,
@@ -74,7 +59,7 @@ const Monitor = () => {
         backgroundSize: backgroundSize,
       }}
       footerStyle={{
-        backgroundColor: datas.color,
+        backgroundColor: "datas.color",
       }}
       headerClass="header"
       mainClass="main"
@@ -97,17 +82,17 @@ const Monitor = () => {
           orientation={orientation}
           verticalRows={Math.max(sentNumberOfVerticalRows || 0)}
           horizontalCols={Math.max(sentNumberOfHorizontalCols || 0)}
-          queueType={data?.type}
-          queueTicket={data?.ticket}
-          queueCounter={data?.countercode}
+          queueType={data.type}
+          queueTicket={data.ticketno}
+          queueCounter={data.countercode}
           bgColor={{ backgroundColor: windowColor }}
           fontFamily={fontFamily}
         />
       ) : null}
 
       <QueueTv
-        key={videoUpload}
-        src={videoUpload}
+        key={"videoUpload"}
+        src={"videoUpload"}
         componentType={showVideo ? "main-right" : "none"}
         layoutType="default"
         fontFamily={fontFamily}
