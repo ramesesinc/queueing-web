@@ -2,11 +2,14 @@
 import fs from "fs";
 
 export default function handler(req, res) {
-    const { color, fontFamily, windowCount } = req.body;
+    const { color, fontFamily, windowCount, xyAxis, verticalRowsCount, horizontalColsCount } = req.body;
     const datas = {
         color,
         fontFamily,
         windowCount,
+        xyAxis,
+        verticalRowsCount,
+        horizontalColsCount,
     };
     try {
         fs.writeFileSync("./data.json", JSON.stringify(datas));

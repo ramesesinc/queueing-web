@@ -52,7 +52,7 @@ export const ColorsProvider: React.FC<ColorProps> = ({ children }) => {
       setHfColors(data);
     } catch (error) {
       console.error("Error refreshing colors:", error);
-      showAlert("Error refreshing colors");
+      // showAlert("Error refreshing colors");
     }
   }, [API_URL, showAlert]);
 
@@ -72,7 +72,7 @@ export const ColorsProvider: React.FC<ColorProps> = ({ children }) => {
       await refreshColors();
     } catch (error) {
       console.error("Error adding color:", error);
-      showAlert("Error adding color");
+      // showAlert("Error adding color");
     }
   };
 
@@ -84,7 +84,7 @@ export const ColorsProvider: React.FC<ColorProps> = ({ children }) => {
       await refreshColors();
     } catch (error) {
       console.error("Error deleting color:", error);
-      showAlert("Error deleting color");
+      // showAlert("Error deleting color");
     }
   };
 

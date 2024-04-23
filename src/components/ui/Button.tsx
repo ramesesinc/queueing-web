@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 function Button({
-  text,
+  caption,
   onClick,
   href,
   className,
@@ -11,8 +11,9 @@ function Button({
   value,
   icon,
   componentType,
+  type,
 }: {
-  text?: string;
+  caption?: string;
   onClick?: () => void;
   href?: string;
   className?: string;
@@ -21,6 +22,7 @@ function Button({
   value?: string;
   icon?: React.ReactNode;
   componentType?: string;
+  type?: "submit" | "button" | "reset" | undefined;
 }) {
   const [clicked, setClicked] = useState(false);
 
@@ -40,7 +42,7 @@ function Button({
         href={href}
         className={`text-2xl px-20 py-4 rounded-xl border border-gray-400 uppercase ${display} ${className}`}
       >
-        {text}
+        {caption}
       </Link>
     );
   }
@@ -52,9 +54,10 @@ function Button({
         clicked ? "transform scale-90 transition-transform duration-300" : ""
       }`}
       onClick={handleClick}
+      type={type}
     >
       {icon}
-      {text}
+      {caption}
       {children}
     </button>
   );

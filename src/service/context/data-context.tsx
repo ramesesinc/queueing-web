@@ -7,8 +7,12 @@ interface DataContextValue {
     color: string;
     fontFamily: string;
     windowCount: number;
+    xyAxis: string;
+    verticalRowsCount: number;
+    horizontalColsCount: number;
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleGetData: () => void;
 }
@@ -23,8 +27,12 @@ const DataContext = createContext<DataContextValue>({
     color: "",
     fontFamily: "",
     windowCount: 0,
+    xyAxis: "",
+    verticalRowsCount: 0,
+    horizontalColsCount: 0,
   },
   handleChange: () => {},
+  handleSelect: () => {},
   handleSubmit: () => {},
   handleGetData: () => {},
 });
@@ -38,6 +46,9 @@ export const DataProvider: React.FC<Datacontext> = ({ children }) => {
     color: "",
     fontFamily: "",
     windowCount: 0,
+    xyAxis: "",
+    verticalRowsCount: 0,
+    horizontalColsCount: 0,
   });
 
   useEffect(() => {
@@ -52,6 +63,13 @@ export const DataProvider: React.FC<Datacontext> = ({ children }) => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDatas({
+      ...datas,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setDatas({
       ...datas,
       [event.target.name]: event.target.value,
@@ -81,7 +99,7 @@ export const DataProvider: React.FC<Datacontext> = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ datas, handleChange, handleSubmit, handleGetData }}
+      value={{ datas, handleChange, handleSubmit, handleGetData, handleSelect }}
     >
       {children}
     </DataContext.Provider>
