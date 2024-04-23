@@ -46,11 +46,11 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
   useEffect(() => {
     if (queueType && queueCounter && queueTicket) {
-      const windowIndex = parseInt(queueCounter.substring(1)) - 1; // Extract window number from queueCounter
+      const windowIndex = parseInt(queueCounter.substring(1)) - 1;
       const newWindowTickets = [...windowTickets];
 
-      switch (queueType) {
-        case "TAKE_NUMBER":
+      if (queueType === "TAKE_NUMBER") {
+        if (!newWindowTickets[windowIndex]) {
           newWindowTickets[windowIndex] = queueTicket;
 
           const intervalId = setInterval(() => {
@@ -64,37 +64,38 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
           setTimeout(() => {
             clearInterval(intervalId);
-          }, 3000);
-          break;
+          }, 2000);
+        }
+      } else if (queueType === "BUZZ_NUMBER") {
+        if (
+          newWindowTickets[windowIndex] === queueTicket &&
+          newWindowTickets[windowIndex] !== ""
+        ) {
+          const playBuzzSound = () => {
+            const takeSound = new Audio("/buzz.mp3");
+            takeSound.play();
+          };
 
-        case "BUZZ_NUMBER":
-          // Blink the ticket number if it matches the counter code
-          if (newWindowTickets[windowIndex] === queueTicket) {
-            const buzzIntervalId = setInterval(() => {
-              setWindowTickets((prevWindowTickets) => {
-                const newWindowTickets = [...prevWindowTickets];
-                newWindowTickets[windowIndex] =
-                  newWindowTickets[windowIndex] === "" ? queueTicket : "";
-                return newWindowTickets;
-              });
-            }, 300);
+          playBuzzSound();
+          const intervalId = setInterval(() => {
+            setWindowTickets((prevWindowTickets) => {
+              const newWindowTickets = [...prevWindowTickets];
+              newWindowTickets[windowIndex] =
+                newWindowTickets[windowIndex] === "" ? queueTicket : "";
+              return newWindowTickets;
+            });
+          }, 300);
 
-            setTimeout(() => {
-              clearInterval(buzzIntervalId);
-            }, 3000);
-          }
-          break;
-
-        case "CONSUME_NUMBER":
-          // Delete the ticket number if it matches the counter code
-          if (newWindowTickets[windowIndex] === queueTicket) {
-            newWindowTickets[windowIndex] = "";
-          }
-          break;
-
-        default:
-          // Unknown type, do nothing
-          break;
+          // Clear the interval after 2 seconds
+          setTimeout(() => {
+            clearInterval(intervalId);
+          }, 2000);
+        }
+      } else if (queueType === "CONSUME_NUMBER") {
+        // Delete the ticket number if it matches the counter code
+        if (newWindowTickets[windowIndex] === queueTicket) {
+          newWindowTickets[windowIndex] = "";
+        }
       }
 
       setWindowTickets(newWindowTickets);
