@@ -19,9 +19,6 @@ export const SocketContextProvider = (props: any) => {
     fetch("/api/socket").then(() => {
       socket = io();
       socket.on("connect", () => {
-        console.log("socket connected");
-
-        // Emit 'join-room' event with the group name
         if (group) {
           socket.emit("join-room", { group: group });
         }
