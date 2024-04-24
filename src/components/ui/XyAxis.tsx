@@ -4,20 +4,32 @@ interface XyAxisSelectProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
+  label?: string;
 }
 
-const XyAxis: React.FC<XyAxisSelectProps> = ({ value, onChange, name }) => {
+const XyAxis: React.FC<XyAxisSelectProps> = ({
+  value,
+  onChange,
+  name,
+  label,
+}) => {
   return (
     <div>
-      <select
-        name={name}
-        onChange={onChange}
-        value={value}
-        className="rounded border border-blue-500"
+      <label
+        htmlFor=""
+        className="flex flex-col items-center justify-center leading-none pb-2"
       >
-        <option value="vertical">Vertical</option>
-        <option value="horizontal">Horizontal</option>
-      </select>
+        <p className="leading-none text-[12px] pb-1">{label}</p>
+        <select
+          name={name}
+          onChange={onChange}
+          value={value}
+          className="rounded border border-blue-500"
+        >
+          <option value="vertical">Vertical</option>
+          <option value="horizontal">Horizontal</option>
+        </select>
+      </label>
     </div>
   );
 };

@@ -1,9 +1,6 @@
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import { useBackgroundImageContext } from "../service/context/bgimage-context";
-import { useColorContext } from "../service/context/color-context";
-import { useLogoImageContext } from "../service/context/logo-context";
-import { useVideoContext } from "../service/context/video-context";
+
 import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
@@ -11,105 +8,125 @@ import Template from "./layouts/Template";
 import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
 
-import { useData } from "../service/context/data-context";
+import { useBplsData } from "../service/context/bplsdatas-context";
+import { useRptData } from "../service/context/rptdata-context";
+import { useTcData } from "../service/context/tcdata-context";
 
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
   const { data } = useContext<any>(SocketContext);
 
-  const { headerColor, mainColor, footerColor, windowColor } =
-    useColorContext();
-  const { showVideo, videoUpload } = useVideoContext();
-
-  // const toggleSettings = () => {
-  //   setIsOpenSettings(!isOpenSettings);
-  // };
-
-  const { datas } = useData();
-
-  const { mainBackground, backgroundSize } = useBackgroundImageContext();
-  const { logo } = useLogoImageContext();
+  const { bplsdata } = useBplsData();
+  const { rptdata } = useRptData();
+  const { tcdata } = useTcData();
 
   let title = "";
+  let headerFooterBgColor = "";
+  let bgImage = "";
+  let bgSize = "";
+  let windowCount = 0;
+  let windowColors = "";
+  let verticalRowsCount = 0;
+  let horizontalColsCount = 0;
+  let xyAxis = "";
+  let showVideo = true;
 
   if (group === "bpls") {
     title = "Business Permit and Licensing System";
+    headerFooterBgColor = bplsdata.bpls.color;
+    bgImage = bplsdata.bpls.bgUrl;
+    bgSize = bplsdata.bpls.bgSize;
+    windowCount = bplsdata.bpls.windowCount;
+    verticalRowsCount = bplsdata.bpls.verticalRowsCount;
+    horizontalColsCount = bplsdata.bpls.horizontalColsCount;
+    xyAxis = bplsdata.bpls.xyAxis;
+    windowColors = bplsdata.bpls.windowColor;
+    showVideo = bplsdata.bpls.showVideo;
   } else if (group === "rpt") {
     title = "Real Property Tax";
+    headerFooterBgColor = rptdata.rpt.color;
+    bgImage = rptdata.rpt.bgUrl;
+    bgSize = rptdata.rpt.bgSize;
+    windowCount = rptdata.rpt.windowCount;
+    verticalRowsCount = rptdata.rpt.verticalRowsCount;
+    horizontalColsCount = rptdata.rpt.horizontalColsCount;
+    xyAxis = rptdata.rpt.xyAxis;
+    windowColors = rptdata.rpt.windowColor;
+    showVideo = rptdata.rpt.showVideo;
   } else if (group === "tc") {
     title = "Treasury and Collections";
+    headerFooterBgColor = tcdata.tc.color;
+    bgImage = tcdata.tc.bgUrl;
+    bgSize = tcdata.tc.bgSize;
+    windowCount = tcdata.tc.windowCount;
+    verticalRowsCount = tcdata.tc.verticalRowsCount;
+    horizontalColsCount = tcdata.tc.horizontalColsCount;
+    xyAxis = tcdata.tc.xyAxis;
+    windowColors = tcdata.tc.windowColor;
+    showVideo = tcdata.tc.showVideo;
   } else {
     title = `${group || "Unknown Group"}`;
   }
 
   return (
-    <Template
-      title="Home Page"
-      description="Welcome to our website!"
-      templateType="template1"
-      headerStyle={{
-        backgroundColor: datas.color,
-      }}
-      mainStyle={{
-        backgroundColor: mainColor,
-        backgroundImage: mainBackground ? `url(${mainBackground})` : undefined,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundSize: backgroundSize,
-      }}
-      footerStyle={{
-        backgroundColor: datas.color,
-      }}
-      headerClass="header"
-      mainClass="main"
-      footerClass="footer"
-      fontFamily={datas.fontFamily}
-    >
-      <Header
-        componentType="header"
-        groupName={title}
-        groupAddr={"Cebu City"}
-        src={logo}
-        fontFamily={datas.fontFamily}
-      />
-
-      {datas.windowCount !== 0 &&
-      datas.verticalRowsCount != 0 &&
-      datas.horizontalColsCount != 0 ? (
-        <QueueGroup
-          numberOfItems={Math.max(datas.windowCount || 0)}
-          componentType="main-left"
-          orientation={datas.xyAxis === "vertical" ? "vertical" : "horizontal"}
-          verticalRows={Math.max(datas.verticalRowsCount || 0)}
-          horizontalCols={Math.max(datas.horizontalColsCount || 0)}
-          queueType={data.type}
-          queueTicket={data.ticketno}
-          queueCounter={data.countercode}
-          bgColor={{ backgroundColor: windowColor }}
-          fontFamily={datas.fontFamily}
+    <>
+      <Template
+        title="Home Page"
+        description="Welcome to our website!"
+        templateType="template1"
+        headerStyle={{
+          backgroundColor: headerFooterBgColor,
+        }}
+        mainStyle={{
+          backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: bgSize,
+        }}
+        footerStyle={{
+          backgroundColor: headerFooterBgColor,
+        }}
+        headerClass="header"
+        mainClass="main"
+        footerClass="footer"
+        fontFamily={bplsdata.bpls.fontFamily}
+      >
+        <Header
+          componentType="header"
+          groupName={title}
+          groupAddr={"Cebu City"}
+          src={bplsdata.bpls.logoUrl}
+          fontFamily={bplsdata.bpls.fontFamily}
         />
-      ) : (
-        0
-      )}
-      <QueueTv
-        key={"videoUpload"}
-        src={"videoUpload"}
-        componentType={showVideo ? "main-right" : "none"}
-        layoutType="default"
-        fontFamily={datas.fontFamily}
-      />
-      <Footer componentType="footer" fontFamily={datas.fontFamily} />
-      {/* <Settings
-        isOpen={isOpenSettings}
-        toggleSidebar={toggleSettings}
-        componentType="settings"
-      />
 
-      <OpenSettings componentType="settings" onClick={toggleSettings}>
-        {isOpenSettings ? "Close" : "Open"}
-      </OpenSettings> */}
-    </Template>
+        {windowCount !== 0 &&
+        verticalRowsCount != 0 &&
+        horizontalColsCount != 0 ? (
+          <QueueGroup
+            numberOfItems={Math.max(windowCount || 0)}
+            componentType="main-left"
+            orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
+            verticalRows={Math.max(verticalRowsCount || 0)}
+            horizontalCols={Math.max(horizontalColsCount || 0)}
+            queueType={data.type}
+            queueTicket={data.ticketno}
+            queueCounter={data.countercode}
+            bgColor={{ backgroundColor: windowColors }}
+            fontFamily={bplsdata.bpls.fontFamily}
+          />
+        ) : (
+          0
+        )}
+        <QueueTv
+          src={""}
+          componentType={showVideo ? "main-right" : "none"}
+          layoutType="default"
+          fontFamily={bplsdata.bpls.fontFamily}
+        />
+        <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
+      </Template>
+    </>
   );
 };
 

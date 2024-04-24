@@ -2,17 +2,14 @@
 import fs from "fs";
 
 export default function handler(req, res) {
-    const { color, fontFamily, windowCount, xyAxis, verticalRowsCount, horizontalColsCount } = req.body;
+    const { bpls, rpt, tc } = req.body;
     const datas = {
-        color,
-        fontFamily,
-        windowCount,
-        xyAxis,
-        verticalRowsCount,
-        horizontalColsCount,
+        bpls,
+        rpt,
+        tc
     };
     try {
-        fs.writeFileSync("./data.json", JSON.stringify(datas));
+        fs.writeFileSync("./data.json", JSON.stringify(datas, null, 2));
         res.status(200).json({ message: "Data updated successfully!" });
     } catch (error) {
         console.error("Error updating data:", error);

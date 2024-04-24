@@ -12,6 +12,7 @@ function Button({
   icon,
   componentType,
   type,
+  disabled,
 }: {
   caption?: string;
   onClick?: () => void;
@@ -23,6 +24,7 @@ function Button({
   icon?: React.ReactNode;
   componentType?: string;
   type?: "submit" | "button" | "reset" | undefined;
+  disabled?: boolean | undefined;
 }) {
   const [clicked, setClicked] = useState(false);
 
@@ -55,6 +57,7 @@ function Button({
       }`}
       onClick={handleClick}
       type={type}
+      disabled={disabled}
     >
       {icon}
       {caption}

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useBackgroundImageContext } from "../../service/context/bgimage-context";
 
 const ImageUpload = ({
-  onImageUploaded,
+  onLogoUploaded,
+  removeLogoImage,
 }: {
-  onImageUploaded: (image: string) => void;
+  onLogoUploaded: (image: string) => void;
+  removeLogoImage: () => void;
 }) => {
   const [image, setImage] = useState<File | null>(null);
 
@@ -20,13 +21,11 @@ const ImageUpload = ({
       const reader = new FileReader();
       reader.onload = () => {
         const dataUrl = reader.result as string;
-        onImageUploaded(dataUrl); // Pass the image data URL to the parent component
+        onLogoUploaded(dataUrl); // Pass the image data URL to the parent component
       };
       reader.readAsDataURL(image);
     }
   };
-
-  const { mainBackground, removeBackgroundImage } = useBackgroundImageContext();
 
   return (
     <div className="flex flex-col items-center text-[10px] p-2">
@@ -46,12 +45,11 @@ const ImageUpload = ({
         >
           Upload
         </button>
-        {mainBackground && (
+
+        {removeLogoImage && (
           <button
             className={`px-2 py-1 bg-gray-500 text-white rounded hover:bg-gray-400 transition duration-200`}
-            onClick={() => {
-              removeBackgroundImage();
-            }}
+            onClick={removeLogoImage}
           >
             remove
           </button>
