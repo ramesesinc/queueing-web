@@ -27,7 +27,12 @@ const SocketHandler = (req: any, res: any) => {
     });
 
     res.status(200).json({ message: "Data received and emitted successfully" });
+  } else if (req.method === "GET") {
+    // Handle GET requests
+    // Respond with appropriate data or status code
+    res.status(200).json({ message: "GET request received" });
   } else {
+    // Handle other HTTP methods
     res.status(405).json({ error: "Method not allowed" });
   }
 };

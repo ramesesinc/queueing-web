@@ -39,12 +39,23 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
     gridAutoFlow: orientation === "horizontal" ? "column" : undefined,
   };
   const numItems = typeof numberOfItems === "number" ? numberOfItems : 0;
-
+  const soundEffect = new Audio("/buzz.mp3");
+  const [playSound, setPlaySound] = useState(false);
   const [windowTickets, setWindowTickets] = useState<string[]>(
     Array(numItems).fill("")
   );
 
+  const handlePlaySound = () => {
+    // Set playSound to true to play the sound
+    setPlaySound(true);
+  };
+
   useEffect(() => {
+    if (playSound) {
+      soundEffect.play();
+      setPlaySound(false);
+    }
+
     if (queueType && queueCounter && queueTicket) {
       const windowIndex = parseInt(queueCounter.substring(1)) - 1;
       const newWindowTickets = [...windowTickets];
@@ -86,6 +97,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
           newWindowTickets[windowIndex] === queueTicket &&
           newWindowTickets[windowIndex] !== ""
         ) {
+          handlePlaySound();
           const intervalId = setInterval(() => {
             setWindowTickets((prevWindowTickets) => {
               const newWindowTickets = [...prevWindowTickets];

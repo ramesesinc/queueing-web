@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from "react";
-import TimeDate from "../ui/Time&Date";
-import SubTitle from "../ui/SubTitle";
 import Image from "next/image";
+import React, { useEffect, useRef } from "react";
+import SubTitle from "../ui/SubTitle";
+import TimeDate from "../ui/Time&Date";
 
 interface VideoProps {
   src: string | null;
@@ -38,10 +38,7 @@ const Video: React.FC<VideoProps> = ({
             width={900}
             height={500}
           >
-            {!src && <source src="/videos/video.mp4" type="video/mp4" />}
-            {src && typeof src === "string" && (
-              <source src={src} type="video/mp4" />
-            )}
+            <source src="" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
 
@@ -60,10 +57,7 @@ const Video: React.FC<VideoProps> = ({
             width={1000}
             height={500}
           >
-            {!src && <source src="/videos/video.mp4" type="video/mp4" />}
-            {src && typeof src === "string" && (
-              <source src={src} type="video/mp4" />
-            )}
+            <source src="" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <div className=" absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">
