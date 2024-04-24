@@ -1,5 +1,5 @@
 // DataContext.tsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Define the interface for your context data
 interface TcDataContextValue {
@@ -121,7 +121,7 @@ export const TcDataProvider: React.FC<TcDatacontext> = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(tcdata),
+        body: JSON.stringify({ tc: tcdata.tc }),
       });
       const newTcData = await response.json();
       console.log(newTcData);

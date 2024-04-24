@@ -1,5 +1,5 @@
 // DataContext.tsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Define the interface for your context data
 interface BplsDataContextValue {
@@ -120,7 +120,7 @@ export const BplsDataProvider: React.FC<BplsDatacontext> = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(bplsdata),
+        body: JSON.stringify({ bpls: bplsdata.bpls }),
       });
       const newBplsData = await response.json();
       console.log(newBplsData);
