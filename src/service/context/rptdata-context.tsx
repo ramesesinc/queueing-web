@@ -1,5 +1,5 @@
 // DataContext.tsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 // Define the interface for your context data
 interface RptDataContextValue {
@@ -120,7 +120,7 @@ export const RptDataProvider: React.FC<RptDatacontext> = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(rptdata),
+        body: JSON.stringify({ rpt: rptdata.rpt }),
       });
       const newRptData = await response.json();
       console.log(newRptData);
