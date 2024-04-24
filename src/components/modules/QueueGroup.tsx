@@ -46,13 +46,46 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
   useEffect(() => {
     if (queueType && queueCounter && queueTicket) {
-      const windowIndex = parseInt(queueCounter.substring(1)) - 1; // Extract window number from queueCounter
+      const windowIndex = parseInt(queueCounter.substring(1)) - 1;
       const newWindowTickets = [...windowTickets];
 
-      switch (queueType) {
-        case "TAKE_NUMBER":
-          newWindowTickets[windowIndex] = queueTicket;
+      if (queueType === "TAKE_NUMBER") {
+        // Check if the window index is within the range of existing windows
+        if (windowIndex >= 0 && windowIndex < numberOfItems) {
+          // Check if the window doesn't already have a ticket number
+          if (!newWindowTickets[windowIndex]) {
+            // Check if the ticket number is not displayed in other windows
+            const ticketAlreadyDisplayed = newWindowTickets.some(
+              (ticket) => ticket === queueTicket
+            );
 
+            if (!ticketAlreadyDisplayed) {
+              // Display the ticket number in the window
+              newWindowTickets[windowIndex] = queueTicket;
+
+              // Start the interval to simulate the ticket being taken
+              const intervalId = setInterval(() => {
+                setWindowTickets((prevWindowTickets) => {
+                  // Toggle the visibility of the new ticket number
+                  const newWindowTickets = [...prevWindowTickets];
+                  newWindowTickets[windowIndex] =
+                    newWindowTickets[windowIndex] === "" ? queueTicket : "";
+                  return newWindowTickets;
+                });
+              }, 300);
+
+              // Clear the interval after 2 seconds
+              setTimeout(() => {
+                clearInterval(intervalId);
+              }, 2000);
+            }
+          }
+        }
+      } else if (queueType === "BUZZ_NUMBER") {
+        if (
+          newWindowTickets[windowIndex] === queueTicket &&
+          newWindowTickets[windowIndex] !== ""
+        ) {
           const intervalId = setInterval(() => {
             setWindowTickets((prevWindowTickets) => {
               const newWindowTickets = [...prevWindowTickets];
@@ -64,37 +97,13 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
           setTimeout(() => {
             clearInterval(intervalId);
-          }, 3000);
-          break;
-
-        case "BUZZ_NUMBER":
-          // Blink the ticket number if it matches the counter code
-          if (newWindowTickets[windowIndex] === queueTicket) {
-            const buzzIntervalId = setInterval(() => {
-              setWindowTickets((prevWindowTickets) => {
-                const newWindowTickets = [...prevWindowTickets];
-                newWindowTickets[windowIndex] =
-                  newWindowTickets[windowIndex] === "" ? queueTicket : "";
-                return newWindowTickets;
-              });
-            }, 300);
-
-            setTimeout(() => {
-              clearInterval(buzzIntervalId);
-            }, 3000);
-          }
-          break;
-
-        case "CONSUME_NUMBER":
-          // Delete the ticket number if it matches the counter code
-          if (newWindowTickets[windowIndex] === queueTicket) {
-            newWindowTickets[windowIndex] = "";
-          }
-          break;
-
-        default:
-          // Unknown type, do nothing
-          break;
+          }, 2000);
+        }
+      } else if (queueType === "CONSUME_NUMBER") {
+        // Delete the ticket number if it matches the counter code
+        if (newWindowTickets[windowIndex] === queueTicket) {
+          newWindowTickets[windowIndex] = "";
+        }
       }
 
       setWindowTickets(newWindowTickets);
