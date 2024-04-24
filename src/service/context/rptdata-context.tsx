@@ -34,7 +34,6 @@ interface RptDatacontext {
   children: React.ReactNode;
 }
 
-// Create the context with a default value
 const RptDataContext = createContext<RptDataContextValue>({
   rptdata: {
     rpt: {
@@ -63,10 +62,8 @@ const RptDataContext = createContext<RptDataContextValue>({
   updateBgSize: () => {},
 });
 
-// Create a custom hook to consume the context
 export const useRptData = () => useContext(RptDataContext);
 
-// Define the DataProvider component
 export const RptDataProvider: React.FC<RptDatacontext> = ({ children }) => {
   const [rptdata, setRptData] = useState<RptDataContextValue["rptdata"]>({
     rpt: {

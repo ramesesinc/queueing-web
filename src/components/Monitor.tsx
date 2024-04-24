@@ -72,7 +72,7 @@ const Monitor = () => {
   return (
     <>
       <Template
-        title="Home Page"
+        title={title}
         description="Welcome to our website!"
         templateType="template1"
         headerStyle={{
