@@ -1,7 +1,6 @@
 // DataContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Define the interface for your context data
 interface TcDataContextValue {
   tcdata: {
     tc: {
@@ -34,7 +33,6 @@ interface TcDatacontext {
   children: React.ReactNode;
 }
 
-// Create the context with a default value
 const TcDataContext = createContext<TcDataContextValue>({
   tcdata: {
     tc: {

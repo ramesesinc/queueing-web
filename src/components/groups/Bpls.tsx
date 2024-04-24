@@ -31,7 +31,6 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
     setSelectedBgSize(bgSize);
   };
 
-  console.log("bplsdata", bplsdata.bpls?.color);
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <Title text={title} className="text-center text-xl" />

@@ -31,7 +31,7 @@ export default function Home() {
             removeLogoImage={removeLogoUrl}
           />
           <Button
-            caption="Update"
+            caption="Save"
             type="submit"
             className="!p-0 !m-0 text-[10px] w-[20%] !rounded-md"
           />
