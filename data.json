@@ -3,7 +3,7 @@
     "color": "#ff0000",
     "fontFamily": "Impact, Charcoal, sans-serif",
     "windowCount": "7",
-    "xyAxis": "horizontal",
+    "xyAxis": "vertical",
     "verticalRowsCount": "2",
     "horizontalColsCount": "2",
     "windowColor": "#c21ebd",
