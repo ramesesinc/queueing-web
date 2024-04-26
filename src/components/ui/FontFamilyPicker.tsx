@@ -17,7 +17,7 @@ const FontFamilySelect: React.FC<FontFamilySelectProps> = ({
       value={value}
       onChange={onChange}
       name={name}
-      className="border border-blue-500 w-[25%] rounded"
+      className="border border-blue-500 rounded"
     >
       {fontitem.map((font: FontFamily) => (
         <option key={font.id} value={font.family}>

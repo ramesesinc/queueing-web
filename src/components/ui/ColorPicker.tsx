@@ -5,6 +5,7 @@ type ColorPickerProps = {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+  className?: string;
 };
 
 const ColorPicker: React.FC<ColorPickerProps> = ({
@@ -12,6 +13,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   value,
   label,
   onChange,
+  className,
 }) => {
   return (
     <div className={`color-picker flex`}>
@@ -22,7 +24,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           name={name}
           value={value}
           onChange={onChange}
-          className="h-3 w-28 cursor-pointer text-black rounded"
+          className={`h-3 w-40 cursor-pointer text-black rounded ${className}`}
         />
       </label>
     </div>

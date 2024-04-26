@@ -24,7 +24,7 @@ const XyAxis: React.FC<XyAxisSelectProps> = ({
           name={name}
           onChange={onChange}
           value={value}
-          className="rounded border border-blue-500"
+          className="rounded border border-gray-500 w-28 focus:border-blue-500 focus:outline-none"
         >
           <option value="vertical">Vertical</option>
           <option value="horizontal">Horizontal</option>

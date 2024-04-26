@@ -1,19 +1,19 @@
 {
   "bpls": {
-    "color": "#8080ff",
+    "color": "#ee00ff",
     "fontFamily": "Impact, Charcoal, sans-serif",
     "windowCount": "3",
-    "xyAxis": "vertical",
+    "xyAxis": "horizontal",
     "verticalRowsCount": "2",
     "horizontalColsCount": "2",
     "windowColor": "#ffffff",
-    "showVideo": true,
+    "showVideo": false,
     "logoUrl": "",
     "bgUrl": "",
-    "bgSize": "auto"
+    "bgSize": "cover"
   },
   "rpt": {
-    "color": "#ff0000",
+    "color": "#04ff00",
     "fontFamily": "Times New Roman, Times, serif",
     "windowCount": "4",
     "xyAxis": "vertical",
@@ -23,7 +23,7 @@
     "showVideo": false,
     "logoUrl": "",
     "bgUrl": "",
-    "bgSize": "auto"
+    "bgSize": "contain"
   },
   "tc": {
     "color": "#0400fa",

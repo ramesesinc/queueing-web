@@ -9,7 +9,7 @@ import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
 
 interface BplsProps {
-  title: string;
+  title?: string;
 }
 
 const Bpls: React.FC<BplsProps> = ({ title }) => {
@@ -33,8 +33,8 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <Title text={title} className="text-center text-xl" />
-      <Flex className="flex-col items-center gap-3">
+      <Title text={title || ""} className="text-center text-xl" />
+      <Flex className="flex-col items-center gap-1">
         <ColorPicker
           name={"color"}
           value={bplsdata.bpls.color}
@@ -74,7 +74,6 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
           }`}
           disabled={bplsdata.bpls.xyAxis === "horizontal"}
         />
-
         <InputBox
           label="horizontalColsCount"
           type="number"
@@ -88,10 +87,9 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
           }`}
           disabled={bplsdata.bpls.xyAxis === "vertical"}
         />
-
         <Button
           caption={bplsdata.bpls.showVideo ? "Hide Video" : "Show Video"}
-          className={`!p-0 !m-0 text-[10px] w-[20%] !rounded-md border-none ${
+          className={`!p-0 !m-0 text-[10px] w-[25%] !rounded-md border-none ${
             bplsdata.bpls.showVideo ? "bg-blue-200" : "bg-gray-300"
           }`}
           onClick={toggleVideo}
@@ -100,31 +98,33 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
           onLogoUploaded={updateBgUrl}
           removeLogoImage={removeBgUrl}
         />
-        <Button
-          caption="contain"
-          className={`!p-0 !m-0 text-[10px] w-[20%] !rounded-md ${
-            selectedBgSize === "contain" ? "bg-gray-400" : ""
-          }`}
-          onClick={() => handleBgSizeChange("contain")}
-        />
-        <Button
-          caption="cover"
-          className={`!p-0 !m-0 text-[10px] w-[20%] !rounded-md ${
-            selectedBgSize === "cover" ? "bg-gray-400" : ""
-          }`}
-          onClick={() => handleBgSizeChange("cover")}
-        />
-        <Button
-          caption="auto"
-          className={`!p-0 !m-0 text-[10px] w-[20%] !rounded-md ${
-            selectedBgSize === "auto" ? "bg-gray-400" : ""
-          }`}
-          onClick={() => handleBgSizeChange("auto")}
-        />
+        <Flex className=" gap-5 w-full items-center justify-center">
+          <Button
+            caption="contain"
+            className={`!p-0 !m-0 text-[10px] w-[20%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+              selectedBgSize === "contain" ? "bg-gray-400" : ""
+            }`}
+            onClick={() => handleBgSizeChange("contain")}
+          />
+          <Button
+            caption="cover"
+            className={`!p-0 !m-0 text-[10px] w-[20%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+              selectedBgSize === "cover" ? "bg-gray-400" : ""
+            }`}
+            onClick={() => handleBgSizeChange("cover")}
+          />
+          <Button
+            caption="auto"
+            className={`!p-0 !m-0 text-[10px] w-[20%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+              selectedBgSize === "auto" ? "bg-gray-400" : ""
+            }`}
+            onClick={() => handleBgSizeChange("auto")}
+          />
+        </Flex>
         <Button
           caption="Save"
           type="submit"
-          className="!p-0 !m-0 text-[10px] w-[20%] !rounded-md"
+          className="!p-0 !m-0 text-[10px] w-[15%] h-[25px] text-center flex items-center justify-center !rounded-md absolute bottom-2 right-2"
         />
       </Flex>
     </form>

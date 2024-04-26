@@ -31,7 +31,7 @@ const InputBox: React.FC<InputBox> = ({
           name={name}
           value={value}
           onChange={onChange}
-          className={`border border-blue-500 rounded p-1 ${className}`}
+          className={`border border-gray-500 rounded p-1 focus:border-blue-500 focus:outline-none ${className}`}
           disabled={disabled}
         />
       </label>
