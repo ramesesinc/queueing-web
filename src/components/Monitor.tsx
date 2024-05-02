@@ -72,8 +72,6 @@ const Monitor = () => {
   return (
     <>
       <Template
-        title={title}
-        description="Welcome to our website!"
         templateType="template1"
         headerStyle={{
           backgroundColor: headerFooterBgColor,

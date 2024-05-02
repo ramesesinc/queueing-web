@@ -1,24 +1,46 @@
 // QueueItem.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Number from "../ui/Number";
 
 export type QueueItemProps = {
   queueTicket?: string;
   counter: string;
-  isBlinking?: boolean;
   bgColor?: React.CSSProperties;
   fontFamily?: string;
+  blinkCount: number;
 };
 
 const QueueItem: React.FC<QueueItemProps> = ({
   counter,
   queueTicket,
-  isBlinking = false,
   bgColor,
   fontFamily,
+  blinkCount,
 }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
+    if (blinkCount > 0) {
+      intervalId = setInterval(() => {
+        setIsVisible((prevVisible) => !prevVisible);
+      }, 500);
+    } else {
+      setIsVisible(true);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [blinkCount]);
+
   const itemStyle: React.CSSProperties = {
-    backgroundColor: isBlinking ? "red" : "white", // Change background color when isBlinking is true
     ...(bgColor && {
       ...bgColor,
       backgroundColor: `${bgColor.backgroundColor} !important`,
@@ -47,7 +69,9 @@ const QueueItem: React.FC<QueueItemProps> = ({
         >
           <Number
             number={queueTicket}
-            className="text-5xl max-xl:text-3xl max-lg:text-3xl"
+            className={`text-5xl max-xl:text-3xl max-lg:text-3xl ${
+              blinkCount > 0 && !isVisible ? "invisible" : ""
+            }`}
           />
         </div>
       </div>

@@ -12,7 +12,7 @@ interface QueueGroupsProps {
   queueCounter: string;
   queueTicket: string;
   bgColor: React.CSSProperties;
-  fontFamily?: string;
+  fontFamily?: string | undefined;
 }
 
 const QueueGroups: React.FC<QueueGroupsProps> = ({
@@ -39,99 +39,71 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
     gridAutoFlow: orientation === "horizontal" ? "column" : undefined,
   };
   const numItems = typeof numberOfItems === "number" ? numberOfItems : 0;
-  const soundEffect = new Audio("/buzz.mp3");
-  const [playSound, setPlaySound] = useState(false);
-  const [windowTickets, setWindowTickets] = useState<string[]>(
-    Array(numItems).fill("")
-  );
-
-  const handlePlaySound = () => {
-    // Set playSound to true to play the sound
-    setPlaySound(true);
-  };
+  const [stack, setStack] = useState<{ counter: string; ticket: string }[]>([]);
+  const [blinkCount, setBlinkCount] = useState(0);
 
   useEffect(() => {
-    if (playSound) {
-      soundEffect.play();
-      setPlaySound(false);
-    }
-
     if (queueType && queueCounter && queueTicket) {
-      const windowIndex = parseInt(queueCounter.substring(1)) - 1;
-      const newWindowTickets = [...windowTickets];
+      const newStack = [...stack];
 
       if (queueType === "TAKE_NUMBER") {
-        // Check if the window index is within the range of existing windows
-        if (windowIndex >= 0 && windowIndex < numberOfItems) {
-          // Check if the window doesn't already have a ticket number
-          if (!newWindowTickets[windowIndex]) {
-            // Check if the ticket number is not displayed in other windows
-            const ticketAlreadyDisplayed = newWindowTickets.some(
-              (ticket) => ticket === queueTicket
-            );
-
-            if (!ticketAlreadyDisplayed) {
-              // Display the ticket number in the window
-              newWindowTickets[windowIndex] = queueTicket;
-
-              // Start the interval to simulate the ticket being taken
-              const intervalId = setInterval(() => {
-                setWindowTickets((prevWindowTickets) => {
-                  // Toggle the visibility of the new ticket number
-                  const newWindowTickets = [...prevWindowTickets];
-                  newWindowTickets[windowIndex] =
-                    newWindowTickets[windowIndex] === "" ? queueTicket : "";
-                  return newWindowTickets;
-                });
-              }, 300);
-
-              // Clear the interval after 2 seconds
-              setTimeout(() => {
-                clearInterval(intervalId);
-              }, 2000);
-            }
+        const isNotInStack = !newStack.some(
+          (item) => item.counter === queueCounter && item.ticket === queueTicket
+        );
+        if (isNotInStack) {
+          if (newStack.length < numItems) {
+            newStack.unshift({ counter: queueCounter, ticket: queueTicket });
+            setStack(newStack);
+            setBlinkCount(10);
+          } else {
+            console.log("Queue is full. Cannot add more items.");
           }
         }
       } else if (queueType === "BUZZ_NUMBER") {
-        if (
-          newWindowTickets[windowIndex] === queueTicket &&
-          newWindowTickets[windowIndex] !== ""
-        ) {
-          handlePlaySound();
-          const intervalId = setInterval(() => {
-            setWindowTickets((prevWindowTickets) => {
-              const newWindowTickets = [...prevWindowTickets];
-              newWindowTickets[windowIndex] =
-                newWindowTickets[windowIndex] === "" ? queueTicket : "";
-              return newWindowTickets;
-            });
-          }, 300);
+        const matchFound = newStack.some(
+          (item) => item.counter === queueCounter && item.ticket === queueTicket
+        );
 
-          setTimeout(() => {
-            clearInterval(intervalId);
-          }, 2000);
+        if (matchFound) {
+          setBlinkCount(10);
         }
       } else if (queueType === "CONSUME_NUMBER") {
-        // Delete the ticket number if it matches the counter code
-        if (newWindowTickets[windowIndex] === queueTicket) {
-          newWindowTickets[windowIndex] = "";
-        }
+        const filteredStack = newStack.filter(
+          (item) => item.counter !== queueCounter || item.ticket !== queueTicket
+        );
+        setStack(filteredStack);
       }
-
-      setWindowTickets(newWindowTickets);
     }
   }, [queueType, queueCounter, queueTicket]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
+    if (blinkCount > 0) {
+      intervalId = setInterval(() => {
+        setBlinkCount((prevCount) => prevCount - 1); // Decrement blink count
+      }, 500);
+    }
+
+    // Cleanup function to clear the interval when blinkCount reaches 0
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [blinkCount]);
 
   return (
     <div id={componentType} className="p-5 flex flex-col gap-10">
       <div style={containerStyle}>
-        {windowTickets.map((ticket, index) => (
+        {stack.map((item, index) => (
           <QueueItem
             key={index}
-            counter={`W${index + 1}`}
-            queueTicket={ticket}
+            counter={item.counter}
+            queueTicket={item.ticket}
             bgColor={bgColor}
             fontFamily={fontFamily}
+            blinkCount={item.ticket === queueTicket ? blinkCount : 0}
           />
         ))}
       </div>
