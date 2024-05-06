@@ -1,10 +1,7 @@
 import React from "react";
-import Head from "next/head";
 import SubTitle from "../ui/SubTitle";
 
 interface TemplateProps {
-  title: string;
-  description?: string;
   templateType: "template1" | "template2";
   children?: React.ReactNode;
   headerStyle?: React.CSSProperties;
@@ -17,8 +14,6 @@ interface TemplateProps {
 }
 
 const Template: React.FC<TemplateProps> = ({
-  title,
-  description,
   templateType,
   children,
   headerStyle,
@@ -71,12 +66,7 @@ const Template: React.FC<TemplateProps> = ({
   };
 
   return (
-    <div className={`min-h-screen ${bgColors}  flex flex-col`}>
-      <Head>
-        <title>{title}</title>
-        {description && <meta name="description" content={description} />}
-      </Head>
-
+    <div className={`h-screen flex flex-col ${bgColors}`}>
       {/* Header */}
       <header
         className={`${justifyContent} ${headerClass} ${header} py-2 bg-[#0a5366]`}
@@ -84,46 +74,39 @@ const Template: React.FC<TemplateProps> = ({
       >
         {renderMainContent("header")}
       </header>
-      {/* video switch to hide and show the video */}
-      {renderMainContent("videoswitch")}
 
       {/* Main Content */}
-
-      <div
-        className={`flex flex-1 items-center justify-center gap-10 p-4 ${mainClass} ${
-          flexDirection || "flex-row"
-        }`}
+      <main
+        className={`flex-grow m-10 ${mainClass} ${flexDirection || "flex-row"}`}
         style={mainStyle}
       >
-        {children &&
-          !React.Children.toArray(children).some(
-            (child) =>
-              React.isValidElement(child) &&
-              child.props.componentType === "none"
-          ) && (
-            <div className="basis-[70%] w-full relative">
-              {renderMainContent("main-right")}
+        <div className={`flex gap-x-5 float-left`}>
+          {children &&
+            !React.Children.toArray(children).some(
+              (child) =>
+                React.isValidElement(child) &&
+                child.props.componentType === "none"
+            ) && (
+              <div className="basis-[70%] w-full relative">
+                {renderMainContent("main-right")}
+              </div>
+            )}
+
+          {/* main-left */}
+          {renderMainContent("main-left") && (
+            <div className={`${!renderMainContent("main-right") && ""}`}>
+              <div style={{ fontFamily: fontFamily }}>
+                <SubTitle
+                  text="now serving"
+                  className={`text-[28px] leading-3 !font-bold uppercase text-start ${textColor}`}
+                />
+              </div>
+
+              {renderMainContent("main-left")}
             </div>
           )}
-
-        {/* main-left */}
-        {renderMainContent("main-left") && (
-          <div
-            className={`${
-              !renderMainContent("main-right") && "flex justify-center"
-            }`}
-          >
-            <div style={{ fontFamily: fontFamily }}>
-              <SubTitle
-                text="now serving"
-                className={`text-[18px] leading-3 ml-5 !font-bold uppercase  text-start ${textColor}  p-2`}
-              />
-            </div>
-
-            {renderMainContent("main-left")}
-          </div>
-        )}
-      </div>
+        </div>
+      </main>
 
       {/* Footer */}
       <footer
@@ -131,7 +114,6 @@ const Template: React.FC<TemplateProps> = ({
         className={`${justifyContent} ${footerClass} ${footer} relative flex p-2 text-center bg-[#0a5366]`}
       >
         {renderMainContent("footer")}
-        {renderMainContent("settings")}
       </footer>
     </div>
   );

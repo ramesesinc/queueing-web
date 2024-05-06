@@ -26,14 +26,14 @@
     "bgSize": "contain"
   },
   "tc": {
-    "color": "#0400fa",
+    "color": "#a9a1e8",
     "fontFamily": "Times New Roman, Times, serif",
     "windowCount": "5",
     "xyAxis": "vertical",
-    "verticalRowsCount": "2",
+    "verticalRowsCount": "1",
     "horizontalColsCount": "3",
-    "windowColor": "#00f510",
-    "showVideo": false,
+    "windowColor": "#779c9c",
+    "showVideo": true,
     "logoUrl": "",
     "bgUrl": "",
     "bgSize": "cover"
