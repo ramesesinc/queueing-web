@@ -36,6 +36,6 @@
     "showVideo": false,
     "logoUrl": "",
     "bgUrl": "",
-    "bgSize": "auto"
+    "bgSize": "cover"
   }
 }

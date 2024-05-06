@@ -1,5 +1,3 @@
-// pages/index.js
-
 import Bpls from "../components/groups/Bpls";
 import General from "../components/groups/General";
 import Rpt from "../components/groups/Rpt";
