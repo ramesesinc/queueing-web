@@ -6,6 +6,7 @@ interface ToggleButtonProps {
   onClick: () => void;
   componentType?: string;
   className?: string | undefined;
+  caption?: string;
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({
@@ -14,6 +15,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
   onClick,
   componentType,
   className,
+  caption,
 }) => {
   const [circlePosition, setCirclePosition] = useState(
     isActive ? "translate-x-full" : "translate-x-0"
@@ -31,28 +33,27 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
   const handleClick = () => {
     onClick();
     setCirclePosition((prevPosition) =>
-      prevPosition === "translate-x-full" ? "translate-x-full" : "translate-x-0"
+      prevPosition === "translate-x-full" ? "translate-x-0" : "translate-x-full"
     );
-    setCircleColor((prevColor) =>
-      prevColor === "bg-sky-400" ? "bg-gray-400" : "bg-sky-400"
-    );
+    setCircleColor(isActive ? "bg-sky-400" : "bg-gray-400");
   };
 
   return (
     <div
       id={componentType}
-      className={` relative flex items-center flex-col${className}`}
+      className={`flex items-center flex-col ${className}`}
     >
+      <h1>{caption}</h1>
       <button
-        className={`relative ${
-          isActive ? "bg-sky-200" : "bg-gray-200"
-        } px-[12px] py-[6px] rounded-full outline-none focus:outline-none text-[5px]`}
+        className={`relative w-8 h-[15px] ${
+          isActive ? "bg-sky-200" : "bg-gray-300"
+        }  rounded-full outline-none focus:outline-none text-[5px]`}
         onClick={handleClick}
       >
         <span
-          className={`absolute left-0 top-0 w-3 h-3 rounded-full shadow-md transform transition-transform ${circlePosition} ${circleColor}`}
+          className={`absolute left-0 top-0 w-4 h-4 rounded-full shadow-md transform transition-transform ${circlePosition} ${circleColor}`}
         >
-          <p className="hover:bg-gray-500 hover:bg-opacity-30 rounded-full py-[9px] px-[9px] absolute left-[-3px] top-[-3px] z-[1px]"></p>
+          <p className="hover:bg-gray-500 hover:bg-opacity-30 rounded-full py-[11px] px-[11px] absolute left-[-3px] top-[-3px] z-[1px]"></p>
         </span>
       </button>
       <p

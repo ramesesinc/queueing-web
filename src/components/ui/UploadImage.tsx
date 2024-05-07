@@ -3,9 +3,11 @@ import { useState } from "react";
 const ImageUpload = ({
   onLogoUploaded,
   removeLogoImage,
+  title,
 }: {
   onLogoUploaded: (image: string) => void;
   removeLogoImage: () => void;
+  title?: string;
 }) => {
   const [image, setImage] = useState<File | null>(null);
 
@@ -29,6 +31,7 @@ const ImageUpload = ({
 
   return (
     <div className="flex flex-col items-center text-[10px] p-2">
+      <h1 className="text-lg pb-1">{title}</h1>
       <input
         type="file"
         accept="image/*"
