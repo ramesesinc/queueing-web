@@ -7,6 +7,7 @@ import InputBox from "../ui/InputBox";
 import XyAxis from "../ui/XyAxis";
 import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
+import ToggleButton from "../ui/ToggleBtn";
 
 interface TcProps {
   title?: string;
@@ -25,14 +26,14 @@ const Tc: React.FC<TcProps> = ({ title }) => {
   } = useTcData();
   const [selectedBgSize, setSelectedBgSize] = useState<
     "auto" | "contain" | "cover"
-  >("auto");
+  >(tcdata.tc.bgSize);
   const handleBgSizeChange = (bgSize: "auto" | "contain" | "cover") => {
     updateBgSize(bgSize);
     setSelectedBgSize(bgSize);
   };
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <Title text={title || ""} className="text-center text-xl" />
+      <Title text={title || ""} className="text-start pb-5 text-xl" />
       <Flex className="flex-col items-center gap-1">
         <ColorPicker
           name={"color"}
@@ -58,7 +59,7 @@ const Tc: React.FC<TcProps> = ({ title }) => {
           name="windowCount"
           value={tcdata.tc.windowCount}
           onChange={handleChange}
-          className="h-5 w-28 text-center"
+          className="h-6 w-28 text-center"
         />
         <InputBox
           label="verticalRowsCount"
@@ -66,7 +67,7 @@ const Tc: React.FC<TcProps> = ({ title }) => {
           name="verticalRowsCount"
           value={tcdata.tc.verticalRowsCount}
           onChange={handleChange}
-          className={`h-5 w-28 text-center ${
+          className={`h-6 w-28 text-center ${
             tcdata.tc.xyAxis === "horizontal"
               ? "bg-gray-400 opacity-50 border-none"
               : ""
@@ -80,42 +81,41 @@ const Tc: React.FC<TcProps> = ({ title }) => {
           name="horizontalColsCount"
           value={tcdata.tc.horizontalColsCount}
           onChange={handleChange}
-          className={`h-5 w-28 text-center ${
+          className={`h-6 w-28 text-center ${
             tcdata.tc.xyAxis === "vertical"
               ? "bg-gray-400 opacity-50 border-none"
               : ""
           }`}
           disabled={tcdata.tc.xyAxis === "vertical"}
         />
-        <Button
-          caption={tcdata.tc.showVideo ? "Hide Video" : "Show Video"}
-          className={`!p-0 !m-0 text-[10px] w-[25%] !rounded-md border-none ${
-            tcdata.tc.showVideo ? "bg-blue-200" : "bg-gray-300"
-          }`}
+        <ToggleButton
+          isActive={tcdata.tc.showVideo}
           onClick={toggleVideo}
+          caption={tcdata.tc.showVideo ? "Hide Video" : "Show Video"}
         />
         <UploadImage
           onLogoUploaded={updateBgUrl}
           removeLogoImage={removeBgUrl}
+          title="background image"
         />
         <Flex className=" gap-5 w-full items-center justify-center">
           <Button
             caption="contain"
-            className={`!p-0 !m-0 text-[10px] w-[20%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+            className={`!p-0 !m-0 text-[10px] w-[10%] max-xl:w-[8%] h-[25px] text-center flex items-center justify-center !rounded-md ${
               selectedBgSize === "contain" ? "bg-gray-400" : ""
             }`}
             onClick={() => handleBgSizeChange("contain")}
           />
           <Button
             caption="cover"
-            className={`!p-0 !m-0 text-[10px] w-[20%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+            className={`!p-0 !m-0 text-[10px] w-[10%] max-xl:w-[8%] h-[25px] text-center flex items-center justify-center !rounded-md ${
               selectedBgSize === "cover" ? "bg-gray-400" : ""
             }`}
             onClick={() => handleBgSizeChange("cover")}
           />
           <Button
             caption="auto"
-            className={`!p-0 !m-0 text-[10px] w-[20%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+            className={`!p-0 !m-0 text-[10px] w-[10%] max-xl:w-[8%] h-[25px] text-center flex items-center justify-center !rounded-md ${
               selectedBgSize === "auto" ? "bg-gray-400" : ""
             }`}
             onClick={() => handleBgSizeChange("auto")}
@@ -124,7 +124,7 @@ const Tc: React.FC<TcProps> = ({ title }) => {
         <Button
           caption="Save"
           type="submit"
-          className="!p-0 !m-0 text-[10px] w-[15%] h-[25px] text-center flex items-center justify-center !rounded-md absolute bottom-2 right-2"
+          className="!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md absolute bottom-2 right-2"
         />
       </Flex>
     </form>

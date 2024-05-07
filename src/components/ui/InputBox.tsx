@@ -25,13 +25,13 @@ const InputBox: React.FC<InputBox> = ({
         htmlFor=""
         className="flex gap-2 flex-col items-center justify-center leading-none pb-2"
       >
-        <p className="leading-none text-[12px] pb-1">{label}</p>
+        <p className="leading-none text-lg pb-1">{label}</p>
         <input
           type={type}
           name={name}
           value={value}
           onChange={onChange}
-          className={`border border-gray-500 rounded p-1 focus:border-blue-500 focus:outline-none ${className}`}
+          className={`border border-gray-500 w-48 rounded p-1 focus:border-blue-500 focus:outline-none ${className}`}
           disabled={disabled}
         />
       </label>

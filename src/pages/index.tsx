@@ -1,27 +1,17 @@
-import Bpls from "../components/groups/Bpls";
-import General from "../components/groups/General";
-import Rpt from "../components/groups/Rpt";
-import Tc from "../components/groups/Tc";
-import Accordion from "../components/ui/Accordion";
-import AccordionItem from "../components/ui/AccordionItem";
+import { ReactElement, useState } from "react";
+import MainContent from "../components/ui/sidebar/MainContent";
+import Sidebar from "../components/ui/sidebar/Sidebar";
 
 export default function Home() {
+  const [selectedItem, setSelectedItem] = useState<ReactElement | null>(null); // Adjusted type
+
+  const handleItemClick = (item: ReactElement) => {
+    setSelectedItem(item);
+  };
   return (
-    <>
-      <Accordion>
-        <AccordionItem title="BPLS">
-          <Bpls title="Theme" />
-        </AccordionItem>
-        <AccordionItem title="RPT">
-          <Rpt title="Theme" />
-        </AccordionItem>
-        <AccordionItem title="TC">
-          <Tc title="Theme" />
-        </AccordionItem>
-        <AccordionItem title="GENERAL">
-          <General title="Logo & Font Family" />
-        </AccordionItem>
-      </Accordion>
-    </>
+    <div className="flex">
+      <Sidebar onItemClick={handleItemClick} />
+      <MainContent selectedItem={selectedItem} />
+    </div>
   );
 }

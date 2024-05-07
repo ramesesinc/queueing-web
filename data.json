@@ -10,7 +10,7 @@
     "showVideo": false,
     "logoUrl": "",
     "bgUrl": "",
-    "bgSize": "cover"
+    "bgSize": "contain"
   },
   "rpt": {
     "color": "#04ff00",
@@ -20,10 +20,10 @@
     "verticalRowsCount": "2",
     "horizontalColsCount": "3",
     "windowColor": "#ffffff",
-    "showVideo": false,
+    "showVideo": true,
     "logoUrl": "",
     "bgUrl": "",
-    "bgSize": "contain"
+    "bgSize": "cover"
   },
   "tc": {
     "color": "#a9a1e8",
@@ -33,9 +33,9 @@
     "verticalRowsCount": "1",
     "horizontalColsCount": "3",
     "windowColor": "#779c9c",
-    "showVideo": true,
+    "showVideo": false,
     "logoUrl": "",
     "bgUrl": "",
-    "bgSize": "cover"
+    "bgSize": "auto"
   }
 }
