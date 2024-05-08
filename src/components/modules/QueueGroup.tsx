@@ -42,6 +42,13 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   const [stack, setStack] = useState<{ counter: string; ticket: string }[]>([]);
   const [blinkCount, setBlinkCount] = useState(0);
 
+  const speakQueueItem = (counter: string, ticket: string) => {
+    const utterance = new SpeechSynthesisUtterance(
+      `Ticket number, ${ticket}, please proceed to counter ${counter}`
+    );
+    window.speechSynthesis.speak(utterance);
+  };
+
   useEffect(() => {
     if (queueType && queueCounter && queueTicket) {
       const newStack = [...stack];
@@ -54,6 +61,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
           if (newStack.length < numItems) {
             newStack.unshift({ counter: queueCounter, ticket: queueTicket });
             setStack(newStack);
+            speakQueueItem(queueCounter, queueTicket);
             setBlinkCount(10);
           } else {
             console.log("Queue is full. Cannot add more items.");
@@ -66,6 +74,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
         if (matchFound) {
           setBlinkCount(10);
+          speakQueueItem(queueCounter, queueTicket);
         }
       } else if (queueType === "CONSUME_NUMBER") {
         const filteredStack = newStack.filter(
