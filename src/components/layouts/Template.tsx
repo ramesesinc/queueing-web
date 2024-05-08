@@ -77,10 +77,10 @@ const Template: React.FC<TemplateProps> = ({
 
       {/* Main Content */}
       <main
-        className={`flex-grow m-10 ${mainClass} ${flexDirection || "flex-row"}`}
+        className={`flex-grow ${mainClass} ${flexDirection || "flex-row"}`}
         style={mainStyle}
       >
-        <div className={`flex gap-x-5 float-left`}>
+        <div className={`flex gap-x-5 m-10 float-left`}>
           {children &&
             !React.Children.toArray(children).some(
               (child) =>

@@ -51,7 +51,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
         onClick={handleClick}
       >
         <span
-          className={`absolute left-0 top-0 w-4 h-4 rounded-full shadow-md transform transition-transform ${circlePosition} ${circleColor}`}
+          className={`absolute left-0 top-[-0.5px] w-4 h-4 rounded-full shadow-md transform transition-transform ${circlePosition} ${circleColor}`}
         >
           <p className="hover:bg-gray-500 hover:bg-opacity-30 rounded-full py-[11px] px-[11px] absolute left-[-3px] top-[-3px] z-[1px]"></p>
         </span>

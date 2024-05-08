@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SubTitle from "../ui/SubTitle";
 import TimeDate from "../ui/Time&Date";
 
@@ -10,6 +10,7 @@ interface VideoProps {
   type?: string | undefined;
   layoutType?: "default" | "custom";
   fontFamily?: string;
+  videoLink: string;
 }
 
 const Video: React.FC<VideoProps> = ({
@@ -19,28 +20,47 @@ const Video: React.FC<VideoProps> = ({
   type,
   layoutType = "default",
   fontFamily,
+  videoLink,
 }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoId, setVideoId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-    }
-  }, []);
+    const getVideoId = (url: string): string | null => {
+      const regExp =
+        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      if (match && match[2].length === 11) {
+        return match[2];
+      } else {
+        return null;
+      }
+    };
+
+    setVideoId(getVideoId(videoLink));
+  }, [videoLink]);
 
   return (
     <div id={componentType}>
       {layoutType === "default" ? (
         <div className="w-full flex flex-col items-center justify-center gap-5">
-          <video
-            ref={videoRef}
-            controls={controls}
-            className="rounded-md"
-            width={900}
-            height={500}
-          >
-            <source src="" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          <div className="w-full max-w-3xl mx-auto">
+            {videoId !== null ? (
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                  title="YouTube video player"
+                  width="770"
+                  height="450"
+                  className="rounded-xl"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div className="aspect-w-16 aspect-h-9"></div>
+            )}
+          </div>
 
           <TimeDate
             componentType={undefined}
@@ -50,16 +70,22 @@ const Video: React.FC<VideoProps> = ({
         </div>
       ) : (
         <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg ">
-          <video
-            ref={videoRef}
-            controls={controls}
-            className="rounded-t-md"
-            width={1000}
-            height={500}
-          >
-            <source src="" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          <div className="w-full max-w-3xl mx-auto">
+            {videoId !== null ? (
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                  title="YouTube video player"
+                  allowFullScreen
+                  width="770"
+                  height="450"
+                  className="rounded-xl"
+                />
+              </div>
+            ) : (
+              <div className="aspect-w-16 aspect-h-9"></div>
+            )}
+          </div>
           <div className=" absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">
             <TimeDate componentType={undefined} />
           </div>

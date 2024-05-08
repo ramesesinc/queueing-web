@@ -15,6 +15,7 @@ interface TcDataContextValue {
       logoUrl: string;
       bgUrl: string;
       bgSize: "auto" | "contain" | "cover";
+      videoUrl: string;
     };
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -27,27 +28,32 @@ interface TcDataContextValue {
   updateBgUrl: (bgUrl: string) => void;
   removeBgUrl: () => void;
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
+  resetData: () => void;
+  handleUpload: (videoUrl: string) => void;
 }
 
 interface TcDatacontext {
   children: React.ReactNode;
 }
 
+const defaultTcData = {
+  color: "#0a5366",
+  fontFamily: "Arial",
+  windowCount: 0,
+  xyAxis: "vertical",
+  verticalRowsCount: 0,
+  horizontalColsCount: 0,
+  windowColor: "#ffffff",
+  showVideo: true,
+  logoUrl: "/images/lgu-logo.png",
+  bgUrl: "",
+  bgSize: "auto" as const,
+  videoUrl: "",
+};
+
 const TcDataContext = createContext<TcDataContextValue>({
   tcdata: {
-    tc: {
-      color: "",
-      fontFamily: "",
-      windowCount: 0,
-      xyAxis: "",
-      verticalRowsCount: 0,
-      horizontalColsCount: 0,
-      windowColor: "",
-      showVideo: true,
-      logoUrl: "",
-      bgUrl: "",
-      bgSize: "auto",
-    },
+    tc: defaultTcData,
   },
   handleChange: () => {},
   handleSelect: () => {},
@@ -59,25 +65,15 @@ const TcDataContext = createContext<TcDataContextValue>({
   updateBgUrl: () => {},
   removeBgUrl: () => {},
   updateBgSize: () => {},
+  resetData: () => {},
+  handleUpload: () => {},
 });
 
 export const useTcData = () => useContext(TcDataContext);
 
 export const TcDataProvider: React.FC<TcDatacontext> = ({ children }) => {
   const [tcdata, setTcData] = useState<TcDataContextValue["tcdata"]>({
-    tc: {
-      color: "",
-      fontFamily: "",
-      windowCount: 0,
-      xyAxis: "",
-      verticalRowsCount: 0,
-      horizontalColsCount: 0,
-      windowColor: "",
-      showVideo: true,
-      logoUrl: "",
-      bgUrl: "",
-      bgSize: "auto",
-    },
+    tc: defaultTcData,
   });
 
   useEffect(() => {
@@ -192,6 +188,20 @@ export const TcDataProvider: React.FC<TcDatacontext> = ({ children }) => {
     });
   };
 
+  const resetData = () => {
+    setTcData({ tc: defaultTcData });
+  };
+
+  const handleUpload = (videoUrl: string) => {
+    setTcData({
+      ...tcdata,
+      tc: {
+        ...tcdata.tc,
+        videoUrl: videoUrl,
+      },
+    });
+  };
+
   return (
     <TcDataContext.Provider
       value={{
@@ -206,6 +216,8 @@ export const TcDataProvider: React.FC<TcDatacontext> = ({ children }) => {
         updateLogoUrl,
         removeBgUrl,
         removeLogoUrl,
+        resetData,
+        handleUpload,
       }}
     >
       {children}

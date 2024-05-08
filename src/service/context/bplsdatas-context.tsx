@@ -16,6 +16,7 @@ interface BplsDataContextValue {
       logoUrl: string;
       bgUrl: string;
       bgSize: "auto" | "contain" | "cover";
+      videoUrl: string;
     };
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,27 +29,32 @@ interface BplsDataContextValue {
   updateBgUrl: (bgUrl: string) => void;
   removeBgUrl: () => void;
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
+  resetData: () => void;
+  handleUpload: (videoUrl: string) => void;
 }
 
 interface BplsDatacontext {
   children: React.ReactNode;
 }
 
+const defaultBplsData = {
+  color: "#0a5366",
+  fontFamily: "Arial",
+  windowCount: 0,
+  xyAxis: "vertical",
+  verticalRowsCount: 0,
+  horizontalColsCount: 0,
+  windowColor: "#ffffff",
+  showVideo: true,
+  logoUrl: "/images/lgu-logo.png",
+  bgUrl: "",
+  bgSize: "auto" as const,
+  videoUrl: "",
+};
+
 const BplsDataContext = createContext<BplsDataContextValue>({
   bplsdata: {
-    bpls: {
-      color: "",
-      fontFamily: "",
-      windowCount: 0,
-      xyAxis: "",
-      verticalRowsCount: 0,
-      horizontalColsCount: 0,
-      windowColor: "",
-      showVideo: true,
-      logoUrl: "",
-      bgUrl: "",
-      bgSize: "auto",
-    },
+    bpls: defaultBplsData,
   },
   handleChange: () => {},
   handleSelect: () => {},
@@ -60,25 +66,15 @@ const BplsDataContext = createContext<BplsDataContextValue>({
   updateBgUrl: () => {},
   removeBgUrl: () => {},
   updateBgSize: () => {},
+  resetData: () => {},
+  handleUpload: () => {},
 });
 
 export const useBplsData = () => useContext(BplsDataContext);
 
 export const BplsDataProvider: React.FC<BplsDatacontext> = ({ children }) => {
   const [bplsdata, setBplsData] = useState<BplsDataContextValue["bplsdata"]>({
-    bpls: {
-      color: "",
-      fontFamily: "",
-      windowCount: 0,
-      xyAxis: "",
-      verticalRowsCount: 0,
-      horizontalColsCount: 0,
-      windowColor: "",
-      showVideo: true,
-      logoUrl: "",
-      bgUrl: "",
-      bgSize: "auto",
-    },
+    bpls: defaultBplsData,
   });
 
   useEffect(() => {
@@ -193,6 +189,20 @@ export const BplsDataProvider: React.FC<BplsDatacontext> = ({ children }) => {
     });
   };
 
+  const resetData = () => {
+    setBplsData({ bpls: defaultBplsData });
+  };
+
+  const handleUpload = (videoUrl: string) => {
+    setBplsData({
+      ...bplsdata,
+      bpls: {
+        ...bplsdata.bpls,
+        videoUrl: videoUrl,
+      },
+    });
+  };
+
   return (
     <BplsDataContext.Provider
       value={{
@@ -207,6 +217,8 @@ export const BplsDataProvider: React.FC<BplsDatacontext> = ({ children }) => {
         updateBgUrl,
         removeBgUrl,
         updateBgSize,
+        resetData,
+        handleUpload,
       }}
     >
       {children}
