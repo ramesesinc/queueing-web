@@ -1,11 +1,11 @@
 {
   "bpls": {
-    "color": "#34c5ea",
+    "color": "#0a5366",
     "fontFamily": "Arial",
-    "windowCount": 0,
-    "xyAxis": "horizontal",
-    "verticalRowsCount": 0,
-    "horizontalColsCount": 0,
+    "windowCount": 1,
+    "xyAxis": "vertical",
+    "verticalRowsCount": 1,
+    "horizontalColsCount": 1,
     "windowColor": "#ffffff",
     "showVideo": true,
     "logoUrl": "/images/lgu-logo.png",
@@ -14,31 +14,31 @@
     "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
   },
   "rpt": {
-    "color": "#6274fe",
+    "color": "#0a5366",
     "fontFamily": "Arial",
-    "windowCount": "3",
-    "xyAxis": "horizontal",
-    "verticalRowsCount": 0,
-    "horizontalColsCount": 0,
-    "windowColor": "#ff0000",
-    "showVideo": true,
-    "logoUrl": "",
-    "bgUrl": "",
-    "bgSize": "auto",
-    "videoUrl": "https://www.youtube.com/watch?v=wNWyMsrpbz0&t=450s"
-  },
-  "tc": {
-    "color": "#ff004c",
-    "fontFamily": "Arial",
-    "windowCount": 0,
+    "windowCount": 1,
     "xyAxis": "vertical",
-    "verticalRowsCount": 0,
-    "horizontalColsCount": 0,
-    "windowColor": "#0033ff",
+    "verticalRowsCount": 1,
+    "horizontalColsCount": 1,
+    "windowColor": "#ffffff",
     "showVideo": true,
     "logoUrl": "/images/lgu-logo.png",
     "bgUrl": "",
     "bgSize": "auto",
-    "videoUrl": "https://www.youtube.com/watch?v=mDgKjb5eWPk"
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
+  },
+  "tc": {
+    "color": "#0a5366",
+    "fontFamily": "Arial",
+    "windowCount": 1,
+    "xyAxis": "vertical",
+    "verticalRowsCount": 1,
+    "horizontalColsCount": 1,
+    "windowColor": "#ffffff",
+    "showVideo": true,
+    "logoUrl": "/images/lgu-logo.png",
+    "bgUrl": "",
+    "bgSize": "auto",
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
   }
 }

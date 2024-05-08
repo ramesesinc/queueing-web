@@ -73,6 +73,8 @@ const Monitor = () => {
     title = `${group || "Unknown Group"}`;
   }
 
+  console.log("data", data.ticketno);
+
   return (
     <>
       <Template
@@ -120,7 +122,6 @@ const Monitor = () => {
         ) : (
           0
         )}
-
         <QueueTv
           src={""}
           componentType={showVideo ? "main-right" : "none"}
@@ -129,6 +130,7 @@ const Monitor = () => {
           videoLink={videoUrl}
         />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
+        {data.ticketno}
       </Template>
     </>
   );

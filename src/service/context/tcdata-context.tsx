@@ -39,16 +39,16 @@ interface TcDatacontext {
 const defaultTcData = {
   color: "#0a5366",
   fontFamily: "Arial",
-  windowCount: 0,
+  windowCount: 1,
   xyAxis: "vertical",
-  verticalRowsCount: 0,
-  horizontalColsCount: 0,
+  verticalRowsCount: 1,
+  horizontalColsCount: 1,
   windowColor: "#ffffff",
   showVideo: true,
   logoUrl: "/images/lgu-logo.png",
   bgUrl: "",
   bgSize: "auto" as const,
-  videoUrl: "",
+  videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
 };
 
 const TcDataContext = createContext<TcDataContextValue>({
