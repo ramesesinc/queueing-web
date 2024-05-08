@@ -2,7 +2,10 @@ export type FontFamily = { id: string; family: string };
 
 export const fontitem: FontFamily[] = [
   // Serif Fonts
-  { id: "Times New Roman", family: "Times New Roman, Times, serif" },
+  {
+    id: "Arial",
+    family: "Arial, Helvetica, sans-serif",
+  },
   { id: "Georgia", family: "Georgia, serif" },
   {
     id: "Palatino Linotype",
@@ -13,7 +16,7 @@ export const fontitem: FontFamily[] = [
   { id: "Cambria", family: "Cambria, serif" },
 
   // Sans-serif Fonts
-  { id: "Arial", family: "Arial, Helvetica, sans-serif" },
+  { id: "Times New Roman", family: "Times New Roman, Times, serif" },
   { id: "Verdana", family: "Verdana, Geneva, sans-serif" },
   { id: "Tahoma", family: "Tahoma, Geneva, sans-serif" },
   { id: "Calibri", family: "Calibri, sans-serif" },

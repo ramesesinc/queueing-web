@@ -29,10 +29,11 @@ const General: React.FC<GeneralProps> = ({ title }) => {
             removeLogoImage={removeLogoUrl}
             title="Logo"
           />
+
           <Button
             caption="Save"
             type="submit"
-            className="!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md absolute bottom-2 right-2"
+            className="px-5 m-0 text-[10px] absolute bottom-2 right-2 w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-blue-500 hover:bg-blue-600 text-white"
           />
         </Flex>
       </form>

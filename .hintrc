@@ -22,6 +22,14 @@
       {
         "duplicate-id-active": "off"
       }
+    ],
+    "compat-api/html": [
+      "default",
+      {
+        "ignore": [
+          "iframe[allow]"
+        ]
+      }
     ]
   }
 }

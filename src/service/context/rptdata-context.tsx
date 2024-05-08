@@ -16,6 +16,7 @@ interface RptDataContextValue {
       logoUrl: string;
       bgUrl: string;
       bgSize: "auto" | "contain" | "cover";
+      videoUrl: string;
     };
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,27 +29,32 @@ interface RptDataContextValue {
   updateBgUrl: (bgUrl: string) => void;
   removeBgUrl: () => void;
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
+  resetData: () => void;
+  handleUpload: (videoUrl: string) => void;
 }
 
 interface RptDatacontext {
   children: React.ReactNode;
 }
 
+const defaultRptData = {
+  color: "#0a5366",
+  fontFamily: "Arial",
+  windowCount: 0,
+  xyAxis: "vertical",
+  verticalRowsCount: 0,
+  horizontalColsCount: 0,
+  windowColor: "#ffffff",
+  showVideo: true,
+  logoUrl: "/images/lgu-logo.png",
+  bgUrl: "",
+  bgSize: "auto" as const,
+  videoUrl: "",
+};
+
 const RptDataContext = createContext<RptDataContextValue>({
   rptdata: {
-    rpt: {
-      color: "",
-      fontFamily: "",
-      windowCount: 0,
-      xyAxis: "",
-      verticalRowsCount: 0,
-      horizontalColsCount: 0,
-      windowColor: "",
-      showVideo: true,
-      logoUrl: "",
-      bgUrl: "",
-      bgSize: "auto",
-    },
+    rpt: defaultRptData,
   },
   handleChange: () => {},
   handleSelect: () => {},
@@ -60,25 +66,15 @@ const RptDataContext = createContext<RptDataContextValue>({
   updateBgUrl: () => {},
   removeBgUrl: () => {},
   updateBgSize: () => {},
+  resetData: () => {},
+  handleUpload: () => {},
 });
 
 export const useRptData = () => useContext(RptDataContext);
 
 export const RptDataProvider: React.FC<RptDatacontext> = ({ children }) => {
   const [rptdata, setRptData] = useState<RptDataContextValue["rptdata"]>({
-    rpt: {
-      color: "",
-      fontFamily: "",
-      windowCount: 0,
-      xyAxis: "",
-      verticalRowsCount: 0,
-      horizontalColsCount: 0,
-      windowColor: "",
-      showVideo: true,
-      logoUrl: "",
-      bgUrl: "",
-      bgSize: "auto",
-    },
+    rpt: defaultRptData,
   });
 
   useEffect(() => {
@@ -193,6 +189,20 @@ export const RptDataProvider: React.FC<RptDatacontext> = ({ children }) => {
     });
   };
 
+  const resetData = () => {
+    setRptData({ rpt: defaultRptData });
+  };
+
+  const handleUpload = (videoUrl: string) => {
+    setRptData({
+      ...rptdata,
+      rpt: {
+        ...rptdata.rpt,
+        videoUrl: videoUrl,
+      },
+    });
+  };
+
   return (
     <RptDataContext.Provider
       value={{
@@ -207,6 +217,8 @@ export const RptDataProvider: React.FC<RptDatacontext> = ({ children }) => {
         updateLogoUrl,
         removeBgUrl,
         removeLogoUrl,
+        resetData,
+        handleUpload,
       }}
     >
       {children}

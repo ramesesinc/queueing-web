@@ -23,6 +23,7 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
     updateBgUrl,
     removeBgUrl,
     updateBgSize,
+    resetData,
   } = useBplsData();
   const [selectedBgSize, setSelectedBgSize] = useState<
     "auto" | "contain" | "cover"
@@ -31,6 +32,8 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
     updateBgSize(bgSize);
     setSelectedBgSize(bgSize);
   };
+
+  console.log("bplsdata", bplsdata.bpls);
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
@@ -59,6 +62,14 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
           type="number"
           name="windowCount"
           value={bplsdata.bpls.windowCount}
+          onChange={handleChange}
+          className="h-6 w-28 text-center"
+        />
+        <InputBox
+          label="videoUrl"
+          type="text"
+          name="videoUrl"
+          value={bplsdata.bpls.videoUrl}
           onChange={handleChange}
           className="h-6 w-28 text-center"
         />
@@ -101,31 +112,38 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
         <Flex className=" gap-5 w-full items-center justify-center">
           <Button
             caption="contain"
-            className={`!p-0 !m-0 text-[10px] w-[10%] max-xl:w-[8%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+            className={`!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md ${
               selectedBgSize === "contain" ? "bg-gray-400" : ""
             }`}
             onClick={() => handleBgSizeChange("contain")}
           />
           <Button
             caption="cover"
-            className={`!p-0 !m-0 text-[10px] w-[10%] max-xl:w-[8%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+            className={`!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md ${
               selectedBgSize === "cover" ? "bg-gray-400" : ""
             }`}
             onClick={() => handleBgSizeChange("cover")}
           />
           <Button
             caption="auto"
-            className={`!p-0 !m-0 text-[10px] w-[10%] max-xl:w-[8%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+            className={`!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md ${
               selectedBgSize === "auto" ? "bg-gray-400" : ""
             }`}
             onClick={() => handleBgSizeChange("auto")}
           />
         </Flex>
-        <Button
-          caption="Save"
-          type="submit"
-          className="!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md absolute bottom-2 right-2"
-        />
+        <Flex className="gap-10 absolute bottom-2 right-2">
+          <Button
+            caption="Reset"
+            className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-gray-300 hover:bg-gray-400 text-gray-800"
+            onClick={resetData}
+          />
+          <Button
+            caption="Save"
+            type="submit"
+            className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-blue-500 hover:bg-blue-600 text-white"
+          />
+        </Flex>
       </Flex>
     </form>
   );

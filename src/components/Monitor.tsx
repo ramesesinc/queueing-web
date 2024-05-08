@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import SocketContext from "../stores/socket";
 import Footer from "./layouts/Footer";
@@ -18,7 +18,7 @@ const Monitor = () => {
   const { data } = useContext<any>(SocketContext);
 
   const { bplsdata } = useBplsData();
-  const { rptdata } = useRptData();
+  const { rptdata, handleUpload } = useRptData();
   const { tcdata } = useTcData();
 
   let title = "";
@@ -31,6 +31,7 @@ const Monitor = () => {
   let horizontalColsCount = 0;
   let xyAxis = "";
   let showVideo = true;
+  let videoUrl = "";
 
   if (group === "bpls") {
     title = "Business Permit and Licensing System";
@@ -43,6 +44,7 @@ const Monitor = () => {
     xyAxis = bplsdata.bpls.xyAxis;
     windowColors = bplsdata.bpls.windowColor;
     showVideo = bplsdata.bpls.showVideo;
+    videoUrl = bplsdata.bpls.videoUrl;
   } else if (group === "rpt") {
     title = "Real Property Tax";
     headerFooterBgColor = rptdata.rpt.color;
@@ -54,6 +56,7 @@ const Monitor = () => {
     xyAxis = rptdata.rpt.xyAxis;
     windowColors = rptdata.rpt.windowColor;
     showVideo = rptdata.rpt.showVideo;
+    videoUrl = rptdata.rpt.videoUrl;
   } else if (group === "tc") {
     title = "Treasury and Collections";
     headerFooterBgColor = tcdata.tc.color;
@@ -65,6 +68,7 @@ const Monitor = () => {
     xyAxis = tcdata.tc.xyAxis;
     windowColors = tcdata.tc.windowColor;
     showVideo = tcdata.tc.showVideo;
+    videoUrl = tcdata.tc.videoUrl;
   } else {
     title = `${group || "Unknown Group"}`;
   }
@@ -116,11 +120,13 @@ const Monitor = () => {
         ) : (
           0
         )}
+
         <QueueTv
           src={""}
           componentType={showVideo ? "main-right" : "none"}
           layoutType="default"
           fontFamily={bplsdata.bpls.fontFamily}
+          videoLink={videoUrl}
         />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
       </Template>
