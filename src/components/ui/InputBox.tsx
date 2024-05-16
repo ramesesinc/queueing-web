@@ -23,7 +23,7 @@ const InputBox: React.FC<InputBox> = ({
     <div>
       <label
         htmlFor=""
-        className="flex gap-2 flex-col items-center justify-center leading-none pb-2"
+        className="flex flex-col items-center justify-center leading-none pb-2"
       >
         <p className="leading-none text-lg pb-1">{label}</p>
         <input

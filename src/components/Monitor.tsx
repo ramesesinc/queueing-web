@@ -11,6 +11,7 @@ import QueueTv from "./modules/QueueTv";
 import { useBplsData } from "../service/context/bplsdatas-context";
 import { useRptData } from "../service/context/rptdata-context";
 import { useTcData } from "../service/context/tcdata-context";
+import { WindowPosition } from "./ui/MainConPosition";
 
 const Monitor = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const Monitor = () => {
   const { data } = useContext<any>(SocketContext);
 
   const { bplsdata } = useBplsData();
-  const { rptdata, handleUpload } = useRptData();
+  const { rptdata } = useRptData();
   const { tcdata } = useTcData();
 
   let title = "";
@@ -32,6 +33,8 @@ const Monitor = () => {
   let xyAxis = "";
   let showVideo = true;
   let videoUrl = "";
+  let videoPosition = "";
+  let windowPosition = "";
 
   if (group === "bpls") {
     title = "Business Permit and Licensing System";
@@ -45,6 +48,8 @@ const Monitor = () => {
     windowColors = bplsdata.bpls.windowColor;
     showVideo = bplsdata.bpls.showVideo;
     videoUrl = bplsdata.bpls.videoUrl;
+    videoPosition = bplsdata.bpls.videoposition;
+    windowPosition = bplsdata.bpls.windowposition;
   } else if (group === "rpt") {
     title = "Real Property Tax";
     headerFooterBgColor = rptdata.rpt.color;
@@ -57,6 +62,8 @@ const Monitor = () => {
     windowColors = rptdata.rpt.windowColor;
     showVideo = rptdata.rpt.showVideo;
     videoUrl = rptdata.rpt.videoUrl;
+    videoPosition = rptdata.rpt.videoposition;
+    windowPosition = rptdata.rpt.windowposition;
   } else if (group === "tc") {
     title = "Treasury and Collections";
     headerFooterBgColor = tcdata.tc.color;
@@ -69,11 +76,11 @@ const Monitor = () => {
     windowColors = tcdata.tc.windowColor;
     showVideo = tcdata.tc.showVideo;
     videoUrl = tcdata.tc.videoUrl;
+    videoPosition = tcdata.tc.videoposition;
+    windowPosition = tcdata.tc.windowposition;
   } else {
     title = `${group || "Unknown Group"}`;
   }
-
-  console.log("data", data.ticketno);
 
   return (
     <>
@@ -109,7 +116,7 @@ const Monitor = () => {
         horizontalColsCount != 0 ? (
           <QueueGroup
             numberOfItems={Math.max(windowCount || 0)}
-            componentType="main-left"
+            componentType={windowPosition}
             orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
             verticalRows={Math.max(verticalRowsCount || 0)}
             horizontalCols={Math.max(horizontalColsCount || 0)}
@@ -123,8 +130,7 @@ const Monitor = () => {
           0
         )}
         <QueueTv
-          src={""}
-          componentType={showVideo ? "main-right" : "none"}
+          componentType={showVideo ? `${videoPosition}` : "none"}
           layoutType="default"
           fontFamily={bplsdata.bpls.fontFamily}
           videoLink={videoUrl}

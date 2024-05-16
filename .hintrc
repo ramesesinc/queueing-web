@@ -30,6 +30,12 @@
           "iframe[allow]"
         ]
       }
+    ],
+    "axe/text-alternatives": [
+      "default",
+      {
+        "frame-title": "off"
+      }
     ]
   }
 }

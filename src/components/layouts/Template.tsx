@@ -31,7 +31,6 @@ const Template: React.FC<TemplateProps> = ({
       flexDirection: "flex-row",
       header: "",
       footer: "",
-      textColor: "text-black",
     },
     template2: {
       bgColors: "bg-[#0a5366]",
@@ -39,11 +38,10 @@ const Template: React.FC<TemplateProps> = ({
       flexDirection: "",
       header: "",
       footer: "",
-      textColor: "text-white",
     },
   };
 
-  const { bgColors, justifyContent, flexDirection, header, footer, textColor } =
+  const { bgColors, justifyContent, flexDirection, header, footer } =
     templateStyles[templateType] || templateStyles.template1;
 
   const renderMainContent = (type: string) => {
@@ -80,29 +78,22 @@ const Template: React.FC<TemplateProps> = ({
         className={`flex-grow ${mainClass} ${flexDirection || "flex-row"}`}
         style={mainStyle}
       >
-        <div className={`flex gap-x-5 m-10 float-left`}>
+        <div className={`flex gap-x-5 m-10`}>
           {children &&
             !React.Children.toArray(children).some(
               (child) =>
                 React.isValidElement(child) &&
                 child.props.componentType === "none"
             ) && (
-              <div className="basis-[70%] w-full relative">
+              <div className=" w-[60%] flex flex-col items-start relative">
                 {renderMainContent("main-right")}
               </div>
             )}
 
           {/* main-left */}
           {renderMainContent("main-left") && (
-            <div className={`${!renderMainContent("main-right") && ""}`}>
-              <div style={{ fontFamily: fontFamily }}>
-                <SubTitle
-                  text="now serving"
-                  className={`text-[28px] leading-3 !font-bold uppercase text-start ${textColor}`}
-                />
-              </div>
-
-              {renderMainContent("main-left")}
+            <div className={`${!renderMainContent("main-right") && ""} w-full`}>
+              <div className="relative">{renderMainContent("main-left")}</div>
             </div>
           )}
         </div>

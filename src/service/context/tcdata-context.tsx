@@ -16,6 +16,8 @@ interface TcDataContextValue {
       bgUrl: string;
       bgSize: "auto" | "contain" | "cover";
       videoUrl: string;
+      videoposition: string;
+      windowposition: string;
     };
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -49,6 +51,8 @@ const defaultTcData = {
   bgUrl: "",
   bgSize: "auto" as const,
   videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+  videoposition: "main-right",
+  windowposition: "main-left",
 };
 
 const TcDataContext = createContext<TcDataContextValue>({

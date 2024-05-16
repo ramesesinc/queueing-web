@@ -11,7 +11,10 @@
     "logoUrl": "/images/lgu-logo.png",
     "bgUrl": "",
     "bgSize": "auto",
-    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+    "videoposition": "main-left",
+    "videposition": "horizontal",
+    "windowposition": "main-right"
   },
   "rpt": {
     "color": "#0a5366",
@@ -25,7 +28,9 @@
     "logoUrl": "/images/lgu-logo.png",
     "bgUrl": "",
     "bgSize": "auto",
-    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+    "videoposition": "main-right",
+    "windowposition": "main-left"
   },
   "tc": {
     "color": "#0a5366",
@@ -39,6 +44,8 @@
     "logoUrl": "/images/lgu-logo.png",
     "bgUrl": "",
     "bgSize": "auto",
-    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+    "videoposition": "main-right",
+    "windowposition": "main-left"
   }
 }

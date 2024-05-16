@@ -8,6 +8,7 @@ import XyAxis from "../ui/XyAxis";
 import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
 import ToggleButton from "../ui/ToggleBtn";
+import { VideoPosition, WindowPosition } from "../ui/MainConPosition";
 
 interface TcProps {
   title?: string;
@@ -36,67 +37,82 @@ const Tc: React.FC<TcProps> = ({ title }) => {
     <form onSubmit={handleSubmit} className="w-full">
       <Title text={title || ""} className="text-start pb-5 text-xl" />
       <Flex className="flex-col items-center gap-1">
-        <ColorPicker
-          name={"color"}
-          value={tcdata.tc.color}
-          onChange={handleChange}
-          label="header and footer color"
-        />
-        <ColorPicker
-          name={"windowColor"}
-          value={tcdata.tc.windowColor}
-          onChange={handleChange}
-          label="window color"
-        />
-        <XyAxis
-          value={tcdata.tc.xyAxis}
-          onChange={handleSelect}
-          name={"xyAxis"}
-          label="Window X & Y axis"
-        />
-        <InputBox
-          label="Window Count"
-          type="number"
-          name="windowCount"
-          value={tcdata.tc.windowCount}
-          onChange={handleChange}
-          className="h-6 w-28 text-center"
-        />
-        <InputBox
-          label="videoUrl"
-          type="text"
-          name="videoUrl"
-          value={tcdata.tc.videoUrl}
-          onChange={handleChange}
-          className="h-6 w-28 text-center"
-        />
-        <InputBox
-          label="verticalRowsCount"
-          type="number"
-          name="verticalRowsCount"
-          value={tcdata.tc.verticalRowsCount}
-          onChange={handleChange}
-          className={`h-6 w-28 text-center ${
-            tcdata.tc.xyAxis === "horizontal"
-              ? "bg-gray-400 opacity-50 border-none"
-              : ""
-          }`}
-          disabled={tcdata.tc.xyAxis === "horizontal"}
-        />
+        <div className="grid grid-cols-2 grid-flow-row gap-2 items-center justify-center">
+          <ColorPicker
+            name={"color"}
+            value={tcdata.tc.color}
+            onChange={handleChange}
+            label="header and footer color"
+          />
+          <ColorPicker
+            name={"windowColor"}
+            value={tcdata.tc.windowColor}
+            onChange={handleChange}
+            label="window color"
+          />
+          <XyAxis
+            value={tcdata.tc.xyAxis}
+            onChange={handleSelect}
+            name={"xyAxis"}
+            label="Window X & Y axis"
+          />
+          <InputBox
+            label="Window Count"
+            type="number"
+            name="windowCount"
+            value={tcdata.tc.windowCount}
+            onChange={handleChange}
+            className="h-6 w-28 text-center"
+          />
 
-        <InputBox
-          label="horizontalColsCount"
-          type="number"
-          name="horizontalColsCount"
-          value={tcdata.tc.horizontalColsCount}
-          onChange={handleChange}
-          className={`h-6 w-28 text-center ${
-            tcdata.tc.xyAxis === "vertical"
-              ? "bg-gray-400 opacity-50 border-none"
-              : ""
-          }`}
-          disabled={tcdata.tc.xyAxis === "vertical"}
-        />
+          <InputBox
+            label="verticalRowsCount"
+            type="number"
+            name="verticalRowsCount"
+            value={tcdata.tc.verticalRowsCount}
+            onChange={handleChange}
+            className={`h-6 w-28 text-center ${
+              tcdata.tc.xyAxis === "horizontal"
+                ? "bg-gray-400 opacity-50 border-none"
+                : ""
+            }`}
+            disabled={tcdata.tc.xyAxis === "horizontal"}
+          />
+
+          <InputBox
+            label="horizontalColsCount"
+            type="number"
+            name="horizontalColsCount"
+            value={tcdata.tc.horizontalColsCount}
+            onChange={handleChange}
+            className={`h-6 w-28 text-center ${
+              tcdata.tc.xyAxis === "vertical"
+                ? "bg-gray-400 opacity-50 border-none"
+                : ""
+            }`}
+            disabled={tcdata.tc.xyAxis === "vertical"}
+          />
+          <WindowPosition
+            value={tcdata.tc.windowposition}
+            onChange={handleSelect}
+            name="windowposition"
+            winLabel="window position"
+          />
+          <VideoPosition
+            value={tcdata.tc.videoposition}
+            onChange={handleSelect}
+            name={"videoposition"}
+            vidLabel="video position"
+          />
+          <InputBox
+            label="videoUrl"
+            type="text"
+            name="videoUrl"
+            value={tcdata.tc.videoUrl}
+            onChange={handleChange}
+            className="h-6 w-28 text-center"
+          />
+        </div>
         <ToggleButton
           isActive={tcdata.tc.showVideo}
           onClick={toggleVideo}
@@ -107,6 +123,7 @@ const Tc: React.FC<TcProps> = ({ title }) => {
           removeLogoImage={removeBgUrl}
           title="background image"
         />
+
         <Flex className=" gap-5 w-full items-center justify-center">
           <Button
             caption="contain"

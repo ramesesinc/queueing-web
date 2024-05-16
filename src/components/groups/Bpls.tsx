@@ -8,6 +8,7 @@ import XyAxis from "../ui/XyAxis";
 import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
 import ToggleButton from "../ui/ToggleBtn";
+import { VideoPosition, WindowPosition } from "../ui/MainConPosition";
 
 interface BplsProps {
   title?: string;
@@ -39,66 +40,83 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
     <form onSubmit={handleSubmit} className="w-full">
       <Title text={title || ""} className="text-start pb-5 text-xl" />
       <Flex className="flex-col items-center gap-1">
-        <ColorPicker
-          name={"color"}
-          value={bplsdata.bpls.color}
-          onChange={handleChange}
-          label="header and footer color"
-        />
-        <ColorPicker
-          name={"windowColor"}
-          value={bplsdata.bpls.windowColor}
-          onChange={handleChange}
-          label="window color"
-        />
-        <XyAxis
-          value={bplsdata.bpls.xyAxis}
-          onChange={handleSelect}
-          name={"xyAxis"}
-          label="Window X & Y axis"
-        />
-        <InputBox
-          label="Window Count"
-          type="number"
-          name="windowCount"
-          value={bplsdata.bpls.windowCount}
-          onChange={handleChange}
-          className="h-6 w-28 text-center"
-        />
-        <InputBox
-          label="videoUrl"
-          type="text"
-          name="videoUrl"
-          value={bplsdata.bpls.videoUrl}
-          onChange={handleChange}
-          className="h-6 w-28 text-center"
-        />
-        <InputBox
-          label="verticalRowsCount"
-          type="number"
-          name="verticalRowsCount"
-          value={bplsdata.bpls.verticalRowsCount}
-          onChange={handleChange}
-          className={`h-6 w-28 text-center ${
-            bplsdata.bpls.xyAxis === "horizontal"
-              ? "bg-gray-400 opacity-50 border-none"
-              : ""
-          }`}
-          disabled={bplsdata.bpls.xyAxis === "horizontal"}
-        />
-        <InputBox
-          label="horizontalColsCount"
-          type="number"
-          name="horizontalColsCount"
-          value={bplsdata.bpls.horizontalColsCount}
-          onChange={handleChange}
-          className={`h-6 w-28 text-center ${
-            bplsdata.bpls.xyAxis === "vertical"
-              ? "bg-gray-400 opacity-50 border-none"
-              : ""
-          }`}
-          disabled={bplsdata.bpls.xyAxis === "vertical"}
-        />
+        <div className="grid grid-cols-2 grid-flow-row gap-2 items-center justify-center">
+          <ColorPicker
+            name={"color"}
+            value={bplsdata.bpls.color}
+            onChange={handleChange}
+            label="header and footer color"
+          />
+          <ColorPicker
+            name={"windowColor"}
+            value={bplsdata.bpls.windowColor}
+            onChange={handleChange}
+            label="window color"
+          />
+
+          <XyAxis
+            value={bplsdata.bpls.xyAxis}
+            onChange={handleSelect}
+            name={"xyAxis"}
+            label="Window X & Y axis"
+          />
+          <InputBox
+            label="Window Count"
+            type="number"
+            name="windowCount"
+            value={bplsdata.bpls.windowCount}
+            onChange={handleChange}
+            className="h-6 w-28  text-center"
+          />
+          <InputBox
+            label="verticalRowsCount"
+            type="number"
+            name="verticalRowsCount"
+            value={bplsdata.bpls.verticalRowsCount}
+            onChange={handleChange}
+            className={`h-6 w-28 text-center ${
+              bplsdata.bpls.xyAxis === "horizontal"
+                ? "bg-gray-400 opacity-50 border-none"
+                : ""
+            }`}
+            disabled={bplsdata.bpls.xyAxis === "horizontal"}
+          />
+          <InputBox
+            label="horizontalColsCount"
+            type="number"
+            name="horizontalColsCount"
+            value={bplsdata.bpls.horizontalColsCount}
+            onChange={handleChange}
+            className={`h-6 w-28 text-center ${
+              bplsdata.bpls.xyAxis === "vertical"
+                ? "bg-gray-400 opacity-50 border-none"
+                : ""
+            }`}
+            disabled={bplsdata.bpls.xyAxis === "vertical"}
+          />
+          <WindowPosition
+            value={bplsdata.bpls.windowposition}
+            onChange={handleSelect}
+            name="windowposition"
+            winLabel="window position"
+          />
+          <VideoPosition
+            value={bplsdata.bpls.videoposition}
+            onChange={handleSelect}
+            name={"videoposition"}
+            vidLabel="video position"
+          />
+
+          <InputBox
+            label="videoUrl"
+            type="text"
+            name="videoUrl"
+            value={bplsdata.bpls.videoUrl}
+            onChange={handleChange}
+            className="h-6 w-28 text-center"
+          />
+        </div>
+
         <ToggleButton
           isActive={bplsdata.bpls.showVideo}
           onClick={toggleVideo}
@@ -109,6 +127,7 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
           removeLogoImage={removeBgUrl}
           title="background image"
         />
+
         <Flex className=" gap-5 w-full items-center justify-center">
           <Button
             caption="contain"
