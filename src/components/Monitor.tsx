@@ -11,7 +11,6 @@ import QueueTv from "./modules/QueueTv";
 import { useBplsData } from "../service/context/bplsdatas-context";
 import { useRptData } from "../service/context/rptdata-context";
 import { useTcData } from "../service/context/tcdata-context";
-import { WindowPosition } from "./ui/MainConPosition";
 
 const Monitor = () => {
   const router = useRouter();
