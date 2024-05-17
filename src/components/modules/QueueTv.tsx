@@ -47,7 +47,7 @@ const Video: React.FC<VideoProps> = ({
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
                 <iframe
-                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`}
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                   title="YouTube video player"
                   width="770"
                   height="450"

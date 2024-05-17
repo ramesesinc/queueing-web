@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
-import SocketContext from "../stores/socket";
+import SocketContext from "../stores/queue";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Template from "./layouts/Template";
@@ -73,8 +73,6 @@ const Monitor = () => {
     title = `${group || "Unknown Group"}`;
   }
 
-  console.log("data", data.ticketno);
-
   return (
     <>
       <Template
@@ -108,20 +106,21 @@ const Monitor = () => {
         verticalRowsCount != 0 &&
         horizontalColsCount != 0 ? (
           <QueueGroup
-            numberOfItems={Math.max(windowCount || 0)}
+            windowCount={Math.max(windowCount || 0)}
             componentType="main-left"
             orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
             verticalRows={Math.max(verticalRowsCount || 0)}
             horizontalCols={Math.max(horizontalColsCount || 0)}
-            queueType={data.type}
-            queueTicket={data.ticketno}
-            queueCounter={data.countercode}
-            bgColor={{ backgroundColor: windowColors }}
+            type={data.type}
+            ticketno={data.ticketno}
+            countercode={data.countercode}
+            bgColor={{ backgroundColor: "windowColors" }}
             fontFamily={bplsdata.bpls.fontFamily}
           />
         ) : (
           0
         )}
+
         <QueueTv
           src={""}
           componentType={showVideo ? "main-right" : "none"}
@@ -130,7 +129,6 @@ const Monitor = () => {
           videoLink={videoUrl}
         />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
-        {data.ticketno}
       </Template>
     </>
   );

@@ -1,45 +1,24 @@
 // QueueItem.tsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Number from "../ui/Number";
 
 export type QueueItemProps = {
-  queueTicket?: string;
-  counter: string;
+  ticketno?: string;
+  countercode: string;
   bgColor?: React.CSSProperties;
   fontFamily?: string;
-  blinkCount: number;
+  className?: string;
+  blink: boolean;
 };
 
 const QueueItem: React.FC<QueueItemProps> = ({
-  counter,
-  queueTicket,
+  countercode,
+  ticketno,
   bgColor,
   fontFamily,
-  blinkCount,
+  className,
+  blink,
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
-
-    if (blinkCount > 0) {
-      intervalId = setInterval(() => {
-        setIsVisible((prevVisible) => !prevVisible);
-      }, 500);
-    } else {
-      setIsVisible(true);
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [blinkCount]);
-
   const itemStyle: React.CSSProperties = {
     ...(bgColor && {
       ...bgColor,
@@ -48,31 +27,35 @@ const QueueItem: React.FC<QueueItemProps> = ({
   };
 
   return (
-    <div
-      className={`bg-white w-[300px] rounded-xl shadow-md border-2 p-2 max-xl:w-[250px] max-lg:w-[200px] `}
-      style={bgColor}
-    >
-      <div
-        className="flex flex-row h-24 max-md:h-16 gap-x-2"
-        style={{ fontFamily: fontFamily }}
-      >
-        <div className="flex flex-col justify-center items-center text-center p-1">
-          <Number
-            number={counter}
-            className="text-5xl max-xl:text-3xl max-lg:text-2xl"
-          />
-        </div>
-        <div className="border border-black border-solid m-2"></div>
+    <div className={`${className}`}>
+      <div className={` ${className}`}>
         <div
-          className="flex flex-col justify-center items-center text-center w-full"
-          style={itemStyle}
+          className={`bg-white w-[300px] rounded-xl shadow-md border-2 p-2 max-xl:w-[250px] max-lg:w-[200px]`}
+          style={bgColor}
         >
-          <Number
-            number={queueTicket}
-            className={`text-5xl max-xl:text-3xl max-lg:text-3xl ${
-              blinkCount > 0 && !isVisible ? "invisible" : ""
-            }`}
-          />
+          <div
+            className="flex flex-row h-24 max-md:h-16 gap-x-2"
+            style={{ fontFamily: fontFamily }}
+          >
+            <div className="flex flex-col justify-center items-center text-center p-1">
+              <Number
+                number={countercode}
+                className="text-5xl max-xl:text-3xl max-lg:text-2xl"
+              />
+            </div>
+            <div className="border border-black border-solid m-2"></div>
+            <div
+              className="flex flex-col justify-center items-center text-center w-full"
+              style={itemStyle}
+            >
+              <Number
+                number={ticketno}
+                className={`text-5xl max-xl:text-3xl max-lg:text-3xl ${
+                  blink ? "blink" : ""
+                }`}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

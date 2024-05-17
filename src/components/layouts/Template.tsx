@@ -98,7 +98,7 @@ const Template: React.FC<TemplateProps> = ({
               <div style={{ fontFamily: fontFamily }}>
                 <SubTitle
                   text="now serving"
-                  className={`text-[28px] leading-3 !font-bold uppercase text-start ${textColor}`}
+                  className={`text-[28px] leading-3 !font-bold uppercase text-start w-52 ${textColor}`}
                 />
               </div>
 

@@ -40,16 +40,16 @@ interface BplsDatacontext {
 const defaultBplsData = {
   color: "#0a5366",
   fontFamily: "Arial",
-  windowCount: 1,
+  windowCount: 0,
   xyAxis: "vertical",
-  verticalRowsCount: 1,
-  horizontalColsCount: 1,
+  verticalRowsCount: 0,
+  horizontalColsCount: 0,
   windowColor: "#ffffff",
   showVideo: true,
   logoUrl: "/images/lgu-logo.png",
   bgUrl: "",
   bgSize: "auto" as const,
-  videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+  videoUrl: "",
 };
 
 const BplsDataContext = createContext<BplsDataContextValue>({

@@ -2,7 +2,7 @@
 "use client";
 
 import QueueCounter from "../../components/QueueCounter";
-import { SocketContextProvider } from "../../stores/socket";
+import { SocketContextProvider } from "../../stores/queue";
 
 function CounterPage() {
   return (

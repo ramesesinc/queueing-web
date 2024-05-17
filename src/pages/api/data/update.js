@@ -16,7 +16,6 @@ export default function handler(req, res) {
       existingData.rpt = { ...existingData.rpt, ...req.body.rpt };
     }
 
-    // Write updated data back to data.json
     fs.writeFileSync("./data.json", JSON.stringify(existingData, null, 2));
 
     res.status(200).json({ message: "Data updated successfully!" });
