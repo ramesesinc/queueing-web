@@ -26,17 +26,17 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
     },
     {
       component: <Tc title="Treasury and Collection" />,
-      icon: <GiReceiveMoney />,
+
       title: "Tc",
     },
     {
       component: <Bpls title="Business Permit" />,
-      icon: <IoMdBriefcase />,
+
       title: "Bpls",
     },
     {
       component: <Rpt title="Real Property Tax" />,
-      icon: <FaHouseChimney />,
+
       title: "Rpt",
     },
   ];

@@ -18,7 +18,7 @@ const Monitor = () => {
   const { data } = useContext<any>(SocketContext);
 
   const { bplsdata } = useBplsData();
-  const { rptdata, handleUpload } = useRptData();
+  const { rptdata } = useRptData();
   const { tcdata } = useTcData();
 
   let title = "";
@@ -32,6 +32,9 @@ const Monitor = () => {
   let xyAxis = "";
   let showVideo = true;
   let videoUrl = "";
+  let videoPosition = "";
+  let windowPosition = "";
+  let buzz = "";
 
   if (group === "bpls") {
     title = "Business Permit and Licensing System";
@@ -45,6 +48,9 @@ const Monitor = () => {
     windowColors = bplsdata.bpls.windowColor;
     showVideo = bplsdata.bpls.showVideo;
     videoUrl = bplsdata.bpls.videoUrl;
+    videoPosition = bplsdata.bpls.videoposition;
+    windowPosition = bplsdata.bpls.windowposition;
+    buzz = bplsdata.bpls.buzz;
   } else if (group === "rpt") {
     title = "Real Property Tax";
     headerFooterBgColor = rptdata.rpt.color;
@@ -57,6 +63,9 @@ const Monitor = () => {
     windowColors = rptdata.rpt.windowColor;
     showVideo = rptdata.rpt.showVideo;
     videoUrl = rptdata.rpt.videoUrl;
+    videoPosition = rptdata.rpt.videoposition;
+    windowPosition = rptdata.rpt.windowposition;
+    buzz = rptdata.rpt.buzz;
   } else if (group === "tc") {
     title = "Treasury and Collections";
     headerFooterBgColor = tcdata.tc.color;
@@ -69,6 +78,9 @@ const Monitor = () => {
     windowColors = tcdata.tc.windowColor;
     showVideo = tcdata.tc.showVideo;
     videoUrl = tcdata.tc.videoUrl;
+    videoPosition = tcdata.tc.videoposition;
+    windowPosition = tcdata.tc.windowposition;
+    buzz = tcdata.tc.buzz;
   } else {
     title = `${group || "Unknown Group"}`;
   }
@@ -106,8 +118,13 @@ const Monitor = () => {
         verticalRowsCount != 0 &&
         horizontalColsCount != 0 ? (
           <QueueGroup
+<<<<<<< HEAD
             windowCount={Math.max(windowCount || 0)}
             componentType="main-left"
+=======
+            numberOfItems={Math.max(windowCount || 0)}
+            componentType={windowPosition}
+>>>>>>> settings
             orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
             verticalRows={Math.max(verticalRowsCount || 0)}
             horizontalCols={Math.max(horizontalColsCount || 0)}
@@ -122,8 +139,7 @@ const Monitor = () => {
         )}
 
         <QueueTv
-          src={""}
-          componentType={showVideo ? "main-right" : "none"}
+          componentType={showVideo ? `${videoPosition}` : "none"}
           layoutType="default"
           fontFamily={bplsdata.bpls.fontFamily}
           videoLink={videoUrl}

@@ -1,10 +1,10 @@
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SubTitle from "../ui/SubTitle";
 import TimeDate from "../ui/Time&Date";
 
 interface VideoProps {
-  src: string | null;
+  src?: string | null;
   controls?: boolean;
   componentType?: string | undefined;
   type?: string | undefined;
@@ -23,42 +23,70 @@ const Video: React.FC<VideoProps> = ({
   videoLink,
 }) => {
   const [videoId, setVideoId] = useState<string | null>(null);
+  const [platform, setPlatform] = useState<string | null>(null);
 
   useEffect(() => {
-    const getVideoId = (url: string): string | null => {
-      const regExp =
+    const getVideoId = (
+      url: string
+    ): { platform: string; id: string | null } => {
+      const youtubeRegExp =
         /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      const match = url.match(regExp);
-      if (match && match[2].length === 11) {
-        return match[2];
-      } else {
-        return null;
+      const youtubeMatch = url.match(youtubeRegExp);
+      if (youtubeMatch && youtubeMatch[2].length === 11) {
+        return { platform: "youtube", id: youtubeMatch[2] };
       }
+
+      const facebookRegExp =
+        /(?:facebook\.com\/.*(?:video\.php\?v=|watch\/?\?v=|videos\/|video\/|watch\/v=)|fb\.watch\/)(\d+)/;
+      const facebookMatch = url.match(facebookRegExp);
+      if (facebookMatch && facebookMatch[1]) {
+        return { platform: "facebook", id: facebookMatch[1] };
+      }
+
+      return { platform: "", id: null };
     };
 
-    setVideoId(getVideoId(videoLink));
+    const videoData = getVideoId(videoLink);
+    setVideoId(videoData.id);
+    setPlatform(videoData.platform);
+    console.log(`Platform: ${videoData.platform}, Video ID: ${videoData.id}`);
   }, [videoLink]);
 
+  const getEmbedUrl = () => {
+    if (platform === "youtube") {
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+    } else if (platform === "facebook") {
+      return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/${videoId}/?autoplay=1&mute=1`;
+    }
+    return "";
+  };
   return (
     <div id={componentType}>
       {layoutType === "default" ? (
-        <div className="w-full flex flex-col items-center justify-center gap-5">
+        <div className=" flex flex-col items-center justify-center gap-5">
           <div className="w-full max-w-3xl mx-auto">
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
                 <iframe
+<<<<<<< HEAD
                   src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                   title="YouTube video player"
+=======
+                  src={getEmbedUrl()}
+                  title="Video player"
+>>>>>>> settings
                   width="770"
-                  height="450"
-                  className="rounded-xl"
+                  height="430"
+                  className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               </div>
             ) : (
-              <div className="aspect-w-16 aspect-h-9"></div>
+              <div className="aspect-w-16 aspect-h-9 text-red-500 text-2xl uppercase">
+                video not found
+              </div>
             )}
           </div>
 
@@ -74,19 +102,20 @@ const Video: React.FC<VideoProps> = ({
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
                 <iframe
-                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                  title="YouTube video player"
+                  src={getEmbedUrl()}
+                  title="Video player"
                   allowFullScreen
                   width="770"
-                  height="450"
-                  className="rounded-xl"
+                  height="430"
+                  className="rounded-t-xl"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
               </div>
             ) : (
               <div className="aspect-w-16 aspect-h-9"></div>
             )}
           </div>
-          <div className=" absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">
+          <div className="absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">
             <TimeDate componentType={undefined} />
           </div>
 

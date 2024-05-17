@@ -8,6 +8,8 @@ import XyAxis from "../ui/XyAxis";
 import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
 import ToggleButton from "../ui/ToggleBtn";
+import { VideoPosition, WindowPosition } from "../ui/MainConPosition";
+import Buzz from "../ui/Buzz";
 
 interface RptProps {
   title?: string;
@@ -37,67 +39,88 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
     <form onSubmit={handleSubmit} className="w-full">
       <Title text={title || ""} className="text-start pb-5 text-xl" />
       <Flex className="flex-col items-center gap-1">
-        <ColorPicker
-          name={"color"}
-          value={rptdata.rpt.color}
-          onChange={handleChange}
-          label="header and footer color"
-        />
-        <ColorPicker
-          name={"windowColor"}
-          value={rptdata.rpt.windowColor}
-          onChange={handleChange}
-          label="window color"
-        />
-        <XyAxis
-          value={rptdata.rpt.xyAxis}
-          onChange={handleSelect}
-          name={"xyAxis"}
-          label="Window X & Y axis"
-        />
-        <InputBox
-          label="Window Count"
-          type="number"
-          name="windowCount"
-          value={rptdata.rpt.windowCount}
-          onChange={handleChange}
-          className="h-6 w-28 text-center"
-        />
-        <InputBox
-          label="videoUrl"
-          type="text"
-          name="videoUrl"
-          value={rptdata.rpt.videoUrl}
-          onChange={handleChange}
-          className="h-6 w-28 text-center"
-        />
-        <InputBox
-          label="verticalRowsCount"
-          type="number"
-          name="verticalRowsCount"
-          value={rptdata.rpt.verticalRowsCount}
-          onChange={handleChange}
-          className={`h-6 w-28 text-center ${
-            rptdata.rpt.xyAxis === "horizontal"
-              ? "bg-gray-400 opacity-50 border-none"
-              : ""
-          }`}
-          disabled={rptdata.rpt.xyAxis === "horizontal"}
-        />
+        <div className="grid grid-cols-2 grid-flow-row gap-2 items-center justify-center">
+          <ColorPicker
+            name={"color"}
+            value={rptdata.rpt.color}
+            onChange={handleChange}
+            label="header and footer color"
+          />
+          <ColorPicker
+            name={"windowColor"}
+            value={rptdata.rpt.windowColor}
+            onChange={handleChange}
+            label="window color"
+          />
+          <XyAxis
+            value={rptdata.rpt.xyAxis}
+            onChange={handleSelect}
+            name={"xyAxis"}
+            label="Window X & Y axis"
+          />
+          <InputBox
+            label="Window Count"
+            type="number"
+            name="windowCount"
+            value={rptdata.rpt.windowCount}
+            onChange={handleChange}
+            className="h-6 w-28 text-center"
+          />
 
-        <InputBox
-          label="horizontalColsCount"
-          type="number"
-          name="horizontalColsCount"
-          value={rptdata.rpt.horizontalColsCount}
-          onChange={handleChange}
-          className={`h-6 w-28 text-center ${
-            rptdata.rpt.xyAxis === "vertical"
-              ? "bg-gray-400 opacity-50 border-none"
-              : ""
-          }`}
-          disabled={rptdata.rpt.xyAxis === "vertical"}
-        />
+          <InputBox
+            label="verticalRowsCount"
+            type="number"
+            name="verticalRowsCount"
+            value={rptdata.rpt.verticalRowsCount}
+            onChange={handleChange}
+            className={`h-6 w-28 text-center ${
+              rptdata.rpt.xyAxis === "horizontal"
+                ? "bg-gray-400 opacity-50 border-none"
+                : ""
+            }`}
+            disabled={rptdata.rpt.xyAxis === "horizontal"}
+          />
+
+          <InputBox
+            label="horizontalColsCount"
+            type="number"
+            name="horizontalColsCount"
+            value={rptdata.rpt.horizontalColsCount}
+            onChange={handleChange}
+            className={`h-6 w-28 text-center ${
+              rptdata.rpt.xyAxis === "vertical"
+                ? "bg-gray-400 opacity-50 border-none"
+                : ""
+            }`}
+            disabled={rptdata.rpt.xyAxis === "vertical"}
+          />
+          <WindowPosition
+            value={rptdata.rpt.windowposition}
+            onChange={handleSelect}
+            name="windowposition"
+            winLabel="window position"
+          />
+          <VideoPosition
+            value={rptdata.rpt.videoposition}
+            onChange={handleSelect}
+            name={"videoposition"}
+            vidLabel="video position"
+          />
+          <InputBox
+            label="videoUrl"
+            type="text"
+            name="videoUrl"
+            value={rptdata.rpt.videoUrl}
+            onChange={handleChange}
+            className="h-6 w-28 text-center"
+          />
+          <Buzz
+            value={rptdata.rpt.buzz}
+            onChange={handleSelect}
+            name={"buzz"}
+            label="Buzz Sound"
+          />
+        </div>
         <ToggleButton
           isActive={rptdata.rpt.showVideo}
           onClick={toggleVideo}

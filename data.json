@@ -11,12 +11,20 @@
     "logoUrl": "/images/lgu-logo.png",
     "bgUrl": "",
     "bgSize": "auto",
-    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s"
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+    "videoposition": "main-left",
+    "videposition": "horizontal",
+    "windowposition": "main-right",
+    "buzz": "/sound/buzz3.mp3"
   },
   "rpt": {
     "color": "#6274fe",
     "fontFamily": "Arial",
+<<<<<<< HEAD
     "windowCount": "3",
+=======
+    "windowCount": "4",
+>>>>>>> settings
     "xyAxis": "vertical",
     "verticalRowsCount": "1",
     "horizontalColsCount": "3",
@@ -25,20 +33,41 @@
     "logoUrl": "",
     "bgUrl": "",
     "bgSize": "auto",
+<<<<<<< HEAD
     "videoUrl": "https://www.youtube.com/watch?v=wNWyMsrpbz0&t=450s"
+=======
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+    "videoposition": "main-right",
+    "windowposition": "main-left",
+    "buzz": "/sound/buzz2.mp3"
+>>>>>>> settings
   },
   "tc": {
     "color": "#ff004c",
     "fontFamily": "Arial",
+<<<<<<< HEAD
     "windowCount": "4",
     "xyAxis": "horizontal",
     "verticalRowsCount": "1",
     "horizontalColsCount": "3",
+=======
+    "windowCount": "2",
+    "xyAxis": "vertical",
+    "verticalRowsCount": 1,
+    "horizontalColsCount": 1,
+>>>>>>> settings
     "windowColor": "#ffffff",
     "showVideo": false,
     "logoUrl": "",
     "bgUrl": "",
     "bgSize": "auto",
+<<<<<<< HEAD
     "videoUrl": ""
+=======
+    "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+    "videoposition": "main-right",
+    "windowposition": "main-left",
+    "buzz": "/sound/buzz1.mp3"
+>>>>>>> settings
   }
 }
