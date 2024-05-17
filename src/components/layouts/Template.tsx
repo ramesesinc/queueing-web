@@ -1,5 +1,4 @@
 import React from "react";
-import SubTitle from "../ui/SubTitle";
 
 interface TemplateProps {
   templateType: "template1" | "template2";
@@ -92,20 +91,8 @@ const Template: React.FC<TemplateProps> = ({
 
           {/* main-left */}
           {renderMainContent("main-left") && (
-<<<<<<< HEAD
-            <div className={`${!renderMainContent("main-right") && ""}`}>
-              <div style={{ fontFamily: fontFamily }}>
-                <SubTitle
-                  text="now serving"
-                  className={`text-[28px] leading-3 !font-bold uppercase text-start w-52 ${textColor}`}
-                />
-              </div>
-
-              {renderMainContent("main-left")}
-=======
             <div className={`${!renderMainContent("main-right") && ""} w-full`}>
               <div className="relative">{renderMainContent("main-left")}</div>
->>>>>>> settings
             </div>
           )}
         </div>

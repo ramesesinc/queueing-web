@@ -51,14 +51,10 @@ const defaultTcData = {
   logoUrl: "/images/lgu-logo.png",
   bgUrl: "",
   bgSize: "auto" as const,
-<<<<<<< HEAD
-  videoUrl: "",
-=======
   videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
   videoposition: "main-right",
   windowposition: "main-left",
   buzz: "/sound/buzz3.mp3",
->>>>>>> settings
 };
 
 const TcDataContext = createContext<TcDataContextValue>({

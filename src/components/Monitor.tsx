@@ -118,13 +118,8 @@ const Monitor = () => {
         verticalRowsCount != 0 &&
         horizontalColsCount != 0 ? (
           <QueueGroup
-<<<<<<< HEAD
             windowCount={Math.max(windowCount || 0)}
-            componentType="main-left"
-=======
-            numberOfItems={Math.max(windowCount || 0)}
             componentType={windowPosition}
->>>>>>> settings
             orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
             verticalRows={Math.max(verticalRowsCount || 0)}
             horizontalCols={Math.max(horizontalColsCount || 0)}

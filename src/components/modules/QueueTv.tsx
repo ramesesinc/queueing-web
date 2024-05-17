@@ -68,13 +68,8 @@ const Video: React.FC<VideoProps> = ({
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
                 <iframe
-<<<<<<< HEAD
-                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                  title="YouTube video player"
-=======
                   src={getEmbedUrl()}
                   title="Video player"
->>>>>>> settings
                   width="770"
                   height="430"
                   className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]"
