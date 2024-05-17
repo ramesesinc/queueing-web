@@ -9,6 +9,7 @@ import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
 import ToggleButton from "../ui/ToggleBtn";
 import { VideoPosition, WindowPosition } from "../ui/MainConPosition";
+import Buzz from "../ui/Buzz";
 
 interface TcProps {
   title?: string;
@@ -111,6 +112,12 @@ const Tc: React.FC<TcProps> = ({ title }) => {
             value={tcdata.tc.videoUrl}
             onChange={handleChange}
             className="h-6 w-28 text-center"
+          />
+          <Buzz
+            value={tcdata.tc.buzz}
+            onChange={handleSelect}
+            name={"buzz"}
+            label="Buzz Sound"
           />
         </div>
         <ToggleButton

@@ -14,12 +14,13 @@
     "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
     "videoposition": "main-left",
     "videposition": "horizontal",
-    "windowposition": "main-right"
+    "windowposition": "main-right",
+    "buzz": "/sound/buzz3.mp3"
   },
   "rpt": {
     "color": "#0a5366",
     "fontFamily": "Arial",
-    "windowCount": 1,
+    "windowCount": "4",
     "xyAxis": "vertical",
     "verticalRowsCount": 1,
     "horizontalColsCount": 1,
@@ -30,12 +31,13 @@
     "bgSize": "auto",
     "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
     "videoposition": "main-right",
-    "windowposition": "main-left"
+    "windowposition": "main-left",
+    "buzz": "/sound/buzz2.mp3"
   },
   "tc": {
     "color": "#0a5366",
     "fontFamily": "Arial",
-    "windowCount": 1,
+    "windowCount": "2",
     "xyAxis": "vertical",
     "verticalRowsCount": 1,
     "horizontalColsCount": 1,
@@ -46,6 +48,7 @@
     "bgSize": "auto",
     "videoUrl": "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
     "videoposition": "main-right",
-    "windowposition": "main-left"
+    "windowposition": "main-left",
+    "buzz": "/sound/buzz1.mp3"
   }
 }

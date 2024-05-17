@@ -35,6 +35,7 @@ const Monitor = () => {
   let videoUrl = "";
   let videoPosition = "";
   let windowPosition = "";
+  let buzz = "";
 
   if (group === "bpls") {
     title = "Business Permit and Licensing System";
@@ -50,6 +51,7 @@ const Monitor = () => {
     videoUrl = bplsdata.bpls.videoUrl;
     videoPosition = bplsdata.bpls.videoposition;
     windowPosition = bplsdata.bpls.windowposition;
+    buzz = bplsdata.bpls.buzz;
   } else if (group === "rpt") {
     title = "Real Property Tax";
     headerFooterBgColor = rptdata.rpt.color;
@@ -64,6 +66,7 @@ const Monitor = () => {
     videoUrl = rptdata.rpt.videoUrl;
     videoPosition = rptdata.rpt.videoposition;
     windowPosition = rptdata.rpt.windowposition;
+    buzz = rptdata.rpt.buzz;
   } else if (group === "tc") {
     title = "Treasury and Collections";
     headerFooterBgColor = tcdata.tc.color;
@@ -78,6 +81,7 @@ const Monitor = () => {
     videoUrl = tcdata.tc.videoUrl;
     videoPosition = tcdata.tc.videoposition;
     windowPosition = tcdata.tc.windowposition;
+    buzz = tcdata.tc.buzz;
   } else {
     title = `${group || "Unknown Group"}`;
   }
@@ -125,6 +129,7 @@ const Monitor = () => {
             queueCounter={data.countercode}
             bgColor={{ backgroundColor: windowColors }}
             fontFamily={bplsdata.bpls.fontFamily}
+            buzzSound={buzz}
           />
         ) : (
           0

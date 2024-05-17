@@ -9,6 +9,7 @@ import Title from "../ui/Title";
 import UploadImage from "../ui/UploadImage";
 import ToggleButton from "../ui/ToggleBtn";
 import { VideoPosition, WindowPosition } from "../ui/MainConPosition";
+import Buzz from "../ui/Buzz";
 
 interface RptProps {
   title?: string;
@@ -112,6 +113,12 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
             value={rptdata.rpt.videoUrl}
             onChange={handleChange}
             className="h-6 w-28 text-center"
+          />
+          <Buzz
+            value={rptdata.rpt.buzz}
+            onChange={handleSelect}
+            name={"buzz"}
+            label="Buzz Sound"
           />
         </div>
         <ToggleButton
