@@ -13,6 +13,7 @@ interface QueueGroupsProps {
   ticketno: string;
   bgColor: React.CSSProperties;
   fontFamily?: string | undefined;
+  buzzSound?: string | undefined;
 }
 
 const QueueGroups: React.FC<QueueGroupsProps> = ({
@@ -26,6 +27,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   ticketno,
   bgColor,
   fontFamily,
+  buzzSound,
 }) => {
   const containerStyle: React.CSSProperties = {
     display: "grid",
@@ -44,7 +46,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   >([]);
 
   const textToSpeech = (countercode: string, ticketno: string) => {
-    const audio = new Audio("/buzz.mp3");
+    const audio = new Audio(`${buzzSound}`);
     audio.addEventListener("ended", () => {
       const utterance = new SpeechSynthesisUtterance(
         `Ticket number ${ticketno} please proceed to counter ${countercode}`
@@ -134,13 +136,13 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
   return (
     <div id={componentType} className="p-5 flex flex-col gap-10">
+      <div style={{ fontFamily: fontFamily }}>
+        <SubTitle
+          text="now serving"
+          className={`text-[28px] leading-3 absolute top-0 !font-bold uppercase text-star`}
+        />
+      </div>
       <div style={containerStyle}>
-        <div style={{ fontFamily: fontFamily }}>
-          <SubTitle
-            text="now serving"
-            className={`text-[28px] leading-3 absolute top-0 !font-bold uppercase text-star`}
-          />
-        </div>
         {stack.map((item, index) => (
           <QueueItem
             key={index}
