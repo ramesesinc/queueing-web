@@ -166,13 +166,13 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
   return (
     <div id={componentType} className="p-5 flex flex-col gap-10">
+      <div style={{ fontFamily: fontFamily }}>
+        <SubTitle
+          text="now serving"
+          className={`text-[28px] leading-3 absolute top-0 !font-bold uppercase text-star`}
+        />
+      </div>
       <div style={containerStyle}>
-        <div style={{ fontFamily: fontFamily }}>
-          <SubTitle
-            text="now serving"
-            className={`text-[28px] leading-3 absolute top-0 !font-bold uppercase text-star`}
-          />
-        </div>
         {stack.map((item, index) => (
           <QueueItem
             key={index}
