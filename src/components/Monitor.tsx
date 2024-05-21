@@ -128,6 +128,7 @@ const Monitor = () => {
             queueCounter={data.countercode}
             bgColor={{ backgroundColor: windowColors }}
             fontFamily={bplsdata.bpls.fontFamily}
+            buzzSound={buzz}
           />
         ) : (
           0

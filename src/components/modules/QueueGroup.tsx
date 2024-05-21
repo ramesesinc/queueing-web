@@ -1,4 +1,3 @@
-// QueueGroup.tsx
 import React, { useEffect, useState } from "react";
 import QueueItem from "./QueueItem";
 import SubTitle from "../ui/SubTitle";
@@ -14,6 +13,7 @@ interface QueueGroupsProps {
   queueTicket: string;
   bgColor: React.CSSProperties;
   fontFamily?: string | undefined;
+  buzzSound: string;
 }
 
 const QueueGroups: React.FC<QueueGroupsProps> = ({
@@ -27,6 +27,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   queueTicket,
   bgColor,
   fontFamily,
+  buzzSound,
 }) => {
   const containerStyle: React.CSSProperties = {
     display: "grid",
@@ -42,60 +43,89 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   const numItems = typeof numberOfItems === "number" ? numberOfItems : 0;
   const [stack, setStack] = useState<{ counter: string; ticket: string }[]>([]);
   const [blinkCount, setBlinkCount] = useState(0);
+  const [soundQueue, setSoundQueue] = useState<string[]>([]);
+  const [isPlayingSound, setIsPlayingSound] = useState(false);
 
-  const speakQueueItem = (counter: string, ticket: string) => {
+  useEffect(() => {
+    if (soundQueue.length > 0 && !isPlayingSound) {
+      const currentBuzzSound = soundQueue[0];
+      const dingAudio = new Audio(currentBuzzSound);
+
+      setIsPlayingSound(true);
+      dingAudio
+        .play()
+        .then(() => {
+          dingAudio.addEventListener("ended", () => {
+            setSoundQueue((prevQueue) => prevQueue.slice(1));
+            setIsPlayingSound(false);
+          });
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+          setSoundQueue((prevQueue) => prevQueue.slice(1));
+          setIsPlayingSound(false);
+        });
+    }
+  }, [soundQueue, isPlayingSound]);
+
+  const speakMessage = () => {
     const utterance = new SpeechSynthesisUtterance(
-      `Ticket number ${ticket} please proceed to counter ${counter}`
+      `Ticket number ${queueTicket} please proceed to counter ${queueCounter}`
     );
     window.speechSynthesis.speak(utterance);
   };
 
   useEffect(() => {
     if (queueType && queueCounter && queueTicket) {
-      const newStack = [...stack];
-
-      if (queueType === "TAKE_NUMBER") {
+      setStack((prevStack) => {
+        const newStack = [...prevStack];
         const isNotInStack = !newStack.some(
           (item) => item.counter === queueCounter && item.ticket === queueTicket
         );
-        if (isNotInStack) {
+
+        if (queueType === "TAKE_NUMBER" && isNotInStack) {
           if (newStack.length < numItems) {
             newStack.unshift({ counter: queueCounter, ticket: queueTicket });
-            setStack(newStack);
-            speakQueueItem(queueCounter, queueTicket);
             setBlinkCount(10);
+
+            setSoundQueue((prevQueue) => [...prevQueue, buzzSound]);
+            setTimeout(speakMessage, 1500);
+
+            return newStack;
           } else {
             console.log("Queue is full. Cannot add more items.");
           }
-        }
-      } else if (queueType === "BUZZ_NUMBER") {
-        const matchFound = newStack.some(
-          (item) => item.counter === queueCounter && item.ticket === queueTicket
-        );
+        } else if (queueType === "BUZZ_NUMBER") {
+          const matchFound = newStack.some(
+            (item) =>
+              item.counter === queueCounter && item.ticket === queueTicket
+          );
 
-        if (matchFound) {
-          setBlinkCount(10);
-          speakQueueItem(queueCounter, queueTicket);
+          if (matchFound) {
+            setBlinkCount(10);
+            setSoundQueue((prevQueue) => [...prevQueue, buzzSound]);
+          }
+        } else if (queueType === "CONSUME_NUMBER") {
+          return newStack.filter(
+            (item) =>
+              item.counter !== queueCounter || item.ticket !== queueTicket
+          );
         }
-      } else if (queueType === "CONSUME_NUMBER") {
-        const filteredStack = newStack.filter(
-          (item) => item.counter !== queueCounter || item.ticket !== queueTicket
-        );
-        setStack(filteredStack);
-      }
+
+        return prevStack;
+      });
     }
-  }, [queueType, queueCounter, queueTicket]);
+  }, [queueType, queueCounter, queueTicket, numItems, buzzSound]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
 
     if (blinkCount > 0) {
       intervalId = setInterval(() => {
-        setBlinkCount((prevCount) => prevCount - 1); // Decrement blink count
+        setBlinkCount((prevCount) => prevCount - 1);
       }, 500);
     }
 
-    // Cleanup function to clear the interval when blinkCount reaches 0
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
