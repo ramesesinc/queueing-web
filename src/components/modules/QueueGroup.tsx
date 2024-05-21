@@ -109,16 +109,14 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
     }
   };
 
-  const handleBuzzNumber = (countercode: string, ticketno: string) => {
-    if (type === "BUZZ_NUMBER") {
-      if (countercode && ticketno) {
-        const matchFoundIndex = stack.findIndex(
-          (item) => item.counter === countercode && item.ticket === ticketno
-        );
-        if (matchFoundIndex !== -1) {
-          queueRef.current.push({ counter: countercode, ticket: ticketno });
-          processQueue();
-        }
+  const handleBuzzNumber = () => {
+    if (countercode && ticketno && type === "BUZZ_NUMBER") {
+      const matchFoundIndex = stack.findIndex(
+        (item) => item.counter === countercode && item.ticket === ticketno
+      );
+      if (matchFoundIndex !== -1) {
+        queueRef.current.push({ counter: countercode, ticket: ticketno });
+        processQueue();
       } else {
         console.error("Countercode or ticketno is missing");
       }
@@ -126,7 +124,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   };
 
   const handleConsumeNumber = () => {
-    if (type === "CONSUME_NUMBER" && countercode && ticketno) {
+    if (countercode && ticketno && type === "CONSUME_NUMBER") {
       const indexToRemove = stack.findIndex(
         (item) => item.counter === countercode && item.ticket === ticketno
       );
@@ -141,7 +139,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
   useEffect(() => {
     handleTakeNumber();
-    handleBuzzNumber(countercode, ticketno);
+    handleBuzzNumber();
     handleConsumeNumber();
   }, [handleTakeNumber, handleBuzzNumber, handleConsumeNumber]);
 
