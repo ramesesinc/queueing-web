@@ -134,7 +134,7 @@ const Monitor = () => {
           0
         )}
         <QueueTv
-          componentType={showVideo ? `${videoPosition}` : "none"}
+          componentType={showVideo ? `${videoPosition}` : ""}
           layoutType="default"
           fontFamily={bplsdata.bpls.fontFamily}
           videoLink={videoUrl}

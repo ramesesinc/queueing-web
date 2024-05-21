@@ -78,22 +78,22 @@ const Template: React.FC<TemplateProps> = ({
         className={`flex-grow ${mainClass} ${flexDirection || "flex-row"}`}
         style={mainStyle}
       >
-        <div className={`flex gap-x-5 m-10`}>
+        <div className={`flex gap-x-3 mx-7 my-10`}>
           {children &&
             !React.Children.toArray(children).some(
               (child) =>
                 React.isValidElement(child) &&
                 child.props.componentType === "none"
             ) && (
-              <div className=" w-[60%] flex flex-col items-start relative">
-                {renderMainContent("main-right")}
+              <div className=" w-full flex flex-col items-start relative">
+                {renderMainContent("main-left")}
               </div>
             )}
 
           {/* main-left */}
-          {renderMainContent("main-left") && (
-            <div className={`${!renderMainContent("main-right") && ""} w-full`}>
-              <div className="relative">{renderMainContent("main-left")}</div>
+          {renderMainContent("main-right") && (
+            <div className={`${!renderMainContent("main-left") && ""} w-full`}>
+              <div className="relative">{renderMainContent("main-right")}</div>
             </div>
           )}
         </div>
