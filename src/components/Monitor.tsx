@@ -140,7 +140,6 @@ const Monitor = () => {
           videoLink={videoUrl}
         />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
-        {data.ticketno}
       </Template>
     </>
   );
