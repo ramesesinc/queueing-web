@@ -1,6 +1,6 @@
 //components/QueueCounter.tsx
 import { useContext, useEffect, useRef } from "react";
-import SocketContext from "../stores/socket";
+import SocketContext from "../stores/queue";
 
 function QueueCounter() {
   const socketCtx = useContext(SocketContext);

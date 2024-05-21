@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useContext } from "react";
 
-import SocketContext from "../stores/socket";
+import SocketContext from "../stores/queue";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Template from "./layouts/Template";
