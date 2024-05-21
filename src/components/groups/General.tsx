@@ -17,18 +17,23 @@ const General: React.FC<GeneralProps> = ({ title }) => {
     <div className="!text-lg">
       <Title text={title || "General"} className="text-start pb-5 text-xl" />
       <form onSubmit={handleSubmit}>
-        <Flex className="gap-10 flex-col justify-center items-center">
+        <Flex className="gap-5 flex-col justify-center items-center">
           <FontFamilyPicker
             value={bplsdata.bpls.fontFamily}
             onChange={handleSelect}
             name={"fontFamily"}
             title="Font Style"
           />
-          <UploadImage
-            onLogoUploaded={updateLogoUrl}
-            removeLogoImage={removeLogoUrl}
-            title="Logo"
-          />
+          <div className="flex flex-col items-start justify-start">
+            <Title
+              text={"Logo"}
+              className="text-start text-xl pl-4 leading-none"
+            />
+            <UploadImage
+              onLogoUploaded={updateLogoUrl}
+              removeLogoImage={removeLogoUrl}
+            />
+          </div>
 
           <Button
             caption="Save"
