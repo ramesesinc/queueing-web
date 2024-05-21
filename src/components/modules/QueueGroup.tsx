@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import QueueItem from "./QueueItem";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import SubTitle from "../ui/SubTitle";
+import QueueItem from "./QueueItem";
 
 interface QueueGroupsProps {
   windowCount: number;
@@ -13,6 +13,7 @@ interface QueueGroupsProps {
   ticketno: string;
   bgColor: React.CSSProperties;
   fontFamily?: string | undefined;
+  buzz?: string;
 }
 
 const QueueGroups: React.FC<QueueGroupsProps> = ({
@@ -26,6 +27,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   ticketno,
   bgColor,
   fontFamily,
+  buzz,
 }) => {
   const containerStyle: React.CSSProperties = {
     display: "grid",
@@ -42,17 +44,47 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
   const [stack, setStack] = useState<
     { counter: string; ticket: string; blink: boolean }[]
   >([]);
+  const queueRef = useRef<{ counter: string; ticket: string }[]>([]);
+  const isProcessingRef = useRef<boolean>(false);
 
-  const textToSpeech = (countercode: string, ticketno: string) => {
-    const audio = new Audio("/buzz.mp3");
-    audio.addEventListener("ended", () => {
+  const processQueue = useCallback(async () => {
+    if (isProcessingRef.current || queueRef.current.length === 0) return;
+    isProcessingRef.current = true;
+
+    while (queueRef.current.length > 0) {
+      const { counter, ticket } = queueRef.current.shift()!;
+      playBuzz();
+      await textToSpeech(counter, ticket);
+      ticketBlink(counter, ticket);
+    }
+
+    isProcessingRef.current = false;
+  }, []);
+
+  const textToSpeech = useCallback((countercode: string, ticketno: string) => {
+    return new Promise<void>((resolve) => {
       const utterance = new SpeechSynthesisUtterance(
-        `Ticket number ${ticketno} please proceed to counter ${countercode}`
+        `Ticket number, ${ticketno}, please proceed to counter ${countercode}`
       );
+      utterance.onend = () => resolve();
       window.speechSynthesis.speak(utterance);
     });
-    audio.play().catch((error) => console.error("Error playing audio:", error));
-  };
+  }, []);
+
+  const playBuzz = useCallback(() => {
+    return new Promise<void>((resolve) => {
+      if (buzz) {
+        const audio = new Audio(buzz);
+        audio.onended = () => resolve();
+        audio.play().catch((error) => {
+          console.error("Error playing audio:", error);
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
+  }, [buzz]);
 
   const ticketBlink = (countercode: string, ticketno: string) => {
     const intervalId = setInterval(() => {
@@ -92,14 +124,14 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
             blink: true,
           });
           setStack(newStack);
-          textToSpeech(countercode, ticketno);
-          ticketBlink(countercode, ticketno);
+          queueRef.current.push({ counter: countercode, ticket: ticketno });
+          processQueue();
         } else {
           console.log("Queue is full.");
         }
       }
     }
-  }, [stack, countercode, ticketno, type, numItems, textToSpeech, ticketBlink]);
+  }, [stack, countercode, ticketno, type, numItems, processQueue]);
 
   const handleBuzzNumber = useCallback(() => {
     if (countercode && ticketno && type === "BUZZ_NUMBER") {
