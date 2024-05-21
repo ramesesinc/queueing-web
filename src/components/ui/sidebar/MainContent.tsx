@@ -7,7 +7,7 @@ interface MainContentProps {
 
 const MainContent: React.FC<MainContentProps> = ({ selectedItem }) => {
   return (
-    <div className="w-[80%] h-screen bg-gray-200">
+    <div className="w-[80%] h-screen relative bg-gray-200">
       <div className="p-4 pl-20">
         {selectedItem ? selectedItem : <General />}
       </div>

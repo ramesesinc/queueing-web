@@ -65,128 +65,174 @@ const Tc: React.FC<TcProps> = ({ title }) => {
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <Title text={title || ""} className="text-start pb-5 text-xl" />
-      <Flex className="flex-col items-center gap-1">
-        <div className="grid grid-cols-2 grid-flow-row gap-2 items-center justify-center">
-          <ColorPicker
-            name={"color"}
-            value={tcdata.tc.color}
-            onChange={handleChange}
-            label="header and footer color"
+      <Flex className="flex-col items-start gap-1">
+        <Title text={"Theme"} className="text-start font-semibold text-xl" />
+        <ColorPicker
+          name={"color"}
+          value={tcdata.tc.color}
+          onChange={handleChange}
+          label=""
+        />
+        <div>
+          <Title
+            text={"Window"}
+            className="text-start pb-2 font-semibold text-xl"
           />
-          <ColorPicker
-            name={"windowColor"}
-            value={tcdata.tc.windowColor}
-            onChange={handleChange}
-            label="window color"
-          />
-          <XyAxis
-            value={tcdata.tc.xyAxis}
-            onChange={handleSelect}
-            name={"xyAxis"}
-            label="Window X & Y axis"
-          />
-          <InputBox
-            label="Window Count"
-            type="number"
-            name="windowCount"
-            value={tcdata.tc.windowCount}
-            onChange={handleChange}
-            className="h-6 w-28 text-center"
-          />
-
-          <InputBox
-            label="verticalRowsCount"
-            type="number"
-            name="verticalRowsCount"
-            value={tcdata.tc.verticalRowsCount}
-            onChange={handleChange}
-            className={`h-6 w-28 text-center ${
-              tcdata.tc.xyAxis === "horizontal"
-                ? "bg-gray-400 opacity-50 border-none"
-                : ""
-            }`}
-            disabled={tcdata.tc.xyAxis === "horizontal"}
-          />
-
-          <InputBox
-            label="horizontalColsCount"
-            type="number"
-            name="horizontalColsCount"
-            value={tcdata.tc.horizontalColsCount}
-            onChange={handleChange}
-            className={`h-6 w-28 text-center ${
-              tcdata.tc.xyAxis === "vertical"
-                ? "bg-gray-400 opacity-50 border-none"
-                : ""
-            }`}
-            disabled={tcdata.tc.xyAxis === "vertical"}
-          />
-          <WindowPosition
-            value={tcdata.tc.windowposition}
-            onChange={(e) =>
-              handlePositionChange("windowposition", e.target.value)
-            }
-            name="windowposition"
-            winLabel="window position"
-          />
-          <VideoPosition
-            value={tcdata.tc.videoposition}
-            onChange={(e) =>
-              handlePositionChange("videoposition", e.target.value)
-            }
-            name={"videoposition"}
-            vidLabel="video position"
-          />
-          <InputBox
-            label="videoUrl"
-            type="text"
-            name="videoUrl"
-            value={tcdata.tc.videoUrl}
-            onChange={handleChange}
-            className="h-6 w-28 text-center"
-          />
-          <Buzz
-            value={tcdata.tc.buzz}
-            onChange={handleSelect}
-            name={"buzz"}
-            label="Buzz Sound"
-          />
+          <div className="flex gap-5 justify-center item-center pl-5">
+            <InputBox
+              label="Number of Windows"
+              type="number"
+              name="windowCount"
+              value={tcdata.tc.windowCount}
+              onChange={handleChange}
+              className="h-6 w-28 text-center"
+            />
+            <ColorPicker
+              name={"windowColor"}
+              value={tcdata.tc.windowColor}
+              onChange={handleChange}
+              label="window color"
+            />
+          </div>
         </div>
-        <ToggleButton
-          isActive={tcdata.tc.showVideo}
-          onClick={toggleVideo}
-          caption={tcdata.tc.showVideo ? "Hide Video" : "Show Video"}
-        />
-        <UploadImage
-          onLogoUploaded={updateBgUrl}
-          removeLogoImage={removeBgUrl}
-          title="background image"
-        />
+        <div className="flex gap-5 pl-5">
+          <div className="flex flex-col">
+            <Title
+              text={"Window Position"}
+              className="text-start font-normal text-xl"
+            />
+            <XyAxis
+              value={tcdata.tc.xyAxis}
+              onChange={handleSelect}
+              name={"xyAxis"}
+              label=""
+            />
 
-        <Flex className=" gap-5 w-full items-center justify-center">
-          <Button
-            caption="contain"
-            className={`!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md ${
-              selectedBgSize === "contain" ? "bg-gray-400" : ""
-            }`}
-            onClick={() => handleBgSizeChange("contain")}
+            <WindowPosition
+              value={tcdata.tc.windowposition}
+              onChange={(e) =>
+                handlePositionChange("windowposition", e.target.value)
+              }
+              name="windowposition"
+              winLabel=""
+            />
+          </div>
+          <div>
+            <Title
+              text={"X & Y axis"}
+              className="text-start font-normal text-xl"
+            />
+            <InputBox
+              label=""
+              type="number"
+              name="verticalRowsCount"
+              value={tcdata.tc.verticalRowsCount}
+              onChange={handleChange}
+              className={`h-6 w-28 text-center ${
+                tcdata.tc.xyAxis === "horizontal"
+                  ? "bg-gray-400 opacity-50 border-none"
+                  : ""
+              }`}
+              disabled={tcdata.tc.xyAxis === "horizontal"}
+            />
+
+            <InputBox
+              label=""
+              type="number"
+              name="horizontalColsCount"
+              value={tcdata.tc.horizontalColsCount}
+              onChange={handleChange}
+              className={`h-6 w-28 text-center ${
+                tcdata.tc.xyAxis === "vertical"
+                  ? "bg-gray-400 opacity-50 border-none"
+                  : ""
+              }`}
+              disabled={tcdata.tc.xyAxis === "vertical"}
+            />
+          </div>
+        </div>
+        <Title text={"Video"} className="text-start font-semibold text-xl" />
+        <div className="flex gap-5 pl-5">
+          <div>
+            <InputBox
+              label="URL"
+              type="text"
+              name="videoUrl"
+              value={tcdata.tc.videoUrl}
+              onChange={handleChange}
+              className="h-6 w-28 text-center"
+            />
+            <VideoPosition
+              value={tcdata.tc.videoposition}
+              onChange={(e) =>
+                handlePositionChange("videoposition", e.target.value)
+              }
+              name={"videoposition"}
+              vidLabel="Position"
+            />
+          </div>
+          <div>
+            <ToggleButton
+              isActive={tcdata.tc.showVideo}
+              onClick={toggleVideo}
+              caption={"Visibility "}
+              text={tcdata.tc.showVideo ? "Hide Video" : "Show Video"}
+            />
+            <Buzz
+              value={tcdata.tc.buzz}
+              onChange={handleSelect}
+              name={"buzz"}
+              label="Buzz Sound"
+            />
+          </div>
+        </div>
+        <div>
+          <Title
+            text="Background"
+            className="text-start pt-3 font-semibold text-xl"
           />
-          <Button
-            caption="cover"
-            className={`!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md ${
-              selectedBgSize === "cover" ? "bg-gray-400" : ""
-            }`}
-            onClick={() => handleBgSizeChange("cover")}
-          />
-          <Button
-            caption="auto"
-            className={`!p-0 !m-0 text-[10px] w-[8%] max-xl:w-[6%] h-[25px] text-center flex items-center justify-center !rounded-md ${
-              selectedBgSize === "auto" ? "bg-gray-400" : ""
-            }`}
-            onClick={() => handleBgSizeChange("auto")}
-          />
-        </Flex>
-        <Flex className="gap-10 absolute bottom-2 right-2">
+          <div className="flex flex-col pl-5">
+            <div className="flex items-center justify-center gap-5">
+              <Title text="Image" className="text-start font-normal text-xl" />
+              <UploadImage
+                onLogoUploaded={updateBgUrl}
+                removeLogoImage={removeBgUrl}
+                title=""
+              />
+            </div>
+
+            <Flex className=" gap-5 w-full items-start justify-start">
+              <Title
+                text="Position"
+                className="text-start font-normal text-xl"
+              />
+              <div className="flex w-full gap-2">
+                <Button
+                  caption="contain"
+                  className={`!p-0 !m-0 text-[10px] w-[30%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+                    selectedBgSize === "contain" ? "bg-gray-400" : ""
+                  }`}
+                  onClick={() => handleBgSizeChange("contain")}
+                />
+                <Button
+                  caption="cover"
+                  className={`!p-0 !m-0 text-[10px] w-[30%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+                    selectedBgSize === "cover" ? "bg-gray-400" : ""
+                  }`}
+                  onClick={() => handleBgSizeChange("cover")}
+                />
+                <Button
+                  caption="auto"
+                  className={`!p-0 !m-0 text-[10px] w-[30%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+                    selectedBgSize === "auto" ? "bg-gray-400" : ""
+                  }`}
+                  onClick={() => handleBgSizeChange("auto")}
+                />
+              </div>
+            </Flex>
+          </div>
+        </div>
+        <Flex className="gap-10 absolute bottom-10 left-20">
           <Button
             caption="Reset"
             className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-gray-300 hover:bg-gray-400 text-gray-800"
