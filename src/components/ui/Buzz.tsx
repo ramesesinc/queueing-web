@@ -19,7 +19,7 @@ const Buzz: React.FC<BuzzSelectProps> = ({ value, onChange, name, label }) => {
           name={name}
           onChange={onChange}
           value={value}
-          className="rounded border border-gray-500 w-48 focus:border-blue-500 focus:outline-none"
+          className="rounded border border-gray-500 w-48 focus:border-blue-500 focus:outline-none pl-1"
         >
           <option value="/sound/buzz1.mp3">buzz 1</option>
           <option value="/sound/buzz2.mp3">buzz 2</option>
