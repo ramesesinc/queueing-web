@@ -34,6 +34,9 @@ interface BplsDataContextValue {
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
   resetData: () => void;
   handleUpload: (videoUrl: string) => void;
+  setBplsData: React.Dispatch<
+    React.SetStateAction<BplsDataContextValue["bplsdata"]>
+  >;
 }
 
 interface BplsDatacontext {
@@ -74,6 +77,7 @@ const BplsDataContext = createContext<BplsDataContextValue>({
   updateBgSize: () => {},
   resetData: () => {},
   handleUpload: () => {},
+  setBplsData: () => {},
 });
 
 export const useBplsData = () => useContext(BplsDataContext);
@@ -225,6 +229,7 @@ export const BplsDataProvider: React.FC<BplsDatacontext> = ({ children }) => {
         updateBgSize,
         resetData,
         handleUpload,
+        setBplsData,
       }}
     >
       {children}

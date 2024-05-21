@@ -26,6 +26,7 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
     removeBgUrl,
     updateBgSize,
     resetData,
+    setBplsData,
   } = useBplsData();
   const [selectedBgSize, setSelectedBgSize] = useState<
     "auto" | "contain" | "cover"
@@ -35,7 +36,31 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
     setSelectedBgSize(bgSize);
   };
 
-  console.log("bplsdata", bplsdata.bpls);
+  const handlePositionChange = (name: string, value: string) => {
+    if (name === "windowposition") {
+      const newVideoPosition =
+        value === "main-left" ? "main-right" : "main-left";
+      setBplsData({
+        ...bplsdata,
+        bpls: {
+          ...bplsdata.bpls,
+          windowposition: value,
+          videoposition: newVideoPosition,
+        },
+      });
+    } else if (name === "videoposition") {
+      const newWindowPosition =
+        value === "main-left" ? "main-right" : "main-left";
+      setBplsData({
+        ...bplsdata,
+        bpls: {
+          ...bplsdata.bpls,
+          videoposition: value,
+          windowposition: newWindowPosition,
+        },
+      });
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
@@ -97,13 +122,17 @@ const Bpls: React.FC<BplsProps> = ({ title }) => {
           />
           <WindowPosition
             value={bplsdata.bpls.windowposition}
-            onChange={handleSelect}
+            onChange={(e) =>
+              handlePositionChange("windowposition", e.target.value)
+            }
             name="windowposition"
             winLabel="window position"
           />
           <VideoPosition
             value={bplsdata.bpls.videoposition}
-            onChange={handleSelect}
+            onChange={(e) =>
+              handlePositionChange("videoposition", e.target.value)
+            }
             name={"videoposition"}
             vidLabel="video position"
           />

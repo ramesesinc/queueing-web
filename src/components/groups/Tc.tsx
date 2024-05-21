@@ -26,6 +26,7 @@ const Tc: React.FC<TcProps> = ({ title }) => {
     removeBgUrl,
     updateBgSize,
     resetData,
+    setTcData,
   } = useTcData();
   const [selectedBgSize, setSelectedBgSize] = useState<
     "auto" | "contain" | "cover"
@@ -34,6 +35,33 @@ const Tc: React.FC<TcProps> = ({ title }) => {
     updateBgSize(bgSize);
     setSelectedBgSize(bgSize);
   };
+
+  const handlePositionChange = (name: string, value: string) => {
+    if (name === "windowposition") {
+      const newVideoPosition =
+        value === "main-left" ? "main-right" : "main-left";
+      setTcData({
+        ...tcdata,
+        tc: {
+          ...tcdata.tc,
+          windowposition: value,
+          videoposition: newVideoPosition,
+        },
+      });
+    } else if (name === "videoposition") {
+      const newWindowPosition =
+        value === "main-left" ? "main-right" : "main-left";
+      setTcData({
+        ...tcdata,
+        tc: {
+          ...tcdata.tc,
+          videoposition: value,
+          windowposition: newWindowPosition,
+        },
+      });
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <Title text={title || ""} className="text-start pb-5 text-xl" />
@@ -95,13 +123,17 @@ const Tc: React.FC<TcProps> = ({ title }) => {
           />
           <WindowPosition
             value={tcdata.tc.windowposition}
-            onChange={handleSelect}
+            onChange={(e) =>
+              handlePositionChange("windowposition", e.target.value)
+            }
             name="windowposition"
             winLabel="window position"
           />
           <VideoPosition
             value={tcdata.tc.videoposition}
-            onChange={handleSelect}
+            onChange={(e) =>
+              handlePositionChange("videoposition", e.target.value)
+            }
             name={"videoposition"}
             vidLabel="video position"
           />
