@@ -128,7 +128,7 @@ const Monitor = () => {
             countercode={data.countercode}
             bgColor={{ backgroundColor: "windowColors" }}
             fontFamily={bplsdata.bpls.fontFamily}
-            buzzSound={buzz}
+            buzz={buzz}
           />
         ) : (
           0
