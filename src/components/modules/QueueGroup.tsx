@@ -53,15 +53,14 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
 
     while (queueRef.current.length > 0) {
       const { counter, ticket } = queueRef.current.shift()!;
-      playBuzz();
+      await playBuzz();
       await textToSpeech(counter, ticket);
-      ticketBlink(counter, ticket);
     }
 
     isProcessingRef.current = false;
   }, []);
 
-  const textToSpeech = useCallback((countercode: string, ticketno: string) => {
+  const textToSpeech = (countercode: string, ticketno: string) => {
     return new Promise<void>((resolve) => {
       const utterance = new SpeechSynthesisUtterance(
         `Ticket number, ${ticketno}, please proceed to counter ${countercode}`
@@ -69,9 +68,9 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
       utterance.onend = () => resolve();
       window.speechSynthesis.speak(utterance);
     });
-  }, []);
+  };
 
-  const playBuzz = useCallback(() => {
+  const playBuzz = () => {
     return new Promise<void>((resolve) => {
       if (buzz) {
         const audio = new Audio(buzz);
@@ -84,32 +83,9 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
         resolve();
       }
     });
-  }, [buzz]);
-
-  const ticketBlink = (countercode: string, ticketno: string) => {
-    const intervalId = setInterval(() => {
-      setStack((prevStack) =>
-        prevStack.map((item) =>
-          item.counter === countercode && item.ticket === ticketno
-            ? { ...item, blink: !item.blink }
-            : item
-        )
-      );
-    }, 800);
-
-    setTimeout(() => {
-      clearInterval(intervalId);
-      setStack((prevStack) =>
-        prevStack.map((item) =>
-          item.counter === countercode && item.ticket === ticketno
-            ? { ...item, blink: false }
-            : item
-        )
-      );
-    }, 4000);
   };
 
-  const handleTakeNumber = useCallback(() => {
+  const handleTakeNumber = () => {
     if (countercode && ticketno && type === "TAKE_NUMBER") {
       const newStack = [...stack];
       const isNotInStack = !newStack.some(
@@ -131,20 +107,25 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
         }
       }
     }
-  }, [stack, countercode, ticketno, type, numItems, processQueue]);
+  };
 
-  const handleBuzzNumber = useCallback(() => {
-    if (countercode && ticketno && type === "BUZZ_NUMBER") {
-      const matchFoundIndex = stack.findIndex(
-        (item) => item.counter === countercode && item.ticket === ticketno
-      );
-      if (matchFoundIndex !== -1) {
-        textToSpeech(countercode, ticketno);
+  const handleBuzzNumber = (countercode: string, ticketno: string) => {
+    if (type === "BUZZ_NUMBER") {
+      if (countercode && ticketno) {
+        const matchFoundIndex = stack.findIndex(
+          (item) => item.counter === countercode && item.ticket === ticketno
+        );
+        if (matchFoundIndex !== -1) {
+          queueRef.current.push({ counter: countercode, ticket: ticketno });
+          processQueue();
+        }
+      } else {
+        console.error("Countercode or ticketno is missing");
       }
     }
-  }, [stack, countercode, ticketno, type, textToSpeech]);
+  };
 
-  const handleConsumeNumber = useCallback(() => {
+  const handleConsumeNumber = () => {
     if (type === "CONSUME_NUMBER" && countercode && ticketno) {
       const indexToRemove = stack.findIndex(
         (item) => item.counter === countercode && item.ticket === ticketno
@@ -156,11 +137,11 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
         setStack(updatedStack);
       }
     }
-  }, [stack, countercode, ticketno, type]);
+  };
 
   useEffect(() => {
     handleTakeNumber();
-    handleBuzzNumber();
+    handleBuzzNumber(countercode, ticketno);
     handleConsumeNumber();
   }, [handleTakeNumber, handleBuzzNumber, handleConsumeNumber]);
 
@@ -180,7 +161,6 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({
             ticketno={item.ticket}
             bgColor={bgColor}
             fontFamily={fontFamily}
-            blink={item.blink}
           />
         ))}
       </div>

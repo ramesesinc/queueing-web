@@ -8,7 +8,7 @@ export type QueueItemProps = {
   bgColor?: React.CSSProperties;
   fontFamily?: string;
   className?: string;
-  blink: boolean;
+  blink?: boolean;
 };
 
 const QueueItem: React.FC<QueueItemProps> = ({
