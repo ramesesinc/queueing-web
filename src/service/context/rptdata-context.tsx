@@ -34,6 +34,9 @@ interface RptDataContextValue {
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
   resetData: () => void;
   handleUpload: (videoUrl: string) => void;
+  setRptData: React.Dispatch<
+    React.SetStateAction<RptDataContextValue["rptdata"]>
+  >;
 }
 
 interface RptDatacontext {
@@ -74,6 +77,7 @@ const RptDataContext = createContext<RptDataContextValue>({
   updateBgSize: () => {},
   resetData: () => {},
   handleUpload: () => {},
+  setRptData: () => {},
 });
 
 export const useRptData = () => useContext(RptDataContext);
@@ -225,6 +229,7 @@ export const RptDataProvider: React.FC<RptDatacontext> = ({ children }) => {
         removeLogoUrl,
         resetData,
         handleUpload,
+        setRptData,
       }}
     >
       {children}

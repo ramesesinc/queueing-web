@@ -26,13 +26,42 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
     removeBgUrl,
     updateBgSize,
     resetData,
+    setRptData,
   } = useRptData();
+
   const [selectedBgSize, setSelectedBgSize] = useState<
     "auto" | "contain" | "cover"
   >(rptdata.rpt.bgSize);
+
   const handleBgSizeChange = (bgSize: "auto" | "contain" | "cover") => {
     updateBgSize(bgSize);
     setSelectedBgSize(bgSize);
+  };
+
+  const handlePositionChange = (name: string, value: string) => {
+    if (name === "windowposition") {
+      const newVideoPosition =
+        value === "main-left" ? "main-right" : "main-left";
+      setRptData({
+        ...rptdata,
+        rpt: {
+          ...rptdata.rpt,
+          windowposition: value,
+          videoposition: newVideoPosition,
+        },
+      });
+    } else if (name === "videoposition") {
+      const newWindowPosition =
+        value === "main-left" ? "main-right" : "main-left";
+      setRptData({
+        ...rptdata,
+        rpt: {
+          ...rptdata.rpt,
+          videoposition: value,
+          windowposition: newWindowPosition,
+        },
+      });
+    }
   };
 
   return (
@@ -66,7 +95,6 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
             onChange={handleChange}
             className="h-6 w-28 text-center"
           />
-
           <InputBox
             label="verticalRowsCount"
             type="number"
@@ -80,7 +108,6 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
             }`}
             disabled={rptdata.rpt.xyAxis === "horizontal"}
           />
-
           <InputBox
             label="horizontalColsCount"
             type="number"
@@ -96,13 +123,17 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
           />
           <WindowPosition
             value={rptdata.rpt.windowposition}
-            onChange={handleSelect}
+            onChange={(e) =>
+              handlePositionChange("windowposition", e.target.value)
+            }
             name="windowposition"
             winLabel="window position"
           />
           <VideoPosition
             value={rptdata.rpt.videoposition}
-            onChange={handleSelect}
+            onChange={(e) =>
+              handlePositionChange("videoposition", e.target.value)
+            }
             name={"videoposition"}
             vidLabel="video position"
           />

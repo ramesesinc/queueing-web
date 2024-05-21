@@ -33,6 +33,7 @@ interface TcDataContextValue {
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
   resetData: () => void;
   handleUpload: (videoUrl: string) => void;
+  setTcData: React.Dispatch<React.SetStateAction<TcDataContextValue["tcdata"]>>;
 }
 
 interface TcDatacontext {
@@ -73,6 +74,7 @@ const TcDataContext = createContext<TcDataContextValue>({
   updateBgSize: () => {},
   resetData: () => {},
   handleUpload: () => {},
+  setTcData: () => {},
 });
 
 export const useTcData = () => useContext(TcDataContext);
@@ -224,6 +226,7 @@ export const TcDataProvider: React.FC<TcDatacontext> = ({ children }) => {
         removeLogoUrl,
         resetData,
         handleUpload,
+        setTcData,
       }}
     >
       {children}
