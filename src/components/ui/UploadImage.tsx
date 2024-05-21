@@ -30,13 +30,13 @@ const ImageUpload = ({
   };
 
   return (
-    <div className="flex flex-col items-center text-[10px] p-2">
+    <div className="flex justify-center items-center text-[10px] p-4">
       <h1 className="text-lg pb-1">{title}</h1>
       <input
         type="file"
         accept="image/*"
         onChange={handleImageChange}
-        className="mb-4 rounded w-[160px]"
+        className=" rounded w-[160px]"
       />
       <div className="flex gap-2">
         <button

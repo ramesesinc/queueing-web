@@ -17,8 +17,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 }) => {
   return (
     <div className={`color-picker flex`}>
-      <label className="flex flex-col items-center justify-center leading-none pb-2">
-        <p className="leading-none text-lg pb-1">{label}</p>
+      <label className="flex flex-col items-start justify-center leading-none pb-5">
+        <p className="leading-none text-lg pb-1 !text-start">{label}</p>
         <input
           type="color"
           name={name}
