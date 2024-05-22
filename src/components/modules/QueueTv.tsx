@@ -54,9 +54,9 @@ const Video: React.FC<VideoProps> = ({
 
   const getEmbedUrl = () => {
     if (platform === "youtube") {
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
     } else if (platform === "facebook") {
-      return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/${videoId}/?autoplay=1&mute=1`;
+      return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/${videoId}/?autoplay=1&mute=1&rel=0`;
     }
     return "";
   };
@@ -101,7 +101,7 @@ const Video: React.FC<VideoProps> = ({
                   title="Video player"
                   allowFullScreen
                   width="770"
-                  height="430"
+                  height="380"
                   className="rounded-t-xl"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
