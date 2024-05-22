@@ -101,7 +101,7 @@ const Video: React.FC<VideoProps> = ({
                   title="Video player"
                   allowFullScreen
                   width="770"
-                  height="430"
+                  height="380"
                   className="rounded-t-xl"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
