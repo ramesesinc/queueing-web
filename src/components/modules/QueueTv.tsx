@@ -54,9 +54,9 @@ const Video: React.FC<VideoProps> = ({
 
   const getEmbedUrl = () => {
     if (platform === "youtube") {
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
     } else if (platform === "facebook") {
-      return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/${videoId}/?autoplay=1&mute=1`;
+      return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/facebook/videos/${videoId}/?autoplay=1&mute=1&rel=0`;
     }
     return "";
   };
