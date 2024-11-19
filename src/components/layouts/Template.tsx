@@ -12,17 +12,7 @@ interface TemplateProps {
   fontFamily?: string;
 }
 
-const Template: React.FC<TemplateProps> = ({
-  templateType,
-  children,
-  headerStyle,
-  mainStyle,
-  footerStyle,
-  headerClass,
-  mainClass,
-  footerClass,
-  fontFamily,
-}) => {
+const Template: React.FC<TemplateProps> = ({ templateType, children, headerStyle, mainStyle, footerStyle, headerClass, mainClass, footerClass, fontFamily }) => {
   const templateStyles = {
     template1: {
       bgColors: "bg-white",
@@ -40,8 +30,7 @@ const Template: React.FC<TemplateProps> = ({
     },
   };
 
-  const { bgColors, justifyContent, flexDirection, header, footer } =
-    templateStyles[templateType] || templateStyles.template1;
+  const { bgColors, justifyContent, flexDirection, header, footer } = templateStyles[templateType] || templateStyles.template1;
 
   const renderMainContent = (type: string) => {
     return React.Children.map(children, (child) => {
@@ -65,29 +54,14 @@ const Template: React.FC<TemplateProps> = ({
   return (
     <div className={`h-screen flex flex-col ${bgColors}`}>
       {/* Header */}
-      <header
-        className={`${justifyContent} ${headerClass} ${header} py-2 bg-[#0a5366]`}
-        style={headerStyle}
-      >
+      <header className={`${justifyContent} ${headerClass} ${header} py-2 bg-[#0a5366]`} style={headerStyle}>
         {renderMainContent("header")}
       </header>
 
       {/* Main Content */}
-      <main
-        className={`flex-grow ${mainClass} ${flexDirection || "flex-row"}`}
-        style={mainStyle}
-      >
-        <div className={`flex gap-x-5 m-10`}>
-          {children &&
-            !React.Children.toArray(children).some(
-              (child) =>
-                React.isValidElement(child) &&
-                child.props.componentType === "none"
-            ) && (
-              <div className=" w-[60%] flex flex-col items-start relative">
-                {renderMainContent("main-right")}
-              </div>
-            )}
+      <main className={`flex-grow ${mainClass} ${flexDirection || "flex-col"} pt-10 px-5`} style={mainStyle}>
+        <div className={`flex gap-x-5 w-full`}>
+          {children && !React.Children.toArray(children).some((child) => React.isValidElement(child) && child.props.componentType === "none") && <div className=" w-[60%] flex flex-col items-start relative">{renderMainContent("main-right")}</div>}
 
           {/* main-left */}
           {renderMainContent("main-left") && (
@@ -99,10 +73,7 @@ const Template: React.FC<TemplateProps> = ({
       </main>
 
       {/* Footer */}
-      <footer
-        style={footerStyle}
-        className={`${justifyContent} ${footerClass} ${footer} relative flex p-2 text-center bg-[#0a5366]`}
-      >
+      <footer style={footerStyle} className={`${justifyContent} ${footerClass} ${footer} relative flex p-2 text-center bg-[#0a5366]`}>
         {renderMainContent("footer")}
       </footer>
     </div>

@@ -20,6 +20,7 @@ interface BplsDataContextValue {
       videoposition: string;
       windowposition: string;
       buzz: string;
+      lguname: string;
     };
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -34,9 +35,7 @@ interface BplsDataContextValue {
   updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
   resetData: () => void;
   handleUpload: (videoUrl: string) => void;
-  setBplsData: React.Dispatch<
-    React.SetStateAction<BplsDataContextValue["bplsdata"]>
-  >;
+  setBplsData: React.Dispatch<React.SetStateAction<BplsDataContextValue["bplsdata"]>>;
 }
 
 interface BplsDatacontext {
@@ -59,6 +58,7 @@ const defaultBplsData = {
   videoposition: "main-right",
   windowposition: "main-left",
   buzz: "/sound/buzz3.mp3",
+  lguname: "",
 };
 
 const BplsDataContext = createContext<BplsDataContextValue>({

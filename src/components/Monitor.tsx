@@ -5,12 +5,12 @@ import SocketContext from "../stores/queue";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Template from "./layouts/Template";
-import QueueGroup from "./modules/QueueGroup";
 import QueueTv from "./modules/QueueTv";
 
 import { useBplsData } from "../service/context/bplsdatas-context";
 import { useRptData } from "../service/context/rptdata-context";
 import { useTcData } from "../service/context/tcdata-context";
+import QueueGroup from "./modules/QueueGroup";
 
 const Monitor = () => {
   const router = useRouter();
@@ -35,6 +35,7 @@ const Monitor = () => {
   let videoPosition = "";
   let windowPosition = "";
   let buzz = "";
+  let lguname = "";
 
   if (group === "bpls") {
     title = "Business Permit and Licensing System";
@@ -51,6 +52,7 @@ const Monitor = () => {
     videoPosition = bplsdata.bpls.videoposition;
     windowPosition = bplsdata.bpls.windowposition;
     buzz = bplsdata.bpls.buzz;
+    lguname = bplsdata.bpls.lguname;
   } else if (group === "rpt") {
     title = "Real Property Tax";
     headerFooterBgColor = rptdata.rpt.color;
@@ -66,6 +68,7 @@ const Monitor = () => {
     videoPosition = rptdata.rpt.videoposition;
     windowPosition = rptdata.rpt.windowposition;
     buzz = rptdata.rpt.buzz;
+    lguname = bplsdata.bpls.lguname;
   } else if (group === "tc") {
     title = "Treasury and Collections";
     headerFooterBgColor = tcdata.tc.color;
@@ -81,6 +84,7 @@ const Monitor = () => {
     videoPosition = tcdata.tc.videoposition;
     windowPosition = tcdata.tc.windowposition;
     buzz = tcdata.tc.buzz;
+    lguname = bplsdata.bpls.lguname;
   } else {
     title = `${group || "Unknown Group"}`;
   }
@@ -106,40 +110,15 @@ const Monitor = () => {
         footerClass="footer"
         fontFamily={bplsdata.bpls.fontFamily}
       >
-        <Header
-          componentType="header"
-          groupName={title}
-          groupAddr={"Cebu City"}
-          src={bplsdata.bpls.logoUrl}
-          fontFamily={bplsdata.bpls.fontFamily}
-        />
+        <Header componentType="header" groupName={title} groupAddr={bplsdata.bpls.lguname} src={bplsdata.bpls.logoUrl} fontFamily={bplsdata.bpls.fontFamily} />
 
-        {windowCount !== 0 &&
-        verticalRowsCount != 0 &&
-        horizontalColsCount != 0 ? (
-          <QueueGroup
-            windowCount={Math.max(windowCount || 0)}
-            componentType={windowPosition}
-            orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
-            verticalRows={Math.max(verticalRowsCount || 0)}
-            horizontalCols={Math.max(horizontalColsCount || 0)}
-            type={data.type}
-            ticketno={data.ticketno}
-            countercode={data.countercode}
-            bgColor={{ backgroundColor: "windowColors" }}
-            fontFamily={bplsdata.bpls.fontFamily}
-            buzz={buzz}
-          />
+        {windowCount !== 0 && verticalRowsCount != 0 && horizontalColsCount != 0 ? (
+          <QueueGroup windowCount={Math.max(windowCount || 0)} componentType={windowPosition} orientation={xyAxis === "vertical" ? "vertical" : "horizontal"} verticalRows={2} horizontalCols={Math.max(horizontalColsCount || 0)} type={data.type} ticketno={data.ticketno} countercode={data.countercode} bgColor={{ backgroundColor: "windowColors" }} fontFamily={bplsdata.bpls.fontFamily} buzz={buzz} />
         ) : (
           0
         )}
 
-        <QueueTv
-          componentType={showVideo ? `${videoPosition}` : "none"}
-          layoutType="default"
-          fontFamily={bplsdata.bpls.fontFamily}
-          videoLink={videoUrl}
-        />
+        <QueueTv componentType={showVideo ? `${videoPosition}` : "none"} layoutType="default" fontFamily={bplsdata.bpls.fontFamily} videoLink={videoUrl} />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
       </Template>
     </>
