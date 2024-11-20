@@ -7,10 +7,9 @@ export type QueueItemProps = {
   bgColor?: React.CSSProperties;
   fontFamily?: string;
   className?: string;
-  blink?: boolean;
 };
 
-const QueueItem: React.FC<QueueItemProps> = ({ countercode, ticketno, bgColor, fontFamily, className, blink }) => {
+const QueueItem: React.FC<QueueItemProps> = ({ countercode, ticketno, bgColor, fontFamily, className }) => {
   const itemStyle: React.CSSProperties = {
     ...(bgColor && {
       ...bgColor,
@@ -28,7 +27,7 @@ const QueueItem: React.FC<QueueItemProps> = ({ countercode, ticketno, bgColor, f
             </div>
             <div className="border border-black border-solid m-2"></div>
             <div className="flex flex-col justify-center items-center text-center w-full" style={itemStyle}>
-              <Number number={ticketno} className={`~text-lg/5xl ${blink ? "blink" : ""}`} />
+              <Number number={ticketno} className={`~text-lg/5xl`} />
             </div>
           </div>
         </div>
