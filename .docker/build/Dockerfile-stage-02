@@ -1,0 +1,12 @@
+# Build Stage
+FROM queueing-web:stage-01
+
+WORKDIR /app
+
+COPY . .
+
+#RUN echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+RUN rm -rf .next && rm -rf dist && rm -rf tmp
+
+RUN npm run build --production --verbose

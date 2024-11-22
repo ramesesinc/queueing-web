@@ -1,0 +1,21 @@
+# Build Stage
+FROM queueing-web:stage-02 AS build
+
+
+# Final Stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY . .
+
+COPY --from=build /app/.next /app/.next
+COPY --from=build /app/package*.json /app/
+COPY --from=build /app/node_modules /app/node_modules
+
+RUN rm -rf /app/src
+RUN touch  /app/.env.local
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

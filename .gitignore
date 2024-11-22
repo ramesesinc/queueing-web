@@ -34,7 +34,6 @@ yarn-error.log*
 .vercel
 
 # IDE files
-.env
 .idea
 .vscode
 
