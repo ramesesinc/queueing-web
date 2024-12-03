@@ -1,0 +1,12 @@
+**/node_modules/
+**/dist
+.git
+.gitignore
+.docker
+npm-debug.log
+.coverage
+.coverage.*
+.aws
+.next
+/_custom
+/_res

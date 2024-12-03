@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  
+   queueing-web:
+      container_name: queueing-web
+      image: ramesesinc/queueing-web:1.01
+      logging:
+         driver: "json-file"
+         options:
+            max-file: "5"
+            max-size: 10m
+      env_file:
+         - ./env.conf
+      ports:
+         - "4080:3000"
+      volumes:
+         - ./env.conf:/app/.env.local
