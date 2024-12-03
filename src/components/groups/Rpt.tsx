@@ -121,10 +121,10 @@ const Rpt: React.FC<RptProps> = ({ title }) => {
             </Flex>
           </div>
         </div>
-        <Flex className="gap-10 absolute bottom-10 left-20">
+        <div className="flex gap-x-10">
           <Button caption="Reset" className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-gray-300 hover:bg-gray-400 text-gray-800" onClick={resetData} />
           <Button caption="Save" type="submit" className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-blue-500 hover:bg-blue-600 text-white" />
-        </Flex>
+        </div>
       </Flex>
     </form>
   );

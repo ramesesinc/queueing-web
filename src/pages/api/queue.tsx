@@ -17,22 +17,25 @@ const SocketHandler = (req: any, res: any) => {
   }
 
   if (req.method === "POST") {
-    const { type, groupid, countercode, ticketno } = req.body;
+    const { type, groupid, countercode, ticketno, sectionid } = req.body;
     const group = groupid.toLowerCase();
-    res.socket.server.io.to(group).emit("update", {
-      type,
-      groupid,
-      countercode,
-      ticketno,
-    });
+    const updateData = [
+      {
+        type,
+        groupid,
+        countercode,
+        ticketno,
+        sectionid,
+      },
+    ];
+
+    // Emit the array of data to the room
+    res.socket.server.io.to(group).emit("update", updateData);
 
     res.status(200).json({ message: "Data received and emitted successfully" });
   } else if (req.method === "GET") {
-    // Handle GET requests
-    // Respond with appropriate data or status code
     res.status(200).json({ message: "GET request received" });
   } else {
-    // Handle other HTTP methods
     res.status(405).json({ error: "Method not allowed" });
   }
 };

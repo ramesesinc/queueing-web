@@ -37,7 +37,7 @@ const Video: React.FC<VideoProps> = ({ src, controls = true, componentType, type
     const videoData = getVideoId(videoLink);
     setVideoId(videoData.id);
     setPlatform(videoData.platform);
-    console.log(`Platform: ${videoData.platform}, Video ID: ${videoData.id}`);
+    //console.log(`Platform: ${videoData.platform}, Video ID: ${videoData.id}`);
   }, [videoLink]);
 
   const getEmbedUrl = () => {
@@ -55,27 +55,32 @@ const Video: React.FC<VideoProps> = ({ src, controls = true, componentType, type
           <div className="w-full max-w-3xl mx-auto">
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
-                <iframe src={getEmbedUrl()} title="Video player" width="770" height="430" className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                <iframe src={getEmbedUrl()} title="Video player" width="720" height="380" className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
               </div>
             ) : (
-              <div className="aspect-w-16 aspect-h-9 text-red-500 text-2xl uppercase">video not found</div>
+              <div className="aspect-w-12 aspect-h-9 text-red-500 text-2xl uppercase">
+                <div>
+                  <div className="absolute text-center">No video link found</div>
+                  <iframe src={getEmbedUrl()} title="Video player" width="720" height="380" className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                </div>
+              </div>
             )}
           </div>
 
-          <TimeDate componentType={undefined} className="bg-gray-200 bg-opacity-50 rounded px-2" fontFamily={fontFamily} />
+          <TimeDate componentType={undefined} className="" fontFamily={fontFamily} />
         </div>
       ) : (
         <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg ">
           <div className="w-full max-w-3xl mx-auto">
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
-                <iframe src={getEmbedUrl()} title="Video player" allowFullScreen width="770" height="430" className="rounded-t-xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
+                <iframe src={getEmbedUrl()} title="Video player" allowFullScreen width="770" height="380" className="rounded-t-xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
               </div>
             ) : (
               <div className="aspect-w-16 aspect-h-9"></div>
             )}
           </div>
-          <div className="absolute right-2 top-2 bg-gray-200 bg-opacity-50 rounded px-2">
+          <div className="absolute right-2 top-2 ">
             <TimeDate componentType={undefined} />
           </div>
 

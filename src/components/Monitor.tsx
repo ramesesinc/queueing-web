@@ -1,27 +1,38 @@
 import { useRouter } from "next/router";
-import { useContext } from "react";
-
+import { useContext, useEffect, useState } from "react";
+import { lookupService } from "../lib/client";
+import { useBplsData } from "../service/context/bplsdatas-context";
+import { useRptData } from "../service/context/rptdata-context";
+import { useTcData } from "../service/context/tcdata-context";
 import SocketContext from "../stores/queue";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import Template from "./layouts/Template";
-import QueueTv from "./modules/QueueTv";
-
-import { useBplsData } from "../service/context/bplsdatas-context";
-import { useRptData } from "../service/context/rptdata-context";
-import { useTcData } from "../service/context/tcdata-context";
 import QueueGroup from "./modules/QueueGroup";
+import QueueTv from "./modules/QueueTv";
 
 const Monitor = () => {
   const router = useRouter();
   const group = router.query.group;
   const { data } = useContext<any>(SocketContext);
-
   const { bplsdata } = useBplsData();
   const { rptdata } = useRptData();
   const { tcdata } = useTcData();
+  const svc = lookupService("QueueService");
+  const [info, setInfo] = useState<Record<string, any>>();
 
-  let title = "";
+  useEffect(() => {
+    if (group) {
+      fetchGroups();
+    }
+  }, [group]);
+
+  const fetchGroups = async () => {
+    const res = await svc?.invoke("getGroups", { objid: group });
+    setInfo(res);
+  };
+
+  let title = `${group || "Unknown Group"}`;
   let headerFooterBgColor = "";
   let bgImage = "";
   let bgSize = "";
@@ -38,7 +49,7 @@ const Monitor = () => {
   let lguname = "";
 
   if (group === "bpls") {
-    title = "Business Permit and Licensing System";
+    title = info?.title;
     headerFooterBgColor = bplsdata.bpls.color;
     bgImage = bplsdata.bpls.bgUrl;
     bgSize = bplsdata.bpls.bgSize;
@@ -54,7 +65,7 @@ const Monitor = () => {
     buzz = bplsdata.bpls.buzz;
     lguname = bplsdata.bpls.lguname;
   } else if (group === "rpt") {
-    title = "Real Property Tax";
+    title = info?.title;
     headerFooterBgColor = rptdata.rpt.color;
     bgImage = rptdata.rpt.bgUrl;
     bgSize = rptdata.rpt.bgSize;
@@ -70,7 +81,7 @@ const Monitor = () => {
     buzz = rptdata.rpt.buzz;
     lguname = bplsdata.bpls.lguname;
   } else if (group === "tc") {
-    title = "Treasury and Collections";
+    title = info?.title;
     headerFooterBgColor = tcdata.tc.color;
     bgImage = tcdata.tc.bgUrl;
     bgSize = tcdata.tc.bgSize;
@@ -108,15 +119,30 @@ const Monitor = () => {
         headerClass="header"
         mainClass="main"
         footerClass="footer"
-        fontFamily={bplsdata.bpls.fontFamily}
       >
-        <Header componentType="header" groupName={title} groupAddr={bplsdata.bpls.lguname} src={bplsdata.bpls.logoUrl} fontFamily={bplsdata.bpls.fontFamily} />
+        <Header componentType="header" groupName={title} groupAddr={bplsdata.bpls.lguname} src={bplsdata.bpls.logoUrl} />
 
-        {windowCount !== 0 && verticalRowsCount != 0 && horizontalColsCount != 0 ? (
-          <QueueGroup windowCount={Math.max(windowCount || 0)} componentType={windowPosition} orientation={xyAxis === "vertical" ? "vertical" : "horizontal"} verticalRows={2} horizontalCols={Math.max(horizontalColsCount || 0)} type={data.type} ticketno={data.ticketno} countercode={data.countercode} bgColor={{ backgroundColor: "windowColors" }} fontFamily={bplsdata.bpls.fontFamily} buzz={buzz} />
-        ) : (
-          0
-        )}
+        {windowCount !== 0 && verticalRowsCount !== 0 && horizontalColsCount !== 0
+          ? data && Array.isArray(data)
+            ? data.map((item, index) => (
+                <QueueGroup
+                  key={index}
+                  windowCount={Math.max(windowCount || 0)}
+                  componentType={windowPosition}
+                  orientation={xyAxis === "vertical" ? "vertical" : "horizontal"}
+                  verticalRows={2}
+                  horizontalCols={Math.max(horizontalColsCount || 0)}
+                  type={item?.type}
+                  ticketno={item?.ticketno}
+                  countercode={item?.countercode}
+                  section={item?.sectionid}
+                  bgColor={{ backgroundColor: windowColors }}
+                  fontFamily={bplsdata.bpls.fontFamily}
+                  buzz={buzz}
+                />
+              ))
+            : null
+          : null}
 
         <QueueTv componentType={showVideo ? `${videoPosition}` : "none"} layoutType="default" fontFamily={bplsdata.bpls.fontFamily} videoLink={videoUrl} />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />

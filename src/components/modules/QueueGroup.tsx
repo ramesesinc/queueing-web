@@ -11,12 +11,18 @@ interface QueueGroupsProps {
   type: string;
   countercode: string;
   ticketno: string;
+  section: string;
   bgColor: React.CSSProperties;
   fontFamily?: string | undefined;
   buzz?: string;
 }
 
-const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, orientation = "vertical", verticalRows, horizontalCols, type, countercode, ticketno, bgColor, fontFamily, buzz }) => {
+const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, orientation = "vertical", verticalRows, horizontalCols, type, countercode, ticketno, section, bgColor, fontFamily, buzz }) => {
+  const numItems = typeof windowCount === "number" ? windowCount : 0;
+  const [stack, setStack] = useState<{ counter: string; ticket: string }[]>([]);
+  const queueRef = useRef<{ counter: string; ticket: string }[]>([]);
+  const isProcessingRef = useRef<boolean>(false);
+
   const containerStyle: React.CSSProperties = {
     display: "grid",
     gap: "10px",
@@ -24,10 +30,6 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, o
     gridTemplateRows: orientation === "horizontal" ? `repeat(${horizontalCols}, 1fr)` : undefined,
     gridAutoFlow: orientation === "horizontal" ? "column" : undefined,
   };
-  const numItems = typeof windowCount === "number" ? windowCount : 0;
-  const [stack, setStack] = useState<{ counter: string; ticket: string }[]>([]);
-  const queueRef = useRef<{ counter: string; ticket: string }[]>([]);
-  const isProcessingRef = useRef<boolean>(false);
 
   const processQueue = useCallback(async () => {
     if (isProcessingRef.current || queueRef.current.length === 0) return;
@@ -110,6 +112,10 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, o
     }
   };
 
+  const getItemCount = () => {
+    return orientation === "vertical" ? verticalRows : horizontalCols;
+  };
+
   useEffect(() => {
     handleTakeNumber();
     handleBuzzNumber();
@@ -117,13 +123,11 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, o
   }, [handleTakeNumber, handleBuzzNumber, handleConsumeNumber]);
 
   return (
-    <div id={componentType} className="p-5 flex flex-col gap-4">
-      <div style={{ fontFamily: fontFamily }}>
-        <SubTitle text="now serving" className={`text-[28px] leading-3 absolute top-0 !font-bold uppercase text-star`} />
-      </div>
-      <div style={containerStyle}>
+    <div id={componentType} className="flex flex-col gap-4" style={{ fontFamily: fontFamily }}>
+      <SubTitle text="now serving" className="text-[28px] leading-3 absolute top-[-10px] !font-bold uppercase text-star" />
+      <div className={`${orientation === "vertical" ? "flex flex-col" : "grid"} ${orientation === "vertical" ? `grid-cols-${getItemCount()} gap-4` : `grid-cols-${getItemCount()} gap-4`} mt-4`}>
         {stack.map((item, index) => (
-          <QueueItem key={index} countercode={item.counter} ticketno={item.ticket} bgColor={bgColor} fontFamily={fontFamily} />
+          <QueueItem key={index} countercode={item.counter} ticketno={item.ticket} section={section} bgColor={bgColor} fontFamily={fontFamily} />
         ))}
       </div>
     </div>

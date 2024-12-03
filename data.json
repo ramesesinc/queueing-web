@@ -36,7 +36,7 @@
     "buzz": "/sound/buzz3.mp3"
   },
   "tc": {
-    "color": "#e0d900",
+    "color": "#ffa58f",
     "fontFamily": "Arial",
     "windowCount": "10",
     "xyAxis": "vertical",

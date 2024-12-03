@@ -1,9 +1,12 @@
 import fs from "fs";
+import path from "path";
 
 export default function handler(req, res) {
   try {
     // Read existing data from data.json
-    const existingData = JSON.parse(fs.readFileSync("./data.json"));
+    //const existingData = JSON.parse(fs.readFileSync("./data.json"));
+    const filePath = path.join(process.cwd(), "public", "_custom", "style.json");
+    const existingData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     // Update only the sections of data present in the request body
     if (req.body.bpls) {
@@ -16,7 +19,7 @@ export default function handler(req, res) {
       existingData.rpt = { ...existingData.rpt, ...req.body.rpt };
     }
 
-    fs.writeFileSync("./data.json", JSON.stringify(existingData, null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
 
     res.status(200).json({ message: "Data updated successfully!" });
   } catch (error) {

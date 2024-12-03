@@ -24,7 +24,8 @@ export const SocketContextProvider = (props: any) => {
         }
       });
 
-      socket.on("update", (data: any) => {
+      socket.on("update", (data: {}) => {
+        console.log(data);
         setData(() => data);
       });
     });
@@ -39,11 +40,7 @@ export const SocketContextProvider = (props: any) => {
     data,
   };
 
-  return (
-    <SocketContext.Provider value={context}>
-      {props.children}
-    </SocketContext.Provider>
-  );
+  return <SocketContext.Provider value={context}>{props.children}</SocketContext.Provider>;
 };
 
 export default SocketContext;
