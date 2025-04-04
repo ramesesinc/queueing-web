@@ -1,7 +1,6 @@
 import { ReactElement, useState } from "react";
 import MainContent from "../components/ui/sidebar/MainContent";
 import Sidebar from "../components/ui/sidebar/Sidebar";
-import SocketComponent from "../components/SocketComponent";
 
 
 export default function Home() {
@@ -12,9 +11,9 @@ export default function Home() {
   };
   return (
     <div className="flex">
-      {/* <Sidebar onItemClick={handleItemClick} />
-      <MainContent selectedItem={selectedItem} /> */}
- <SocketComponent />
+      <Sidebar onItemClick={handleItemClick} />
+      <MainContent selectedItem={selectedItem} />
+
     </div>
   );
 }
