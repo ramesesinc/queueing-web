@@ -47,6 +47,7 @@ const Monitor = () => {
   let windowPosition = "";
   let buzz = "";
   let lguname = "";
+  let slidemessage = "";
 
   if (group === "bpls") {
     title = info?.title;
@@ -64,6 +65,7 @@ const Monitor = () => {
     windowPosition = bplsdata.bpls.windowposition;
     buzz = bplsdata.bpls.buzz;
     lguname = bplsdata.bpls.lguname;
+    slidemessage = bplsdata.bpls.slidemessage;
   } else if (group === "rpt") {
     title = info?.title;
     headerFooterBgColor = rptdata.rpt.color;
@@ -99,6 +101,8 @@ const Monitor = () => {
   } else {
     title = `${group || "Unknown Group"}`;
   }
+
+  console.log(bgSize)
 
   return (
     <>
@@ -143,8 +147,10 @@ const Monitor = () => {
               ))
             : null
           : null}
+              {/* <QueueTv componentType={showVideo ? `${windowPosition}` : "none"} layoutType="custom" fontFamily={bplsdata.bpls.fontFamily} videoLink={videoUrl} /> */}
+          
 
-        <QueueTv componentType={showVideo ? `${videoPosition}` : "none"} layoutType="default" fontFamily={bplsdata.bpls.fontFamily} videoLink={videoUrl} />
+        <QueueTv componentType={showVideo ? `${videoPosition}` : "none"} layoutType="custom" fontFamily={bplsdata.bpls.fontFamily} videoLink={videoUrl} />
         <Footer componentType="footer" fontFamily={bplsdata.bpls.fontFamily} />
       </Template>
     </>

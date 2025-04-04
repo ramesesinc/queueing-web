@@ -123,8 +123,8 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, o
   }, [handleTakeNumber, handleBuzzNumber, handleConsumeNumber]);
 
   return (
-    <div id={componentType} className="flex flex-col gap-4" style={{ fontFamily: fontFamily }}>
-      <SubTitle text="now serving" className="text-[28px] leading-3 absolute top-[-10px] !font-bold uppercase text-star" />
+    <div id={componentType} className="flex flex-col gap-4 w-[95%] pt-2 pl-6" style={{ fontFamily: fontFamily }}>
+      <SubTitle text="now serving" className="text-[28px] absolute -top-2 leading-3 !font-bold uppercase text-start" />
       <div className={`${orientation === "vertical" ? "flex flex-col" : "grid"} ${orientation === "vertical" ? `grid-cols-${getItemCount()} gap-4` : `grid-cols-${getItemCount()} gap-4`} mt-4`}>
         {stack.map((item, index) => (
           <QueueItem key={index} countercode={item.counter} ticketno={item.ticket} section={section} bgColor={bgColor} fontFamily={fontFamily} />

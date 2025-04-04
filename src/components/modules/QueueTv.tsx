@@ -2,6 +2,9 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import SubTitle from "../ui/SubTitle";
 import TimeDate from "../ui/Time&Date";
+import SlideMessage from "../io/SlideMessage";
+import Weather from "../io/Weather";
+import { useBplsData } from "../../service/context/bplsdatas-context";
 
 interface VideoProps {
   src?: string | null;
@@ -13,19 +16,43 @@ interface VideoProps {
   videoLink: string;
 }
 
-const Video: React.FC<VideoProps> = ({ src, controls = true, componentType, type, layoutType = "default", fontFamily, videoLink }) => {
+const Video: React.FC<VideoProps> = ({
+  src,
+  controls = true,
+  componentType,
+  type,
+  layoutType = "default",
+  fontFamily,
+  videoLink,
+}) => {
   const [videoId, setVideoId] = useState<string | null>(null);
   const [platform, setPlatform] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>("");
+  const { bplsdata } = useBplsData();
 
   useEffect(() => {
-    const getVideoId = (url: string): { platform: string; id: string | null } => {
-      const youtubeRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    if (bplsdata?.bpls?.slidemessage) {
+      const timeout = setTimeout(() => {
+        setMessage(bplsdata.bpls.slidemessage);
+      }, 500);
+
+      return () => clearTimeout(timeout); // Cleanup the timeout
+    }
+  }, [bplsdata]);
+
+  useEffect(() => {
+    const getVideoId = (
+      url: string
+    ): { platform: string; id: string | null } => {
+      const youtubeRegExp =
+        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
       const youtubeMatch = url.match(youtubeRegExp);
       if (youtubeMatch && youtubeMatch[2].length === 11) {
         return { platform: "youtube", id: youtubeMatch[2] };
       }
 
-      const facebookRegExp = /(?:facebook\.com\/.*(?:video\.php\?v=|watch\/?\?v=|videos\/|video\/|watch\/v=)|fb\.watch\/)(\d+)/;
+      const facebookRegExp =
+        /(?:facebook\.com\/.*(?:video\.php\?v=|watch\/?\?v=|videos\/|video\/|watch\/v=)|fb\.watch\/)(\d+)/;
       const facebookMatch = url.match(facebookRegExp);
       if (facebookMatch && facebookMatch[1]) {
         return { platform: "facebook", id: facebookMatch[1] };
@@ -37,7 +64,6 @@ const Video: React.FC<VideoProps> = ({ src, controls = true, componentType, type
     const videoData = getVideoId(videoLink);
     setVideoId(videoData.id);
     setPlatform(videoData.platform);
-    //console.log(`Platform: ${videoData.platform}, Video ID: ${videoData.id}`);
   }, [videoLink]);
 
   const getEmbedUrl = () => {
@@ -48,50 +74,109 @@ const Video: React.FC<VideoProps> = ({ src, controls = true, componentType, type
     }
     return "";
   };
-  return (
-    <div id={componentType}>
-      {layoutType === "default" ? (
-        <div className=" flex flex-col items-center justify-center gap-5">
-          <div className="w-full max-w-3xl mx-auto">
-            {videoId !== null ? (
-              <div className="aspect-w-16 aspect-h-9">
-                <iframe src={getEmbedUrl()} title="Video player" width="720" height="380" className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-              </div>
-            ) : (
-              <div className="aspect-w-12 aspect-h-9 text-red-500 text-2xl uppercase">
-                <div>
-                  <div className="absolute text-center">No video link found</div>
-                  <iframe src={getEmbedUrl()} title="Video player" width="720" height="380" className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-                </div>
-              </div>
-            )}
-          </div>
 
-          <TimeDate componentType={undefined} className="" fontFamily={fontFamily} />
+  return (
+    <div
+      id={componentType}
+      className="flex flex-col items-center justify-center gap-5"
+    >
+      {layoutType === "default" ? (
+        <div className="w-full max-w-3xl mx-auto">
+          {videoId !== null ? (
+            <div className="aspect-w-16 aspect-h-9">
+              <iframe
+                src={getEmbedUrl()}
+                title="Video player"
+                width="720"
+                height="380"
+                className="rounded-lg"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <div className="aspect-w-16 aspect-h-9 text-red-500 text-xl uppercase">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span>No video link found</span>
+              </div>
+              <iframe
+                src={getEmbedUrl()}
+                title="Video player"
+                width="720"
+                height="380"
+                className="rounded-lg bg-slate-600"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  backgroundImage: "url(/images/no-video.png)",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "auto",
+                  backgroundPosition: "center",
+                }}
+              />
+            </div>
+          )}
         </div>
       ) : (
-        <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg ">
+        <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg">
           <div className="w-full max-w-3xl mx-auto">
             {videoId !== null ? (
               <div className="aspect-w-16 aspect-h-9">
-                <iframe src={getEmbedUrl()} title="Video player" allowFullScreen width="770" height="380" className="rounded-t-xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
+                <iframe
+                  src={getEmbedUrl()}
+                  title="Video player"
+                  width="720"
+                  height="380"
+                  className="rounded-t-xl"
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
               </div>
             ) : (
-              <div className="aspect-w-16 aspect-h-9"></div>
+              <div className="aspect-w-16 aspect-h-9 text-red-500 text-xl uppercase relative">
+                <div className="absolute inset-0 flex items-end justify-center bottom-5">
+                  <span>No video link found</span>
+                </div>
+                <iframe
+                  src={getEmbedUrl()}
+                  title="Video player"
+                  width="720"
+                  height="380"
+                  className="rounded-t-lg bg-slate-600"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{
+                    backgroundImage: "url(/images/no-video.png)",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "auto",
+                    backgroundPosition: "center",
+                  }}
+                />
+              </div>
             )}
           </div>
-          <div className="absolute right-2 top-2 ">
-            <TimeDate componentType={undefined} />
-          </div>
 
-          <div className="bg-white h-[70px] flex items-center justify-between px-20">
-            <Image src={"/images/etracs-logo.png"} alt={"etracs logo"} width={130} height={130} quality={100} />
-            <div className="bg-[#0a5366] rounded-lg p-2">
-              <Image src={"/images/rameses-logo.png"} alt={"etracs logo"} width={110} height={110} quality={100} />
+          {/* Bottom Section */}
+          <div className="bg-white h-[70px] flex items-center justify-between px-16">
+            <TimeDate componentType={undefined} />
+            <div className="relative -top-[10px]">
+              <Weather layout="layout-2" />
             </div>
           </div>
-          <div className="bg-gray-200 h-[60px] rounded-b-md flex items-center justify-center">
-            <SubTitle text="QueueEtracs is a complete enterprise software system for customer queue management system" className="text-[15px] p-2 text-center font-normal" />
+
+          <div className="bg-gray-200 h-[60px] rounded-b-md flex items-center justify-around px-10 relative">
+            <div className="relative overflow-hidden w-full">
+              {message && (
+                <SlideMessage
+                  message={message}
+                  className="text-center"
+                  duration={18000}
+                />
+              )}
+            </div>
           </div>
         </div>
       )}

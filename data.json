@@ -16,7 +16,8 @@
     "videposition": "horizontal",
     "windowposition": "main-right",
     "buzz": "/sound/buzz3.mp3",
-    "lguname": "municipality of carmen"
+    "lguname": "municipality of carmen",
+    "slidemessage": ""
   },
   "rpt": {
     "color": "#6274fe",

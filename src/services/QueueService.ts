@@ -13,6 +13,6 @@ export const getActiveList = async ({ groupid }: { groupid: string }) => {
   const data = await svc.invoke("getActiveList", {
     groupid,
   });
-  console.log(data);
+  console.log("data =====>", data);
   return data;
 };

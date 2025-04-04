@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 let socket;
 
 export async function initializeSocket() {
-  await fetch("/api/queue");
+  await fetch("http://localhost:3000/api/queue");
   socket = io();
 
   socket.on("connect", () => {

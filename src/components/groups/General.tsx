@@ -25,6 +25,7 @@ const General: React.FC<GeneralProps> = ({ title }) => {
           </div>
 
           <InputBox label="LGU Name" name="lguname" value={bplsdata.bpls.lguname} onChange={handleChange} />
+          <InputBox label="Slide Message" name="slidemessage" value={bplsdata.bpls.slidemessage} onChange={handleChange} />
 
           <Button caption="Save" type="submit" className="px-5 m-0 text-[10px] absolute bottom-2 right-2 w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-blue-500 hover:bg-blue-600 text-white" />
         </Flex>

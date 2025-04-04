@@ -12,7 +12,17 @@ interface TemplateProps {
   fontFamily?: string;
 }
 
-const Template: React.FC<TemplateProps> = ({ templateType, children, headerStyle = {}, mainStyle = {}, footerStyle = {}, headerClass, mainClass, footerClass, fontFamily }) => {
+const Template: React.FC<TemplateProps> = ({
+  templateType,
+  children,
+  headerStyle = {},
+  mainStyle = {},
+  footerStyle = {},
+  headerClass,
+  mainClass,
+  footerClass,
+  fontFamily,
+}) => {
   // Template-specific styles
   const templateStyles = {
     template1: {
@@ -31,7 +41,8 @@ const Template: React.FC<TemplateProps> = ({ templateType, children, headerStyle
     },
   };
 
-  const { bgColors, justifyContent, flexDirection, header, footer } = templateStyles[templateType] || templateStyles.template1;
+  const { bgColors, justifyContent, flexDirection, header, footer } =
+    templateStyles[templateType] || templateStyles.template1;
 
   // Dynamic children rendering
   const renderMainContent = (type: string) => {
@@ -54,10 +65,13 @@ const Template: React.FC<TemplateProps> = ({ templateType, children, headerStyle
   };
 
   return (
-    <div className={`h-screen flex flex-col ${bgColors}`} style={{ fontFamily: fontFamily || "inherit" }}>
+    <div
+      className={`h-screen flex flex-col ${bgColors}`}
+      style={{ fontFamily: fontFamily || "inherit" }}
+    >
       {/* Header */}
       <header
-        className={`${justifyContent} ${headerClass} ${header} py-2 bg-[#0a5366]`}
+        className={`${justifyContent} ${headerClass} ${header} bg-[#0a5366]`}
         style={{
           backgroundColor: headerStyle?.backgroundColor || "transparent", // Provide a fallback for SSR
         }}
@@ -67,32 +81,38 @@ const Template: React.FC<TemplateProps> = ({ templateType, children, headerStyle
 
       {/* Main Content */}
       <main
-        className={`flex-grow ${mainClass} ${flexDirection || "flex-col"} pt-10 px-5`}
+        className={`flex-grow relative ${mainClass} ${flexDirection || "flex-col"} pt-10`}
         style={{
           backgroundImage: mainStyle?.backgroundImage,
           backgroundRepeat: mainStyle?.backgroundRepeat,
           backgroundPosition: mainStyle?.backgroundPosition,
-          backgroundSize: "auto",
+          backgroundSize: mainStyle?.backgroundSize,
         }}
       >
-        <div className="flex gap-x-5 w-full">
-          {/* main-right */}
-          {children && !React.Children.toArray(children).some((child) => React.isValidElement(child) && child.props.componentType === "none") && <div className="w-[60%] flex flex-col items-start relative">{renderMainContent("main-right")}</div>}
+        <div className="flex w-full justify-center fixed">
+          {/* Left and Right Main Content */}
+          <div className="flex flex-col md:flex-row w-full">
+            {/* main-left */}
+            {renderMainContent("main-left") && (
+              <div className="flex-1 pl-2">{renderMainContent("main-left")}</div>
+            )}
 
-          {/* main-left */}
-          {renderMainContent("main-left") && (
-            <div className={`${!renderMainContent("main-right") && ""} w-full`}>
-              <div className="relative">{renderMainContent("main-left")}</div>
-            </div>
-          )}
+            {/* main-right */}
+            {children &&
+              !React.Children.toArray(children).some(
+                (child) => React.isValidElement(child) && child.props.componentType === "none"
+              ) && (
+                <div className="flex-1">{renderMainContent("main-right")}</div>
+              )}
+          </div>
         </div>
       </main>
 
       {/* Footer */}
       <footer
-        className={`${justifyContent} ${footerClass} ${footer} relative flex p-2 text-center bg-[#0a5366]`}
+        className={`${justifyContent} ${footerClass} ${footer} relative flex justify-center text-center bg-[#0a5366]`}
         style={{
-          backgroundColor: headerStyle?.backgroundColor || "transparent",
+          backgroundColor: footerStyle?.backgroundColor || "transparent",
         }}
       >
         {renderMainContent("footer")}

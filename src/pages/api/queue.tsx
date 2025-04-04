@@ -1,4 +1,4 @@
-//pages/api/socket.tsx
+//pages/api/queue.tsx
 import { Server } from "socket.io";
 
 const SocketHandler = (req: any, res: any) => {
@@ -31,7 +31,8 @@ const SocketHandler = (req: any, res: any) => {
 
     // Emit the array of data to the room
     res.socket.server.io.to(group).emit("update", updateData);
-
+    console.log(`Emitted update to group: ${group}`, updateData);
+    
     res.status(200).json({ message: "Data received and emitted successfully" });
   } else if (req.method === "GET") {
     res.status(200).json({ message: "GET request received" });

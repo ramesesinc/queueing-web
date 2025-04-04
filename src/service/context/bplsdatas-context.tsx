@@ -21,6 +21,7 @@ interface BplsDataContextValue {
       windowposition: string;
       buzz: string;
       lguname: string;
+      slidemessage: string;
     };
   };
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -59,6 +60,7 @@ const defaultBplsData = {
   windowposition: "main-left",
   buzz: "/sound/buzz3.mp3",
   lguname: "",
+  slidemessage: ""
 };
 
 const BplsDataContext = createContext<BplsDataContextValue>({

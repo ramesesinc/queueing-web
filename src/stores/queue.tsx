@@ -1,8 +1,9 @@
-//stores/socket.tsx
 import { useRouter } from "next/router";
-import { createContext, useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { createContext, useEffect, useState, ReactNode } from "react";
+import { io, Socket } from "socket.io-client";
 import { lookupService } from "../lib/client";
+
+let newSocket: any;
 
 interface SocketData {
   countercode: string;
@@ -12,8 +13,6 @@ interface SocketData {
   type: string;
 }
 
-let socket: any;
-
 interface SocketContextType {
   data: SocketData[];
   emit: (msg: string, data: any) => void;
@@ -21,20 +20,25 @@ interface SocketContextType {
 
 const SocketContext = createContext<SocketContextType>({
   data: [],
-  emit: (msg: any, data: any) => {},
+  emit: () => {},
 });
 
-export const SocketContextProvider = (props: any) => {
+interface SocketProviderProps {
+  children: ReactNode;
+}
+
+export const SocketContextProvider = ({ children }: SocketProviderProps) => {
   const [data, setData] = useState<SocketData[]>([]);
   const router = useRouter();
-  const group = router.query.group;
   const svc = lookupService("QueueService");
+  const groupId = router.query.group;
 
   const fetchActiveList = async () => {
+    if (!svc) return;
     try {
-      const res = await svc?.invoke("getActiveList", { groupid: group });
-      if (res && Array.isArray(res)) {
-        const formattedList = res.map((item: any) => ({
+      const res = await svc.invoke("getActiveList", { groupid: groupId });
+      if (Array.isArray(res)) {
+        const formattedList: SocketData[] = res.map((item: any) => ({
           countercode: item.countercode,
           groupid: item.groupid.toLowerCase(),
           sectionid: item.sectiontitle,
@@ -48,64 +52,54 @@ export const SocketContextProvider = (props: any) => {
     }
   };
 
-  useEffect(() => {
-    fetch("/api/queue").then(() => {
-      socket = io();
-      socket.on("connect", () => {
-        if (group) {
-          socket.emit("join-room", { group: group });
-          fetchActiveList();
+  const initializeSocket = () => {
+    if (newSocket) return;
+
+    fetchActiveList().then(() => {
+      newSocket = io();
+      newSocket.on("connect", () => {
+        console.log("Socket connected");
+        if (groupId) {
+          newSocket.emit("join-room", { group: groupId });
         }
       });
 
-      // socket.on("update", (data: {}) => {
-      //   setData(data);
-      // });
-
-      socket.on("update", (newData: any) => {
-        console.log(newData);
-        if (Array.isArray(newData)) {
-          setData((prevData) => {
-            const updatedData = [...prevData];
-
-            newData.forEach((update) => {
-              const index = updatedData.findIndex((item) => item.ticketno === update.ticketno);
-              if (index !== -1) {
-                updatedData[index] = update;
-              } else {
-                updatedData.push(update);
-              }
-            });
-
-            return updatedData;
-          });
-        } else {
-          console.error("Received data is not an array:", newData);
-
-          setData([newData]);
-        }
+      newSocket.on("update", (data: SocketData[]) => {
+        console.log("Received update data:", data);
+        setData(() => data);
       });
-
-      socket.on("disconnect", () => {
+  
+      newSocket.on("disconnect", () => {
         console.log("Socket disconnected");
       });
-    });
+
+    })
+
+
+  
+  };
+
+  useEffect(() => {
+    if (!router.isReady || !router.query.group) return;
+    if (groupId) {
+      initializeSocket(); 
+    }
 
     return () => {
-      socket?.disconnect();
+      newSocket?.disconnect();
     };
-  }, [group]);
+  }, [groupId]);
 
-  const emit = (msg: any, data: any) => {
-    socket.emit(msg, data);
+  const emit = (msg: string, data: any) => {
+    console.log("Emitting message:", msg, "with data:", data); // Debugging log
+    newSocket.emit(msg, data);
   };
 
-  const context = {
-    emit,
-    data,
-  };
-
-  return <SocketContext.Provider value={context}>{props.children}</SocketContext.Provider>;
+  return (
+    <SocketContext.Provider value={{ data, emit }}>
+      {children}
+    </SocketContext.Provider>
+  );
 };
 
 export default SocketContext;

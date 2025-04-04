@@ -1,6 +1,8 @@
 import { ReactElement, useState } from "react";
 import MainContent from "../components/ui/sidebar/MainContent";
 import Sidebar from "../components/ui/sidebar/Sidebar";
+import SocketComponent from "../components/SocketComponent";
+
 
 export default function Home() {
   const [selectedItem, setSelectedItem] = useState<ReactElement | null>(null); // Adjusted type
@@ -10,8 +12,9 @@ export default function Home() {
   };
   return (
     <div className="flex">
-      <Sidebar onItemClick={handleItemClick} />
-      <MainContent selectedItem={selectedItem} />
+      {/* <Sidebar onItemClick={handleItemClick} />
+      <MainContent selectedItem={selectedItem} /> */}
+ <SocketComponent />
     </div>
   );
 }

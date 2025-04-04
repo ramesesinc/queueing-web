@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
-import SocketContext from "../stores/socket";
+import SocketContext from "../stores/queue";
 
 let data = {};
 
