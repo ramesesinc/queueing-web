@@ -27,7 +27,7 @@
     "verticalRowsCount": "2",
     "horizontalColsCount": "3",
     "windowColor": "#ffffff",
-    "showVideo": false,
+    "showVideo": true,
     "logoUrl": "",
     "bgUrl": "",
     "bgSize": "auto",
