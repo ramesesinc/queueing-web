@@ -1,9 +1,9 @@
-//pages/api/socket.tsx
+//pages/api/queue.tsx
 import { Server } from "socket.io";
 
 const SocketHandler = (req: any, res: any) => {
   if (!res.socket.server.io) {
-    console.log("Socket is initializing");
+    // console.log("Socket is initializing");
     const io = new Server(res.socket.server);
     res.socket.server.io = io;
 
@@ -17,22 +17,17 @@ const SocketHandler = (req: any, res: any) => {
   }
 
   if (req.method === "POST") {
-    const { type, groupid, countercode, ticketno } = req.body;
-    const group = groupid.toLowerCase();
+    const body = req.body;
+    console.log(body);
+    const group = body.groupid.toLowerCase();
     res.socket.server.io.to(group).emit("update", {
-      type,
-      groupid,
-      countercode,
-      ticketno,
+      body,
     });
 
     res.status(200).json({ message: "Data received and emitted successfully" });
   } else if (req.method === "GET") {
-    // Handle GET requests
-    // Respond with appropriate data or status code
     res.status(200).json({ message: "GET request received" });
   } else {
-    // Handle other HTTP methods
     res.status(405).json({ error: "Method not allowed" });
   }
 };
