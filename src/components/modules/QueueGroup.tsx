@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import SubTitle from "../ui/SubTitle";
 import QueueItem from "./QueueItem";
@@ -127,7 +128,7 @@ const QueueGroups: React.FC<QueueGroupsProps> = ({ windowCount, componentType, o
       <SubTitle text="now serving" className="text-[28px] leading-3 absolute top-[-10px] !font-bold uppercase text-star" />
       <div className={`${orientation === "vertical" ? "flex flex-col" : "grid"} ${orientation === "vertical" ? `grid-cols-${getItemCount()} gap-4` : `grid-cols-${getItemCount()} gap-4`} mt-4`}>
         {stack.map((item, index) => (
-          <QueueItem key={index} countercode={item.counter} ticketno={item.ticket} section={section} bgColor={bgColor} fontFamily={fontFamily} />
+          <QueueItem key={index} countercode={"item.counter"} ticketno={"item.ticket"} section={section} bgColor={bgColor} fontFamily={fontFamily} />
         ))}
       </div>
     </div>
