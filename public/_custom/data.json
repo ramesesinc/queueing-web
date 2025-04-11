@@ -1,0 +1,52 @@
+{
+  "general": {
+    "logoUrl": "",
+    "fontFamily": "Arial, Helvetica, sans-serif",
+    "lguname": "municipality of carmen",
+    "slidemessage": "hello hello hello hello"
+  },
+  "group": [
+    {
+      "id": "bpls",
+      "color": "#00ff40",
+      "showVideo": true,
+      "videoUrl": "asfasfasfa",
+      "videoposition": "main-right",
+      "windowposition": "main-left",
+      "xyAxis": "vertical",
+      "rowCount": "12",
+      "columnCount": "2",
+      "bgUrl": "",
+      "bgSize": "auto",
+      "windowCount": "4"
+    },
+    {
+      "id": "rpt",
+      "color": "#ffa52f",
+      "showVideo": true,
+      "videoUrl": "",
+      "videoposition": "main-right",
+      "windowposition": "main-left",
+      "xyAxis": "vertical",
+      "rowCount": 1,
+      "columnCount": 1,
+      "bgUrl": "",
+      "bgSize": "auto",
+      "windowCount": "4"
+    },
+    {
+      "id": "tc",
+      "color": "#ffa58f",
+      "showVideo": true,
+      "videoUrl": "",
+      "videoposition": "main-left",
+      "windowposition": "main-right",
+      "xyAxis": "horizontal",
+      "rowCount": "4",
+      "columnCount": "2",
+      "bgUrl": "",
+      "bgSize": "auto",
+      "windowCount": "5"
+    }
+  ]
+}

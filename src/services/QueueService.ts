@@ -1,10 +1,21 @@
 import Service from "../lib/server/remote-service";
 
-export const getGroups = async ({ objid }: { objid: string }) => {
+export const getGroups = async ({
+  objid,
+  lguname,
+}: {
+  objid: string;
+  lguname: string;
+}) => {
   const svc = Service.lookup("api/QueueService", "etracs");
-  const data = await svc.invoke("getGroup", {
+  const group = await svc.invoke("getGroup", {
     objid,
   });
+  const data: Record<string, any> = {
+    objid: group.objid,
+    title: group.title,
+    lguname: lguname,
+  };
   return data;
 };
 
@@ -14,4 +25,22 @@ export const getActiveList = async ({ groupid }: { groupid: string }) => {
     groupid,
   });
   return data;
+};
+
+export const getQueueGroup = async () => {
+  const svc = Service.lookup("QueueGroupService", "etracs");
+  const groups = await svc.invoke("getGroupsWithSections", null);
+
+  const general = {
+    objid: "GEN",
+    title: "GENERAL",
+  };
+  const groupsdata: Record<string, any>[] = [
+    general,       // Put general first, or wherever you want
+    ...(groups || []) // Spread the actual group array
+  ];
+
+  console.log("groupsdata", groupsdata);
+
+  return groupsdata;
 };

@@ -1,12 +1,18 @@
 "use client";
 
-import QueueMonitor from "@/components/QueueMonitor";
+import QueueMonitor from "@/components/templates/QueueMonitor";
+import Template from "@/components/templates/Template";
+import { DataProvider, useData } from "@/context/DataContext";
 const page = ({ params }: { params: { group: string } }) => {
   const { group } = params;
-
+  const { general } = useData();
   return (
-    <div>
-      <QueueMonitor group={group} />
+    <div style={{ fontFamily: general.fontFamily }}>
+      <DataProvider groupId={group}>
+        <Template group={group}>
+          <QueueMonitor group={group} />
+        </Template>
+      </DataProvider>
     </div>
   );
 };

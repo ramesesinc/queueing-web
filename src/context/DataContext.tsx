@@ -1,0 +1,286 @@
+'use client';
+
+import React, { createContext, useContext, useState, useEffect } from "react";
+
+interface GroupData {
+  id: string;
+  color: string;
+  showVideo: boolean;
+  videoUrl: string;
+  videoposition: string;
+  windowposition: string;
+  xyAxis: string;
+  rowCount: string | number;
+  columnCount: string | number;
+  windowCount: string | number;
+  bgUrl: string;
+  bgSize: "auto" | "contain" | "cover";
+}
+
+interface GeneralData {
+  logoUrl: string;
+  fontFamily: string;
+  lguname: string;
+  slidemessage: string;
+}
+
+interface DataContextValue {
+  groups: GroupData;
+  general: GeneralData;
+  
+  updateBgSize: (bgSize: "auto" | "contain" | "cover") => void;
+  updateLogoUrl: (logoUrl: string) => void;
+  removeLogoUrl: () => void;
+  updateBgUrl: (bgUrl: string) => void;
+  removeBgUrl: () => void;
+  handleBgSizeChange: (bgSize: "auto" | "contain" | "cover") => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handlePositionChange: (name: string, value: string) => void;
+  toggleVideo: () => void;
+  resetData: () => void;
+  groupId: string;
+  setGroupId: (groupId: string) => void;
+}
+
+interface DataProviderProps {
+  children: React.ReactNode;
+  groupId?: string;
+}
+
+const defaultGroup: GroupData = {
+  id: "tc",
+  color: "#ffa58f",
+  showVideo: true,
+  videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+  videoposition: "main-right",
+  windowposition: "main-left",
+  xyAxis: "vertical",
+  rowCount: "1",
+  columnCount: "1",
+  windowCount: "1",
+  bgUrl: "/images/lgu-logo.png",
+  bgSize: "auto" as const
+};
+
+const defaultGeneral: GeneralData = {
+  logoUrl: "/images/lgu-logo.png",
+  fontFamily: "Arial",
+  lguname: "LGU Name",
+  slidemessage: ""
+};
+
+const DataContext = createContext<DataContextValue>({
+  groups: defaultGroup,
+  general: defaultGeneral,
+  updateLogoUrl: () => {},
+  removeLogoUrl: () => {},
+  updateBgSize: () => {},
+  updateBgUrl: () => {},
+  removeBgUrl: () => {},
+  handleBgSizeChange: () => {},
+  handleChange: () => {},
+  handleSelect: () => {},
+  handleSubmit: () => {},
+  handlePositionChange: () => {},
+  toggleVideo: () => {},
+  resetData: () => {},
+  groupId: "tc",
+  setGroupId: () => {},
+});
+
+export const useData = () => useContext(DataContext);
+
+export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = "gen" }) => {
+  const [groups, setGroups] = useState<GroupData>(defaultGroup);
+  const [general, setGeneral] = useState<GeneralData>(defaultGeneral);
+  const [currentGroupId, setCurrentGroupId] = useState(groupId);
+
+  useEffect(() => {
+    fetchData(currentGroupId);
+  }, [currentGroupId]);
+
+  const fetchData = (groupId: string) => {
+    fetch("/api/data/getData")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.group) {
+          const groupData = data.group.find((g: GroupData) => g.id === groupId);
+          if (groupData) {
+            setGroups(groupData);
+          }
+        } else {
+          console.error("Groups data is undefined");
+        }
+
+        if (data.general) {
+          setGeneral(data.general);
+        }
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    if (name === "logoUrl" || name === "lguname" || name === "slidemessage") {
+      setGeneral((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      setGroups((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    if (name === "fontFamily") {
+      setGeneral((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      setGroups((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    
+  };
+
+  const handlePositionChange = (name: string, value: string) => {
+    if (name === "windowposition") {
+      const newVideoPosition = value === "main-left" ? "main-right" : "main-left";
+      setGroups((prev) => ({
+        ...prev,
+        windowposition: value,
+        videoposition: newVideoPosition,
+      }));
+    } else if (name === "videoposition") {
+      const newWindowPosition = value === "main-left" ? "main-right" : "main-left";
+      setGroups((prev) => ({
+        ...prev,
+        videoposition: value,
+        windowposition: newWindowPosition,
+      }));
+    }
+  };
+
+  const handleBgSizeChange = (bgSize: "auto" | "contain" | "cover") => {
+    setGroups((prev) => ({
+      ...prev,
+      bgSize,
+    }));
+  };
+  
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch("/api/data/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          group: groups,
+          general: general,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Updated data:", result);
+      } else {
+        console.error("Error updating data:", result);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  };
+
+  const toggleVideo = () => {
+    setGroups((prev) => ({
+      ...prev,
+      showVideo: !prev.showVideo,
+    }));
+  };
+
+  const updateLogoUrl = (logoUrl: string) => {
+    setGeneral((prev) => ({
+      ...prev,
+      logoUrl,
+    }));
+  };
+
+  const removeLogoUrl = () => {
+    setGeneral((prev) => ({
+      ...prev,
+      logoUrl: "",
+    }));
+  };
+
+  const updateBgUrl = (bgUrl: string) => {
+    setGroups((prev) => ({
+      ...prev,
+      bgUrl,
+    }));
+  };
+
+  const removeBgUrl = () => {
+    setGroups((prev) => ({
+      ...prev,
+      bgUrl: "",
+    }));
+  };
+
+  const updateBgSize = (bgSize: "auto" | "contain" | "cover") => {
+    setGroups((prev) => ({
+      ...prev,
+      bgSize,
+    }));
+  };
+  
+  
+
+  const resetData = () => {
+    setGroups(defaultGroup);
+    setGeneral(defaultGeneral);
+  };
+
+  const setGroupId = (groupId: string) => {
+    setCurrentGroupId(groupId);
+  };
+
+  return (
+    <DataContext.Provider
+      value={{
+        groups,
+        general,
+        updateBgSize,
+        updateLogoUrl,
+        removeLogoUrl,
+        updateBgUrl,
+        removeBgUrl,
+        handleChange,
+        handleSelect,
+        handleSubmit,
+        handlePositionChange,
+        handleBgSizeChange,
+        toggleVideo,
+        resetData,
+        groupId: currentGroupId,
+        setGroupId,
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
+};

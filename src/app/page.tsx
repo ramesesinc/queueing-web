@@ -1,101 +1,258 @@
-import Image from "next/image";
+"use client";
+
+import Sidebar2 from "@/components/templates/Sidebar2";
+import Button from "@/components/ui/Button";
+import ColorPicker from "@/components/ui/ColorPicker";
+import FontFamilyPicker from "@/components/ui/FontFamilyPicker";
+import InputBox from "@/components/ui/InputBox";
+import { VideoPosition, WindowPosition } from "@/components/ui/Position";
+import ToggleButton from "@/components/ui/ToggleButton";
+import ImageUpload from "@/components/ui/UploadImage";
+import XyAxis from "@/components/ui/XyAxis";
+import { useData } from "@/context/DataContext";
+import { lookupService } from "@/lib/client";
+import { ReactElement, useEffect, useState } from "react";
+import Text from "@/components/ui/Text";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [selectedItem, setSelectedItem] = useState<ReactElement | null>(null);
+  const [data, setData] = useState<Record<string, any>[]>([]);
+  const svc = lookupService("QueueService");
+  const {
+    groups,
+    handleSubmit,
+    handleChange,
+    handleSelect,
+    handlePositionChange,
+    handleBgSizeChange,
+    toggleVideo,
+    updateLogoUrl,
+    updateBgUrl,
+    removeLogoUrl,
+    removeBgUrl,
+    resetData,
+    setGroupId,
+    groupId,
+    general,
+  } = useData();
+  const selectedBgSize = groups.bgSize;
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const fetchGroups = async () => {
+    const res = await svc?.invoke("getQueueGroup");
+    setData(res);
+  };
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  const handleGroupChange = (groupId: string) => {
+    setGroupId(groupId);
+  };
+
+  const handleItemClick = (item: ReactElement) => {
+    setSelectedItem(item);
+    fetchGroups();
+  };
+
+  return (
+    <div className="flex h-screen">
+      <Sidebar2
+        onItemClick={handleItemClick}
+        items={data}
+        handleGroupChange={handleGroupChange}
+      />
+
+      <div className="w-full p-4 bg-gray-200 pl-20">
+        <form onSubmit={handleSubmit}>
+          {groupId !== "gen" ? (
+            <div className="flex flex-col items-start w-full">
+              <div>
+                <Text className="text-start font-semibold text-xl uppercase">
+                  Theme
+                </Text>
+                <div className="pl-10 py-3 flex">
+                  <div>
+                    <ImageUpload
+                      onLogoUploaded={updateBgUrl}
+                      removeLogoImage={removeBgUrl}
+                      title="Upload Bg"
+                      imgUrl={groups.bgUrl}
+                    />
+              
+                      <div className="flex w-full gap-2">
+                        <Button
+                          caption="contain"
+                          className={`!p-0 !m-0 text-[10px] w-[30%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+                            selectedBgSize === "contain"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200"
+                          }`}
+                          onClick={() => handleBgSizeChange("contain")}
+                        />
+                        <Button
+                          caption="cover"
+                          className={`!p-0 !m-0 text-[10px] w-[30%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+                            selectedBgSize === "cover"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200"
+                          }`}
+                          onClick={() => handleBgSizeChange("cover")}
+                        />
+                        <Button
+                          caption="auto"
+                          className={`!p-0 !m-0 text-[10px] w-[30%] h-[25px] text-center flex items-center justify-center !rounded-md ${
+                            selectedBgSize === "auto"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200"
+                          }`}
+                          onClick={() => handleBgSizeChange("auto")}
+                        />
+                      </div>
+                    </div>
+               
+                  <div>
+            <div className="hidden">div</div>
+                    <ColorPicker
+                      name={"color"}
+                      value={groups.color}
+                      onChange={handleChange}
+                      label="Choose Color"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <Text className="text-start font-semibold text-xl uppercase">
+                  Window
+                </Text>
+                <div className="pl-10 py-3">
+                  <InputBox
+                    label="Number of Windows"
+                    type="number"
+                    name="windowCount"
+                    value={groups.windowCount}
+                    onChange={handleChange}
+                    className="h-6 w-28 text-center"
+                  />
+                  <XyAxis
+                    value={groups.xyAxis}
+                    onChange={handleSelect}
+                    name="xyAxis"
+                    label="Window Orientation"
+                  />
+                  <WindowPosition
+                    value={groups.windowposition}
+                    onChange={(e) =>
+                      handlePositionChange("windowposition", e.target.value)
+                    }
+                    name="windowposition"
+                    winLabel="Window Position"
+                  />
+                  {/* Conditional rendering for Rows Count and Columns Count based on xyAxis */}
+                  {groups.xyAxis === "horizontal" ? (
+                    <InputBox
+                      label="Columns Count"
+                      name="columnCount"
+                      type="number"
+                      value={groups.columnCount}
+                      onChange={handleChange}
+                    />
+                  ) : null}
+
+                  {groups.xyAxis === "vertical" ? (
+                    <InputBox
+                      label="Rows Count"
+                      name="rowCount"
+                      type="number"
+                      value={groups.rowCount}
+                      onChange={handleChange}
+                    />
+                  ) : null}
+                </div>
+              </div>
+
+              <div>
+                <Text className="text-start font-semibold text-xl uppercase">
+                  Video
+                </Text>
+                <div className="pl-10 py-3 flex gap-5">
+                  <div>
+                    <InputBox
+                      label="URL"
+                      type="text"
+                      name="videoUrl"
+                      value={groups.videoUrl}
+                      onChange={handleChange}
+                      className="h-6 w-28 text-center"
+                    />
+                    <VideoPosition
+                      value={groups.videoposition}
+                      onChange={(e) =>
+                        handlePositionChange("videoposition", e.target.value)
+                      }
+                      name={"videoposition"}
+                      vidLabel="Video Position"
+                    />
+                  </div>
+
+                  <div>
+                    <ToggleButton
+                      isActive={groups.showVideo}
+                      onClick={toggleVideo}
+                      caption="Visibility"
+                      text={groups.showVideo ? "Hide Video" : "Show Video"}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {groupId === "gen" ? (
+            <>
+              <FontFamilyPicker
+                value={general.fontFamily || "Arial"}
+                onChange={handleSelect}
+                name={"fontFamily"}
+                title="Font Style"
+              />
+              <ImageUpload
+                onLogoUploaded={updateLogoUrl}
+                removeLogoImage={removeLogoUrl}
+                title="Upload Logo"
+                imgUrl={general.logoUrl}
+              />
+              <InputBox
+                label="LGU Name"
+                name="lguname"
+                value={general.lguname}
+                onChange={handleChange}
+              />
+              <InputBox
+                label="Slide Message"
+                name="slidemessage"
+                value={general.slidemessage}
+                onChange={handleChange}
+              />
+            </>
+          ) : null}
+
+          <div className="flex gap-x-10">
+            <Button
+              caption="Reset"
+              className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-gray-300 hover:bg-gray-400 text-gray-800"
+              onClick={resetData}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Button
+              caption="Save"
+              type="submit"
+              className="px-5 m-0 text-[10px] w-[60px] h-[25px] text-center flex items-center justify-center !rounded-md bg-blue-500 hover:bg-blue-600 text-white"
+            />
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

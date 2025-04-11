@@ -3,6 +3,9 @@
 import { useQueueSocket } from "@/hooks/useQueueSocket";
 import { lookupService } from "@/lib/client";
 import { useCallback, useEffect, useState } from "react";
+import QueueGroup from "./QueueGroup";
+import QueueVideo from "./QueueVideo";
+import { useData } from "@/context/DataContext";
 
 type QueueMonitorProps = {
   group: string;
@@ -14,6 +17,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const [ticketQueue, setTicketQueue] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [blinkingTicket, setBlinkingTicket] = useState<string | null>(null);
+  const { groups } = useData();
   const svc = lookupService("QueueService");
 
   const fetchGroups = async () => {
@@ -27,15 +31,18 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   }, [group, svc]);
 
   const playBuzz = () => {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       const sound = new Audio("/sound/take_number_sound.mp3");
-      sound.play();
-
-      sound.onended = () => {
-        resolve();
-      };
+      sound.play().then(() => {
+        console.log("Sound played successfully.");
+        sound.onended = () => resolve();
+      }).catch((err) => {
+        console.error("Sound playback failed:", err);
+        resolve(); // Still resolve to not block queue
+      });
     });
   };
+  
 
   const textToSpeech = (countercode: string, ticketno: string) => {
     return new Promise<void>((resolve) => {
@@ -48,20 +55,21 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   };
 
   const processQueue = async () => {
-    if (isProcessing || ticketQueue.length === 0) return; // Don't process if already processing
+    if (isProcessing || ticketQueue.length === 0) return;
 
-    setIsProcessing(true); // Set the processing state to true
-
-    const currentTicket = ticketQueue[0]; // Get the first ticket in the queue
+    setIsProcessing(true);
+    const currentTicket = ticketQueue[0];
 
     try {
-      setTicketInfo((prevTickets) => [...prevTickets, currentTicket]);
+      // Prepend the new ticket to the list
+      setTicketInfo((prevTickets) => [currentTicket, ...prevTickets]);
       await playBuzz();
       setBlinkingTicket(currentTicket.ticketno);
 
       setTimeout(() => {
         setBlinkingTicket(null);
-      }, 5000);
+      }, 6000);
+
       await textToSpeech(currentTicket.countercode, currentTicket.ticketno);
     } finally {
       setTicketQueue((prevQueue) => prevQueue.slice(1));
@@ -82,17 +90,18 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
 
   useQueueSocket({
     group,
-    onUpdate: (data) => {
+    onUpdate: async (data) => {
       if (data.type === "TAKE_NUMBER") {
         setTicketQueue((prevQueue) => [...prevQueue, data]);
       } else if (data.type === "BUZZ_NUMBER") {
-        textToSpeech(data.countercode, data.ticketno);
+        await playBuzz();
+         textToSpeech(data.countercode, data.ticketno);
         setBlinkingTicket(data.ticketno);
 
         // Reset blinking after 5 seconds
         setTimeout(() => {
           setBlinkingTicket(null); // Stop the blinking effect after 5 seconds
-        }, 5000);
+        }, 6000);
       } else if (data.type === "CONSUME_NUMBER") {
         setTicketInfo((prevTickets) =>
           prevTickets.filter((ticket) => ticket.ticketno !== data.ticketno)
@@ -100,39 +109,51 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
       }
     },
   });
+  const isVideoLeft = groups.videoposition === "main-left";
+  const isQueueGroupRight = groups.windowposition === "main-right";
 
   return (
-    <div>
-      <p>Title: {data?.title}</p>
-      <p>objid: {data?.objid}</p>
-      <div>
-        <h3>Tickets (Type: "TAKE_NUMBER")</h3>
-        {ticketinfo.length > 0 ? (
-          ticketinfo.map((ticket, index) => (
-            <div
-              key={index}
-              className={ticket.ticketno === blinkingTicket ? "blinking" : ""}
-            >
-              <p>Ticket No: {ticket?.ticketno}</p>
-              <p>Counter ID: {ticket?.countercode}</p>
-            </div>
-          ))
-        ) : (
-          <p>No "TAKE_NUMBER" tickets yet.</p>
-        )}
-      </div>
-      <style jsx>{`
-        .blinking {
-          animation: blink 1s steps(5, start) infinite;
-        }
-
-        @keyframes blink {
-          50% {
-            opacity: 0;
-          }
-        }
-      `}</style>
+<div className="flex w-full h-full gap-4 p-4 pt-10">
+  {/* Conditionally render video section */}
+  {groups.showVideo && isVideoLeft ? (
+    <div className={`w-1/2 flex justify-center items-center`}>
+      <QueueVideo
+        componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
+        videoLink={groups.videoUrl}
+        layoutType="custom"
+      />
     </div>
+  ) : null}
+
+  {/* Content section */}
+  <div className={`w-1/2 pt-10 ${isQueueGroupRight ? "ml-auto" : ""} ${!groups.showVideo ? "w-full" : ""}`}>
+    {ticketinfo ? (
+      <QueueGroup
+        props={ticketinfo}
+        componentType={groups.windowposition}
+        orientation={groups.xyAxis}
+        columnCount={groups.columnCount}
+        rowCount={groups.rowCount}
+        blinkingTicket={blinkingTicket || ""}
+        windowCount={groups.windowCount}
+      />
+    ) : (
+      <p>No "TAKE_NUMBER" tickets yet.</p>
+    )}
+  </div>
+
+  {/* Conditionally render video section */}
+  {groups.showVideo && !isVideoLeft ? (
+    <div className={`w-1/2 flex justify-center items-center`}>
+      <QueueVideo
+        componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
+        videoLink={groups.videoUrl}
+        layoutType="custom"
+      />
+    </div>
+  ) : null}
+</div>
+
   );
 };
 
