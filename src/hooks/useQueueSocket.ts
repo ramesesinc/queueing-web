@@ -1,30 +1,52 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
-let socket: Socket | null = null;
-
-export const useQueueSocket = ({
-  group,
-  onUpdate,
-}: {
+type Props = {
   group: string;
   onUpdate: (data: any) => void;
-}) => {
+};
+
+export const useQueueSocket = ({ group, onUpdate }: Props) => {
+  const socketRef = useRef<Socket | null>(null);
+
   useEffect(() => {
     if (!group) return;
 
-    if (!socket) {
-      socket = io();
-    }
+    const socket = io(`${process.env.NEXT_PUBLIC_SOCKETIO_SERVER_IP}`);
+    socketRef.current = socket;
 
-    socket.emit("join-room", { group });
+    socket.on("connect", () => {
+      // console.log("✅ Connected to socket.io server");
+      socket.emit("join", group);
+    });
 
-    socket.on("update", (message) => {
-      onUpdate(message.body);
+    socket.on("message", (msg: string) => {
+      onUpdate(msg);
+    });
+
+    socket.on("disconnect", () => {
+      // console.log("❌ Disconnected from socket.io server");
     });
 
     return () => {
-      socket?.off("update");
+      if (socket) {
+        socket.off("message");
+        socket.disconnect();
+        // console.log("🔌 Socket disconnected");
+      }
     };
-  }, [group]);
+  }, [group, onUpdate]);
+
+  const sendMessage = (message: string) => {
+    const socket = socketRef.current;
+    if (socket && socket.connected) {
+      socket.emit("send", group, message, (ack: any) => {
+        console.log("📤 Message sent:", ack);
+      });
+    } else {
+      console.warn("❗ Cannot send message: Socket not connected");
+    }
+  };
+
+  return { sendMessage };
 };
