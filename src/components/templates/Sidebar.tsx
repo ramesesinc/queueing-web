@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemClick, items, handleGroupChange
           <div key={index} className="uppercase">
             <div
               onClick={() => handleItemClick(item.objid, item.title, item.objid.toLowerCase())}
-              className={`pl-5 cursor-pointer flex gap-4 items-center text-xl py-2 ${selectedItem === item.title ? "bg-sky-200 mx-4 transition-all duration-200 ease-in rounded-lg" : ""}`}
+              className={`pl-5 cursor-pointer flex gap-4 items-center text-xl py-2 ${selectedItem === item.title ? "bg-sky-200 mx-6 transition-all duration-200 ease-in rounded-lg" : "underline-hover"}`}
             >
               {item.objid}
             </div>

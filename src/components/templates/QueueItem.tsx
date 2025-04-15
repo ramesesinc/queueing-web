@@ -7,6 +7,12 @@ export type QueueItemProps = {
   bgColor?: React.CSSProperties;
   fontFamily?: string;
   className?: string;
+  height?: string;
+  width?: string;
+  textSize?: string;
+  borderLine?: string;
+  hideSectionTitle?: boolean;
+  counterCodeWidth?: string;
 };
 const QueueItem: React.FC<QueueItemProps> = ({
   props,
@@ -14,6 +20,12 @@ const QueueItem: React.FC<QueueItemProps> = ({
   bgColor,
   fontFamily,
   className,
+  height,
+  width,
+  textSize,
+  borderLine,
+  hideSectionTitle,
+  counterCodeWidth
 }) => {
   const isEmpty = !props || Object.keys(props).length === 0;
 
@@ -27,7 +39,7 @@ const QueueItem: React.FC<QueueItemProps> = ({
   return (
     <div className={className}>
       <div
-        className="bg-white rounded-xl shadow-md border-2 p-2 h-32 flex items-center justify-center"
+        className={`bg-white rounded-xl shadow-md border-2 p-2 h-32 flex items-center justify-center h-[${height}] w-[${width}]`}
         style={itemStyle}
       >
         {isEmpty ? (
@@ -39,11 +51,12 @@ const QueueItem: React.FC<QueueItemProps> = ({
             className="flex flex-row w-full h-full gap-x-2 items-center"
             style={{ fontFamily }}
           >
-            <p className="font-bold text-5xl">{props.countercode}</p>
-            <div className="border border-black border-solid pt-20" />
+            <p className={`font-bold text-5xl w-[150px] text-center ${textSize} ${counterCodeWidth}`}>{props.countercode}</p>
+            <div className={`border border-black border-solid pt-20 ${borderLine}`} />
             <div className="flex flex-col items-center justify-center text-center w-full h-full">
-              <p className="font-bold text-5xl">{props.ticketno}</p>
-              <p className="uppercase">{props.sectiontitle}</p>
+              <p className={`font-bold text-5xl ${textSize}`}>{props.ticketno}</p>
+              {hideSectionTitle ? ( "" ): (<p className="uppercase">{props.sectiontitle}</p>)}
+            
             </div>
           </div>
         )}

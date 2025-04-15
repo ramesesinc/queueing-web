@@ -14,7 +14,7 @@ const SlideMessage = ({
 }: SlideMessageProps) => {
   return (
     <div
-      className={`transform -translate-y-1/2 p-4 text-black rounded-lg animate-slide ${className}`}
+      className={`transform -translate-y-1/2 p-4 text-black rounded-lg animate-slide w-full text-start ${className}`}
       style={{ animationDuration: `${duration}ms` }}
     >
       {message}

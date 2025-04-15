@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import QueueGroup from "./QueueGroup";
 import QueueVideo from "./QueueVideo";
 import { useData } from "@/context/DataContext";
+import QueueItem from "./QueueItem";
 
 type QueueMonitorProps = {
   group: string;
@@ -17,7 +18,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const [ticketQueue, setTicketQueue] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [blinkingTicket, setBlinkingTicket] = useState<string | null>(null);
-  const { groups } = useData();
+  const { groups, general } = useData();
   const svc = lookupService("QueueService");
 
   const fetchGroups = async () => {
@@ -32,7 +33,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
 
   const playBuzz = () => {
     return new Promise<void>((resolve, reject) => {
-      const sound = new Audio("/sound/take_number_sound.mp3");
+      const sound = new Audio(general.buzz);
       sound.play().then(() => {
         console.log("Sound played successfully.");
         sound.onended = () => resolve();
@@ -68,7 +69,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
 
       setTimeout(() => {
         setBlinkingTicket(null);
-      }, 6000);
+      }, 5000);
 
       await textToSpeech(currentTicket.countercode, currentTicket.ticketno);
     } finally {
@@ -101,7 +102,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
         // Reset blinking after 5 seconds
         setTimeout(() => {
           setBlinkingTicket(null); // Stop the blinking effect after 5 seconds
-        }, 6000);
+        }, 5000);
       } else if (data.type === "CONSUME_NUMBER") {
         setTicketInfo((prevTickets) =>
           prevTickets.filter((ticket) => ticket.ticketno !== data.ticketno)
@@ -112,48 +113,92 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const isVideoLeft = groups.videoposition === "main-left";
   const isQueueGroupRight = groups.windowposition === "main-right";
 
+  const totalTickets = ticketinfo.length;
+  const maxMain = Number(groups.windowCount);
+  const reserveSlots = 5;
+
+  // Determine how many go to main vs reserve
+  let mainTickets: Record<string, any>[] = [];
+  let reserveTickets: Record<string, any>[] = [];
+
+  if (totalTickets > maxMain) {
+    // Show the first `windowCount` in main, rest in reserve
+    mainTickets = ticketinfo.slice(0, maxMain);
+    reserveTickets = ticketinfo.slice(maxMain);
+  } else {
+    mainTickets = ticketinfo;
+    reserveTickets = [];
+  }
+
+  // Pad reserve with empty slots to always show 4
+  const paddedReserveTickets = Array.from(
+    { length: reserveSlots },
+    (_, index) => {
+      return reserveTickets[index] || {}; // Fill with empty object if no ticket
+    }
+  );
+
   return (
-<div className="flex w-full h-full gap-4 p-4 pt-10">
-  {/* Conditionally render video section */}
-  {groups.showVideo && isVideoLeft ? (
-    <div className={`w-1/2 flex justify-center items-center`}>
-      <QueueVideo
-        componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
-        videoLink={groups.videoUrl}
-        layoutType="custom"
-      />
+    <div className="flex flex-col min-hscreen">
+      {/* Main content */}
+      <div className="flex-grow flex w-full gap-4 px-4 py-2">
+        {/* Left Video */}
+        {groups.showVideo && isVideoLeft && (
+          <div className="w-1/2 flex justify-center items-start pt-2">
+            <QueueVideo
+              componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
+              videoLink={groups.videoUrl}
+              layoutType="custom"
+            />
+          </div>
+        )}
+
+        {/* Queue Group */}
+        <div className={`pt-10 ${isQueueGroupRight ? "ml-auto" : ""} ${!groups.showVideo ? "w-full" : "w-1/2"}`}>
+          {ticketinfo.length > 0 ? (
+            <QueueGroup
+              props={ticketinfo}
+              componentType={groups.windowposition}
+              orientation={groups.xyAxis}
+              columnCount={groups.columnCount}
+              rowCount={groups.rowCount}
+              blinkingTicket={blinkingTicket || ""}
+              windowCount={groups.windowCount}
+            />
+          ) : (
+            <p>No "TAKE_NUMBER" tickets yet.</p>
+          )}
+        </div>
+
+        {/* Right Video */}
+        {groups.showVideo && !isVideoLeft && (
+          <div className="w-1/2 flex justify-center items-start pt-2">
+            <QueueVideo
+              componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
+              videoLink={groups.videoUrl}
+              layoutType="custom"
+            />
+          </div>
+        )}
+      </div>
+ 
+     <div className="grid grid-cols-5 w-full gap-5 px-5 pb-2">
+        {paddedReserveTickets.map((ticket, index) => (
+          <QueueItem
+            key={index}
+            props={ticket || {}}
+            className={`${ticket.ticketno ? "" : "opacity-50"} ${
+              ticket?.ticketno === blinkingTicket ? "blinking" : ""
+            }`}
+            height="70px"
+            textSize="!text-3xl"
+            borderLine="pt-8"
+            counterCodeWidth="w-auto"
+            hideSectionTitle
+          />
+        ))}
+      </div> 
     </div>
-  ) : null}
-
-  {/* Content section */}
-  <div className={`w-1/2 pt-10 ${isQueueGroupRight ? "ml-auto" : ""} ${!groups.showVideo ? "w-full" : ""}`}>
-    {ticketinfo ? (
-      <QueueGroup
-        props={ticketinfo}
-        componentType={groups.windowposition}
-        orientation={groups.xyAxis}
-        columnCount={groups.columnCount}
-        rowCount={groups.rowCount}
-        blinkingTicket={blinkingTicket || ""}
-        windowCount={groups.windowCount}
-      />
-    ) : (
-      <p>No "TAKE_NUMBER" tickets yet.</p>
-    )}
-  </div>
-
-  {/* Conditionally render video section */}
-  {groups.showVideo && !isVideoLeft ? (
-    <div className={`w-1/2 flex justify-center items-center`}>
-      <QueueVideo
-        componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
-        videoLink={groups.videoUrl}
-        layoutType="custom"
-      />
-    </div>
-  ) : null}
-</div>
-
   );
 };
 

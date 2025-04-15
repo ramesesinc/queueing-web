@@ -17,7 +17,7 @@ const FontFamilySelect: React.FC<FontFamilySelectProps> = ({
 }) => {
   return (
     <div>
-      <h1 className="text-center pb-1">{title}</h1>
+      <h1 className="text-center p-4">{title}</h1>
       <select
         value={value || "Arial"} // Use fallback value if undefined
         onChange={onChange}

@@ -35,7 +35,7 @@ const Header = ({props, color, lgulogo, fontFamily}:{props: any, color?: string,
       </div>
       <div>
         <Image
-          src={"/images/etracs-logo.png"}
+          src={"/images/etracs.png"}
           alt={"etracs logo"}
           width={0}
           height={0}

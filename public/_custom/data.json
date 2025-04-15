@@ -1,9 +1,10 @@
 {
   "general": {
-    "logoUrl": "",
-    "fontFamily": "Arial, Helvetica, sans-serif",
-    "lguname": "municipality of carmen",
-    "slidemessage": "hello hello hello hello"
+    "logoUrl": "/images/lgu-logo.png",
+    "fontFamily": "Arial",
+    "lguname": "CITY OF PUERTO PRINCESA",
+    "slidemessage": "EtracsQueue is a complete enterprise software system for  dasdasdaddasdad",
+    "buzz": "/sound/take_number_sound.mp3"
   },
   "group": [
     {
@@ -41,12 +42,12 @@
       "videoUrl": "",
       "videoposition": "main-left",
       "windowposition": "main-right",
-      "xyAxis": "horizontal",
-      "rowCount": "4",
-      "columnCount": "2",
-      "bgUrl": "",
+      "xyAxis": "vertical",
+      "rowCount": "3",
+      "columnCount": "3",
+      "bgUrl": "/images/lgu-logo.png",
       "bgSize": "auto",
-      "windowCount": "5"
+      "windowCount": "4"
     }
   ]
 }

@@ -35,7 +35,7 @@ const ImageUpload = ({
   };
 
   return (
-    <div className="flex flex-col items-center text-[10px] p-4">
+    <div className="flex flex-col items-center text-[10px]">
       <h1 className="text-lg pb-2">{title}</h1>
       
       {/* Display image if it's uploaded */}

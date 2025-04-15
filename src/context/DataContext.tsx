@@ -22,6 +22,7 @@ interface GeneralData {
   fontFamily: string;
   lguname: string;
   slidemessage: string;
+  buzz: string;
 }
 
 interface DataContextValue {
@@ -34,7 +35,7 @@ interface DataContextValue {
   updateBgUrl: (bgUrl: string) => void;
   removeBgUrl: () => void;
   handleBgSizeChange: (bgSize: "auto" | "contain" | "cover") => void;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handlePositionChange: (name: string, value: string) => void;
@@ -57,9 +58,9 @@ const defaultGroup: GroupData = {
   videoposition: "main-right",
   windowposition: "main-left",
   xyAxis: "vertical",
-  rowCount: "1",
-  columnCount: "1",
-  windowCount: "1",
+  rowCount: "3",
+  columnCount: "3",
+  windowCount: "4",
   bgUrl: "/images/lgu-logo.png",
   bgSize: "auto" as const
 };
@@ -68,7 +69,8 @@ const defaultGeneral: GeneralData = {
   logoUrl: "/images/lgu-logo.png",
   fontFamily: "Arial",
   lguname: "LGU Name",
-  slidemessage: ""
+  slidemessage: "EtracsQueue is a complete enterprise software system for customer",
+  buzz: "/sound/take_number_sound.mp3",
 };
 
 const DataContext = createContext<DataContextValue>({
@@ -121,7 +123,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
       .catch((error) => console.error("Error fetching data:", error));
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
 
     if (name === "logoUrl" || name === "lguname" || name === "slidemessage") {
@@ -139,7 +141,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
-    if (name === "fontFamily") {
+    if (name === "fontFamily" || name === "buzz") {
       setGeneral((prev) => ({
         ...prev,
         [name]: value,

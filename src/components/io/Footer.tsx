@@ -11,7 +11,7 @@ const Footer: React.FC<FooterProps> = ({ componentType, fontfamily, color }) => 
   return (
     <div id={componentType} style={{ fontFamily: fontfamily, backgroundColor: color }} >
       <Text className="text-[20px] p-2 text-center text-white">
-        QueueEtracs is a complete enterprise software system for customer queue
+      EtracsQueue is a complete enterprise software system for customer queue
         management system.
       </Text>
       
