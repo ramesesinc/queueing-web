@@ -171,7 +171,7 @@ const Video: React.FC<VideoProps> = ({
           </div>
 
           <div className="bg-gray-200 h-[60px] rounded-b-md flex items-center justify-around px-10 relative">
-            <div className="relative overflow-hidden w-full">
+            <div className="absolute overflow-hidden w-full">
               {message && (
                 <SlideMessage
                   message={message}

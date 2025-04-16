@@ -14,12 +14,14 @@ const SlideMessage = ({
 }: SlideMessageProps) => {
   return (
     <div
-      className={`transform -translate-y-1/2 p-4 text-black rounded-lg animate-slide w-full text-start ${className}`}
+      className={`whitespace-nowrap w-max p-4 text-black rounded-lg animate-slide text-start ${className}`}
       style={{ animationDuration: `${duration}ms` }}
     >
       {message}
     </div>
   );
 };
+
+
 
 export default SlideMessage;
