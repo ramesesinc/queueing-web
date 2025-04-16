@@ -36,7 +36,7 @@ export default function Home() {
     setGroupId,
     groupId,
     general,
-    removeVideoUrl
+    removeVideoUrl,
   } = useData();
   const selectedBgSize = groups.bgSize;
 
@@ -84,15 +84,15 @@ export default function Home() {
           className=""
         >
           {groupId !== "gen" ? (
-            <div className="flex flex-col items-center w-full border border-black rounded mt-5 p-5">
-              <div className="flex justify-center">
+            <div className="grid grid-cols-2 auto-cols-fr items-center w-full border border-black rounded mt-5 p-5">
+        
                 <div className="border-r border-b-2 border-black/20">
                   <div className="w-full text-center">
                     <Text className="inline-block font-semibold text-xl uppercase p-0 border-b-2 border-black/50">
                       Theme
                     </Text>
                   </div>
-                  <div className=" p-5 h-[350px] w-[400px] flex flex-col items-center justify-center">
+                  <div className=" p-5 h-[350px] w-full flex flex-col items-center justify-center">
                     <div>
                       <ImageUpload
                         onLogoUploaded={updateBgUrl}
@@ -150,7 +150,7 @@ export default function Home() {
                     </Text>
                   </div>
 
-                  <div className=" p-5 h-[350px] w-[400px] flex flex-col items-center justify-center">
+                  <div className=" p-5 h-[350px] w-full flex flex-col items-center justify-center">
                     <div className="">
                       <InputBox
                         label="Number of Windows"
@@ -197,17 +197,13 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex justify-center">
                 <div className="border-r border-black/20">
                   <div className="w-full text-center">
                     <Text className="inline-block font-semibold text-xl uppercase p-0 border-b-2 border-black/50">
                       Video
                     </Text>
                   </div>
-                  <div className=" p-5 h-[350px] w-[400px] flex flex-col items-center justify-center gap-2">
-            
+                  <div className=" p-5 h-[350px] w-full flex flex-col items-center justify-center gap-2">
                     <ToggleButton
                       isActive={groups.showVideo}
                       onClick={toggleVideo}
@@ -223,7 +219,10 @@ export default function Home() {
                         onChange={handleChange}
                         className="h-6 w-28 text-center"
                       />
-                      <button onClick={removeVideoUrl} className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-400 transition duration-200 text-[12px]">
+                      <button
+                        onClick={removeVideoUrl}
+                        className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-400 transition duration-200 text-[12px]"
+                      >
                         Remove
                       </button>
                     </div>
@@ -235,70 +234,70 @@ export default function Home() {
                       name={"videoposition"}
                       vidLabel="Video Position"
                     />
-                         <VideoLayout
-                        value={groups.videoLayout}
-                        onChange={handleSelect}
-                        name="videoLayout"
-                        label="Video Layout"
-                      />
+                    <VideoLayout
+                      value={groups.videoLayout}
+                      onChange={handleSelect}
+                      name="videoLayout"
+                      label="Video Layout"
+                    />
                   </div>
                 </div>
                 <div className="border-l border-black/20">
-                  <Text className="text-center text-transparent font-semibold text-xl uppercase p-0">
-                    Video
-                  </Text>
-                  <div className=" p-5 h-[350px] w-[400px] flex flex-col items-center justify-center"></div>
+                  <div className="w-full text-center">
+                    <Text className="inline-block font-semibold text-xl uppercase p-0 border-b-2  text-transparent">
+                      Video
+                    </Text>
+                  </div>
+                  <div className=" p-5 h-[350px] w-[233px] flex flex-col items-center justify-center gap-2">
+                    {/* 4th cont */}
+                  </div>
                 </div>
-              </div>
+           
             </div>
           ) : null}
 
           {groupId === "gen" ? (
-            <div className="flex flex-col w-full border border-black rounded mt-5 p-5">
-              <div className="flex justify-center ">
-                <div className="border-r border-b-2 border-black/20 p-5 h-[350px] w-[400px] flex flex-col items-center justify-center gap-5">
-                  <FontFamilyPicker
-                    value={general.fontFamily || "Arial"}
-                    onChange={handleSelect}
-                    name={"fontFamily"}
-                    title="Font Style"
-                  />
-                  <ImageUpload
-                    onLogoUploaded={updateLogoUrl}
-                    removeLogoImage={removeLogoUrl}
-                    title="Upload Logo"
-                    imgUrl={general.logoUrl}
-                  />
-                </div>
-                <div className="border-l border-b-2 border-black/20 p-5 h-[350px] w-[400px] flex flex-col items-center justify-center gap-5">
-                  <InputBox
-                    label="LGU Name"
-                    name="lguname"
-                    value={general.lguname}
-                    onChange={handleChange}
-                    textArea
-                  />
-                  <InputBox
-                    label="Slide Message"
-                    name="slidemessage"
-                    value={general.slidemessage}
-                    onChange={handleChange}
-                    textArea
-                  />
-                </div>
+            <div className="grid grid-cols-2 auto-cols-fr w-full border border-black rounded mt-5 p-5">
+              <div className="border-r border-b-2 border-black/20 = p-5 h-[350px] flex flex-col items-center justify-center gap-5">
+                <FontFamilyPicker
+                  value={general.fontFamily || "Arial"}
+                  onChange={handleSelect}
+                  name={"fontFamily"}
+                  title="Font Style"
+                />
+                <ImageUpload
+                  onLogoUploaded={updateLogoUrl}
+                  removeLogoImage={removeLogoUrl}
+                  title="Upload Logo"
+                  imgUrl={general.logoUrl}
+                />
               </div>
-              <div className="flex justify-center ">
-                <div className="border-r border-black/20 p-5 h-[300px] w-[400px] flex flex-col items-center justify-center gap-5">
-                  <Buzz
-                    value={general.buzz}
-                    onChange={handleSelect}
-                    name={"buzz"}
-                    label="Buzz Sound"
-                  />
-                </div>
-                <div className="border-l border-black/20 p-5 h-[300px] w-[400px] flex flex-col items-center justify-center gap-5">
-                  {/* 4th content   */}
-                </div>
+              <div className="border-l border-b-2 border-black/20 = p-5 h-[350px] flex flex-col items-center justify-center gap-5">
+                <InputBox
+                  label="LGU Name"
+                  name="lguname"
+                  value={general.lguname}
+                  onChange={handleChange}
+                  textArea
+                />
+                <InputBox
+                  label="Slide Message"
+                  name="slidemessage"
+                  value={general.slidemessage}
+                  onChange={handleChange}
+                  textArea
+                />
+              </div>
+              <div className="border-r border-black/20 = p-5 h-[350px] w-auto flex flex-col items-center justify-center gap-5">
+                <Buzz
+                  value={general.buzz}
+                  onChange={handleSelect}
+                  name={"buzz"}
+                  label="Buzz Sound"
+                />
+              </div>
+              <div className="border-l border-black/20 = p-5 h-[350px] w-auto flex flex-col items-center justify-center gap-5">
+               {/* 4th content */}
               </div>
             </div>
           ) : null}
