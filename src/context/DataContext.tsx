@@ -8,6 +8,7 @@ interface GroupData {
   showVideo: boolean;
   videoUrl: string;
   videoposition: string;
+  videoLayout: "standard" | "info-panel";
   windowposition: string;
   xyAxis: string;
   rowCount: string | number;
@@ -57,6 +58,7 @@ const defaultGroup: GroupData = {
   showVideo: true,
   videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
   videoposition: "main-right",
+  videoLayout: "standard",
   windowposition: "main-left",
   xyAxis: "vertical",
   rowCount: "3",

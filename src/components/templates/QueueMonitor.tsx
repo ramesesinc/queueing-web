@@ -34,13 +34,16 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const playBuzz = () => {
     return new Promise<void>((resolve, reject) => {
       const sound = new Audio(general.buzz);
-      sound.play().then(() => {
-        console.log("Sound played successfully.");
-        sound.onended = () => resolve();
-      }).catch((err) => {
-        console.error("Sound playback failed:", err);
-        resolve(); // Still resolve to not block queue
-      });
+      sound
+        .play()
+        .then(() => {
+          console.log("Sound played successfully.");
+          sound.onended = () => resolve();
+        })
+        .catch((err) => {
+          console.error("Sound playback failed:", err);
+          resolve(); // Still resolve to not block queue
+        });
     });
   };
 
@@ -141,6 +144,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
     }
   );
 
+
   return (
     <div className="flex flex-col min-hscreen">
       {/* Main content */}
@@ -149,15 +153,21 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
         {groups.showVideo && isVideoLeft && (
           <div className="w-1/2 flex justify-center items-start pt-2">
             <QueueVideo
-              componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
+              componentType={
+                groups.showVideo ? `${groups.videoposition}` : "none"
+              }
               videoLink={groups.videoUrl}
-              layoutType="custom"
+              layoutType={groups.videoLayout}
             />
           </div>
         )}
 
         {/* Queue Group */}
-        <div className={`pt-10 ${isQueueGroupRight ? "ml-auto" : ""} ${!groups.showVideo ? "w-full" : "w-1/2"}`}>
+        <div
+          className={`pt-10 ${isQueueGroupRight ? "ml-auto" : ""} ${
+            !groups.showVideo ? "w-full" : "w-1/2"
+          }`}
+        >
           {ticketinfo.length > 0 ? (
             <QueueGroup
               props={ticketinfo}
@@ -185,15 +195,21 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
         {groups.showVideo && !isVideoLeft && (
           <div className="w-1/2 flex justify-center items-start pt-2">
             <QueueVideo
-              componentType={groups.showVideo ? `${groups.videoposition}` : "none"}
+              componentType={
+                groups.showVideo ? `${groups.videoposition}` : "none"
+              }
               videoLink={groups.videoUrl}
-              layoutType="custom"
+              layoutType={groups.videoLayout}
             />
           </div>
         )}
       </div>
- 
-     <div className="grid grid-cols-5 w-full gap-5 px-5 pb-2">
+
+      <div
+        className={`grid grid-cols-5 w-full gap-5 px-5 pb-2 ${
+          groups.videoLayout === "standard" ? "pt-14" : ""
+        }`}
+      >
         {paddedReserveTickets.map((ticket, index) => (
           <QueueItem
             key={index}
@@ -208,7 +224,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
             hideSectionTitle
           />
         ))}
-      </div> 
+      </div>
     </div>
   );
 };

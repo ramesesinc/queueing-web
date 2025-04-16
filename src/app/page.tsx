@@ -14,6 +14,7 @@ import { lookupService } from "@/lib/client";
 import { ReactElement, useEffect, useState } from "react";
 import Text from "@/components/ui/Text";
 import Buzz from "@/components/ui/Buzz";
+import VideoLayout from "@/components/ui/VideoLayout";
 
 export default function Home() {
   const [selectedItem, setSelectedItem] = useState<ReactElement | null>(null);
@@ -205,7 +206,8 @@ export default function Home() {
                       Video
                     </Text>
                   </div>
-                  <div className=" p-5 h-[350px] w-[400px] flex flex-col items-center justify-center">
+                  <div className=" p-5 h-[350px] w-[400px] flex flex-col items-center justify-center gap-2">
+            
                     <ToggleButton
                       isActive={groups.showVideo}
                       onClick={toggleVideo}
@@ -233,6 +235,12 @@ export default function Home() {
                       name={"videoposition"}
                       vidLabel="Video Position"
                     />
+                         <VideoLayout
+                        value={groups.videoLayout}
+                        onChange={handleSelect}
+                        name="videoLayout"
+                        label="Video Layout"
+                      />
                   </div>
                 </div>
                 <div className="border-l border-black/20">

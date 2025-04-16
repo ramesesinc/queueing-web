@@ -12,7 +12,7 @@ interface VideoProps {
   controls?: boolean;
   componentType?: string | undefined;
   type?: string | undefined;
-  layoutType?: "default" | "custom";
+  layoutType?: "standard" | "info-panel";
   fontFamily?: string;
   videoLink: string;
 }
@@ -22,7 +22,7 @@ const Video: React.FC<VideoProps> = ({
   controls = true,
   componentType,
   type,
-  layoutType = "default",
+  layoutType = "standard",
   fontFamily,
   videoLink,
 }) => {
@@ -85,7 +85,7 @@ const Video: React.FC<VideoProps> = ({
       id={componentType}
       className="flex flex-col items-center justify-center gap-5"
     >
-      {layoutType === "default" ? (
+      {layoutType === "standard" ? (
         <div className="flex flex-col items-center justify-center gap-5">
           <div className="w-full max-w-3xl mx-auto">
             {videoId !== null ? (
@@ -102,21 +102,27 @@ const Video: React.FC<VideoProps> = ({
                 />
               </div>
             ) : (
-              <div className="aspect-w-12 aspect-h-9 text-red-500 text-2xl uppercase">
-                <div>
-                  <div className="absolute text-center">No video link found</div>
-                  <iframe
-                    src={getEmbedUrl()}
-                    title="Video player"
-                    width="720"
-                    height="380"
-                    className="rounded-xl shadow-[0,3px,6px,0,rgba(0,0,0,0.3)]"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
+              <div className="aspect-w-16 aspect-h-9 text-red-500 text-xl uppercase relative">
+              <div className="absolute inset-0 flex items-end justify-center bottom-5">
+                <span>No video link found</span>
               </div>
+              <iframe
+                src={getEmbedUrl()}
+                title="Video player"
+                width="720"
+                height="380"
+                className="rounded-lg bg-slate-600"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  backgroundImage: "url(/images/no-video.png)",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "auto",
+                  backgroundPosition: "center",
+                }}
+              />
+            </div>
             )}
           </div>
 
