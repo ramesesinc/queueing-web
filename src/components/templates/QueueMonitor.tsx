@@ -1,11 +1,11 @@
 "use client";
 
+import { useData } from "@/context/DataContext";
 import { useQueueSocket } from "@/hooks/useQueueSocket";
 import { lookupService } from "@/lib/client";
 import { useCallback, useEffect, useState } from "react";
 import QueueGroup from "./QueueGroup";
 import QueueVideo from "./QueueVideo";
-import { useData } from "@/context/DataContext";
 import QueueItem from "./QueueItem";
 
 type QueueMonitorProps = {
@@ -43,7 +43,6 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
       });
     });
   };
-  
 
   const textToSpeech = (countercode: string, ticketno: string) => {
     return new Promise<void>((resolve) => {
@@ -62,8 +61,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
     const currentTicket = ticketQueue[0];
 
     try {
-      // Prepend the new ticket to the list
-      setTicketInfo((prevTickets) => [currentTicket, ...prevTickets]);
+      // setTicketInfo((prevTickets) => [currentTicket, ...prevTickets]);
       await playBuzz();
       setBlinkingTicket(currentTicket.ticketno);
 
@@ -73,6 +71,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
 
       await textToSpeech(currentTicket.countercode, currentTicket.ticketno);
     } finally {
+      // Move the processed ticket to the next in the queue
       setTicketQueue((prevQueue) => prevQueue.slice(1));
       setIsProcessing(false);
     }
@@ -93,23 +92,27 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
     group,
     onUpdate: async (data) => {
       if (data.type === "TAKE_NUMBER") {
-        setTicketQueue((prevQueue) => [...prevQueue, data]);
+        setTicketInfo((prev) => [data, ...prev]); // 🆕 Show ticket immediately in UI
+        setTicketQueue((prevQueue) => [...prevQueue, data]); // 🔁 Queue for speech + blinking
+        // setTicketQueue((prevQueue) => [...prevQueue, data]);
       } else if (data.type === "BUZZ_NUMBER") {
+        // Process buzz and text-to-speech immediately
         await playBuzz();
-         textToSpeech(data.countercode, data.ticketno);
+        await textToSpeech(data.countercode, data.ticketno);
         setBlinkingTicket(data.ticketno);
 
-        // Reset blinking after 5 seconds
         setTimeout(() => {
           setBlinkingTicket(null); // Stop the blinking effect after 5 seconds
         }, 5000);
       } else if (data.type === "CONSUME_NUMBER") {
+        // Remove consumed ticket from the active list
         setTicketInfo((prevTickets) =>
           prevTickets.filter((ticket) => ticket.ticketno !== data.ticketno)
         );
       }
     },
   });
+
   const isVideoLeft = groups.videoposition === "main-left";
   const isQueueGroupRight = groups.windowposition === "main-right";
 
