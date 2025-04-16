@@ -86,7 +86,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   }, [group]);
 
   useEffect(() => {
-    processQueue(); // Trigger the queue processing
+    processQueue(); // Trigger the queue processings
   }, [ticketQueue]);
 
   useQueueSocket({
