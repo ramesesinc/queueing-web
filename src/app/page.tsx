@@ -35,6 +35,7 @@ export default function Home() {
     setGroupId,
     groupId,
     general,
+    removeVideoUrl
   } = useData();
   const selectedBgSize = groups.bgSize;
 
@@ -211,14 +212,19 @@ export default function Home() {
                       caption="Visibility"
                       text={groups.showVideo ? "Hide Video" : "Show Video"}
                     />
-                    <InputBox
-                      label="URL"
-                      type="text"
-                      name="videoUrl"
-                      value={groups.videoUrl}
-                      onChange={handleChange}
-                      className="h-6 w-28 text-center"
-                    />
+                    <div className="flex flex-col items-center">
+                      <InputBox
+                        label="URL"
+                        type="text"
+                        name="videoUrl"
+                        value={groups.videoUrl}
+                        onChange={handleChange}
+                        className="h-6 w-28 text-center"
+                      />
+                      <button onClick={removeVideoUrl} className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-400 transition duration-200 text-[12px]">
+                        Remove
+                      </button>
+                    </div>
                     <VideoPosition
                       value={groups.videoposition}
                       onChange={(e) =>

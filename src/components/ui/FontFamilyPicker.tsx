@@ -23,9 +23,14 @@ const FontFamilySelect: React.FC<FontFamilySelectProps> = ({
         onChange={onChange}
         name={name}
         className="border border-blue-500 rounded"
+        style={{
+          fontFamily: value || "Arial"
+        }}
       >
         {fontitem.map((font: FontFamily) => (
-          <option key={font.id} value={font.family}>
+          <option key={font.id} value={font.family} style={{
+            fontFamily: font.family
+          }}>
             {font.id}
           </option>
         ))}

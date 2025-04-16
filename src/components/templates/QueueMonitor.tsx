@@ -169,7 +169,15 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
               windowCount={groups.windowCount}
             />
           ) : (
-            <p>No "TAKE_NUMBER" tickets yet.</p>
+            <QueueGroup
+              props={ticketinfo}
+              componentType={groups.windowposition}
+              orientation={groups.xyAxis}
+              columnCount={groups.columnCount}
+              rowCount={groups.rowCount}
+              blinkingTicket={blinkingTicket || ""}
+              windowCount={groups.windowCount}
+            />
           )}
         </div>
 

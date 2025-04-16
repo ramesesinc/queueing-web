@@ -1,7 +1,7 @@
 {
   "general": {
     "logoUrl": "/images/lgu-logo.png",
-    "fontFamily": "Arial",
+    "fontFamily": "Arial, Helvetica, sans-serif",
     "lguname": "CITY OF PUERTO PRINCESA",
     "slidemessage": "EtracsQueue is a complete enterprise software system for  dasdasdaddasdad",
     "buzz": "/sound/take_number_sound.mp3"
@@ -12,10 +12,10 @@
       "color": "#00ff40",
       "showVideo": true,
       "videoUrl": "asfasfasfa",
-      "videoposition": "main-right",
-      "windowposition": "main-left",
+      "videoposition": "main-left",
+      "windowposition": "main-right",
       "xyAxis": "vertical",
-      "rowCount": "12",
+      "rowCount": "3",
       "columnCount": "2",
       "bgUrl": "",
       "bgSize": "auto",
@@ -37,17 +37,17 @@
     },
     {
       "id": "tc",
-      "color": "#ffa58f",
+      "color": "#ff8080",
       "showVideo": true,
       "videoUrl": "",
-      "videoposition": "main-left",
-      "windowposition": "main-right",
+      "videoposition": "main-right",
+      "windowposition": "main-left",
       "xyAxis": "vertical",
       "rowCount": "3",
       "columnCount": "3",
-      "bgUrl": "/images/lgu-logo.png",
-      "bgSize": "auto",
-      "windowCount": "4"
+      "bgUrl": "",
+      "bgSize": "cover",
+      "windowCount": "5"
     }
   ]
 }

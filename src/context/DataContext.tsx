@@ -34,6 +34,7 @@ interface DataContextValue {
   removeLogoUrl: () => void;
   updateBgUrl: (bgUrl: string) => void;
   removeBgUrl: () => void;
+  removeVideoUrl: () => void;
   handleBgSizeChange: (bgSize: "auto" | "contain" | "cover") => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -81,6 +82,7 @@ const DataContext = createContext<DataContextValue>({
   updateBgSize: () => {},
   updateBgUrl: () => {},
   removeBgUrl: () => {},
+  removeVideoUrl: () => {},
   handleBgSizeChange: () => {},
   handleChange: () => {},
   handleSelect: () => {},
@@ -243,6 +245,14 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
     }));
   };
 
+  const removeVideoUrl = () => {
+    setGroups((prev) => ({
+      ...prev,
+      videoUrl: "",
+    }));
+  };
+  
+
   const updateBgSize = (bgSize: "auto" | "contain" | "cover") => {
     setGroups((prev) => ({
       ...prev,
@@ -271,6 +281,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
         removeLogoUrl,
         updateBgUrl,
         removeBgUrl,
+        removeVideoUrl,
         handleChange,
         handleSelect,
         handleSubmit,
