@@ -11,16 +11,16 @@
       "id": "bpls",
       "color": "#00ff40",
       "showVideo": true,
-      "videoUrl": "asfasfasfa",
-      "videoposition": "main-right",
+      "videoUrl": "https://www.youtube.com/watch?v=x2gi5nLZFwY",
+      "videoposition": "main-left",
       "videoLayout": "info-panel",
-      "windowposition": "main-left",
+      "windowposition": "main-right",
       "xyAxis": "vertical",
-      "rowCount": "3",
+      "rowCount": "4",
       "columnCount": "2",
       "bgUrl": "",
       "bgSize": "auto",
-      "windowCount": "4"
+      "windowCount": "5"
     },
     {
       "id": "rpt",
@@ -39,18 +39,18 @@
     },
     {
       "id": "tc",
-      "color": "#ff8080",
+      "color": "#27be39",
       "showVideo": true,
       "videoUrl": "",
       "videoposition": "main-left",
       "videoLayout": "info-panel",
       "windowposition": "main-right",
       "xyAxis": "vertical",
-      "rowCount": "3",
+      "rowCount": "4",
       "columnCount": "3",
       "bgUrl": "",
       "bgSize": "cover",
-      "windowCount": "5"
+      "windowCount": "6"
     }
   ]
 }

@@ -71,7 +71,7 @@ const QueueGroup = ({
   };
 
   return (
-    <div id={componentType}>
+    <div id={componentType} className="w-full">
       <Text className="text-[28px] leading-6 absolute top-[90px] !font-bold uppercase text-start">
         now serving
       </Text>

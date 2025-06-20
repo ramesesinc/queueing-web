@@ -80,117 +80,113 @@ const Video: React.FC<VideoProps> = ({
     return null; // If `componentType` is "none", do not render the video.
   }
 
-  return (
-    <div
-      id={componentType}
-      className="flex flex-col items-center justify-center gap-5"
-    >
-      {layoutType === "standard" ? (
-        <div className="flex flex-col items-center justify-center gap-5">
-          <div className="w-full max-w-3xl mx-auto">
-            {videoId !== null ? (
-              <div className="aspect-w-16 aspect-h-9">
-                <iframe
-                  src={getEmbedUrl()}
-                  title="Video player"
-                  width="720"
-                  height="380"
-                  className="rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            ) : (
-              <div className="aspect-w-16 aspect-h-9 text-red-500 text-xl uppercase relative">
+ return (
+  <div
+    id={componentType}
+    className="flex flex-col items-center justify-between w-full gap-5 p-4"
+  >
+    {/* Video Section */}
+    {layoutType === "standard" ? (
+      <div className="flex flex-col items-center justify-center w-full h-full gap-5">
+        <div className="w-full h-[60vh] md:h-[50vh] max-w-7xl mx-auto">
+          {videoId !== null ? (
+            <div className="w-full h-full aspect-video">
+              <iframe
+                src={getEmbedUrl()}
+                title="Video player"
+                className="w-full h-full rounded-xl shadow-[0_3px_6px_0_rgba(0,0,0,0.3)]"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <div className="w-full h-full aspect-video text-red-500 text-xl uppercase relative">
               <div className="absolute inset-0 flex items-end justify-center bottom-5">
                 <span>No video link found</span>
               </div>
               <iframe
                 src={getEmbedUrl()}
                 title="Video player"
-                width="720"
-                height="380"
-                className="rounded-lg bg-slate-600"
+                className="w-full h-full rounded-lg bg-slate-600"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 style={{
                   backgroundImage: "url(/images/no-video.png)",
                   backgroundRepeat: "no-repeat",
-                  backgroundSize: "auto",
+                  backgroundSize: "contain",
                   backgroundPosition: "center",
                 }}
               />
             </div>
-            )}
-          </div>
-
-          <TimeDate componentType={undefined} className="" fontFamily={fontFamily} />
+          )}
         </div>
-      ) : (
-        <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg">
-          <div className="w-full max-w-3xl mx-auto">
-            {videoId !== null ? (
-              <div className="aspect-w-16 aspect-h-9">
-                <iframe
-                  src={getEmbedUrl()}
-                  title="Video player"
-                  width="720"
-                  height="380"
-                  className="rounded-t-xl"
-                  allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                />
-              </div>
-            ) : (
-              <div className="aspect-w-16 aspect-h-9 text-red-500 text-xl uppercase relative">
-                <div className="absolute inset-0 flex items-end justify-center bottom-5">
-                  <span>No video link found</span>
-                </div>
-                <iframe
-                  src={getEmbedUrl()}
-                  title="Video player"
-                  width="720"
-                  height="380"
-                  className="rounded-t-lg bg-slate-600"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{
-                    backgroundImage: "url(/images/no-video.png)",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "auto",
-                    backgroundPosition: "center",
-                  }}
-                />
-              </div>
-            )}
-          </div>
 
-          {/* Bottom Section */}
-          <div className="bg-white h-[70px] flex items-center justify-between px-20">
-            <TimeDate componentType={undefined} />
-            <div className="relative -top-[10px]">
-              <Weather layout="layout-2" />
+        {/* Time and Date */}
+        <TimeDate componentType={undefined} className="" fontFamily={fontFamily} />
+      </div>
+    ) : (
+      <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg w-full max-w-7xl mx-auto">
+        <div className="w-full h-[50vh] md:h-[50vh]">
+          {videoId !== null ? (
+            <div className="w-full h-full aspect-video">
+              <iframe
+                src={getEmbedUrl()}
+                title="Video player"
+                className="w-full h-full rounded-t-xl"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
-          </div>
+          ) : (
+            <div className="w-full h-full aspect-video text-red-500 text-xl uppercase relative">
+              <div className="absolute inset-0 flex items-end justify-center bottom-5">
+                <span>No video link found</span>
+              </div>
+              <iframe
+                src={getEmbedUrl()}
+                title="Video player"
+                className="w-full h-full rounded-t-lg bg-slate-600"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  backgroundImage: "url(/images/no-video.png)",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                }}
+              />
+            </div>
+          )}
+        </div>
 
-          <div className="bg-gray-200 h-[60px] rounded-b-md flex items-center justify-around px-10 relative">
-            <div className="absolute overflow-hidden w-full">
-              {message && (
-                <SlideMessage
-                  message={message}
-                  className="text-center"
-                  duration={18000}
-                />
-              )}
-            </div>
+        {/* Info Panel */}
+        <div className="bg-white h-[70px] flex items-center justify-between px-20">
+          <TimeDate componentType={undefined} />
+          <div className="relative -top-[10px]">
+            <Weather layout="layout-2" />
           </div>
         </div>
-      )}
-    </div>
-  );
+
+        <div className="bg-gray-200 h-[60px] rounded-b-md flex items-center justify-around px-10 relative">
+          <div className="absolute overflow-hidden w-full">
+            {message && (
+              <SlideMessage
+                message={message}
+                className="text-center"
+                duration={18000}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+);
+
 };
 
 

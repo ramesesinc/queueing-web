@@ -101,8 +101,9 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
       } else if (data.type === "BUZZ_NUMBER") {
         // Process buzz and text-to-speech immediately
         await playBuzz();
+         await setBlinkingTicket(data.ticketno);
         await textToSpeech(data.countercode, data.ticketno);
-        setBlinkingTicket(data.ticketno);
+       
 
         setTimeout(() => {
           setBlinkingTicket(null); // Stop the blinking effect after 5 seconds
@@ -206,7 +207,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
       </div>
 
       <div
-        className={`grid grid-cols-5 w-full gap-5 px-5 pb-2 ${
+        className={`grid grid-cols-5 w-full gap-5 px-5 pb-2 ${groups.showVideo ? "pt-20" : "pt-32"} ${
           groups.videoLayout === "standard" ? "pt-14" : ""
         }`}
       >
