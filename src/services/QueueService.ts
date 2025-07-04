@@ -16,6 +16,8 @@ export const getGroups = async ({
     title: group.title,
     lguname: lguname,
   };
+
+  console.log("getGroups", data)
   return data;
 };
 

@@ -71,7 +71,7 @@ const defaultGroup: GroupData = {
 const defaultGeneral: GeneralData = {
   logoUrl: "/images/lgu-logo.png",
   fontFamily: "Arial",
-  lguname: "LGU Name",
+  lguname: "",
   slidemessage: "EtracsQueue is a complete enterprise software system for customer",
   buzz: "/sound/take_number_sound.mp3",
 };

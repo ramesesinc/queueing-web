@@ -5,6 +5,9 @@ import Header from "../io/Header";
 import Footer from "../io/Footer";
 import { lookupService } from "@/lib/client";
 import { useData } from "@/context/DataContext";
+import Service from "@/lib/server/remote-service";
+import axios from "axios";
+import { getRootOrg, getGroup } from "@/actions/QueueService";
 
 type QueueMonitorProps = {
   group: string;
@@ -16,20 +19,31 @@ const Template = ({ children, group }: QueueMonitorProps) => {
   const svc = lookupService("QueueService");
   const { groups, general } = useData();
 
-  
-  const fetchGroups = async () => {
-    const res = await svc?.invoke("getGroups", {
-      objid: group,
-      lguname: general.lguname,
-    });
+  const fetchData = async () => {
+    let newConf = {};
+    let name = general.lguname;
+    if (name && name.length > 0) {
+      newConf = { ...general };
+    } else {
+      const org = await getRootOrg();
+      name = org.lgu.fullname;
+      newConf = { ...general, lguname: name };
+    }
 
-    setDatas(res);
+    const groupInfo = await getGroup(group);
+    newConf.title = groupInfo?.title;
+
+setDatas(newConf)
+
   };
 
-  useEffect(() => {
-    fetchGroups();
-  }, [general.lguname]);
+ 
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log("dats", datas);
   return (
     <div className="flex flex-col min-h-screen">
       <Header props={datas} color={groups.color} lgulogo={general.logoUrl} />
