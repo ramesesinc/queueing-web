@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "../io/Header";
 import Footer from "../io/Footer";
-import { lookupService } from "@/lib/client";
 import { useData } from "@/context/DataContext";
-import Service from "@/lib/server/remote-service";
-import axios from "axios";
-import { getRootOrg, getGroup } from "@/actions/QueueService";
+import { getRootOrg, getGroup, getAnnouncement } from "@/actions/QueueService";
+import SlideMessage from "../io/SlideMessage";
+import QueueItem from "./QueueItem";
+import { useQueueTicket } from "@/context/QueueTicketContext";
 
 type QueueMonitorProps = {
   group: string;
@@ -16,8 +16,9 @@ type QueueMonitorProps = {
 
 const Template = ({ children, group }: QueueMonitorProps) => {
   const [datas, setDatas] = useState<Record<string, any>>({});
-  const svc = lookupService("QueueService");
   const { groups, general } = useData();
+  const { blinkingTicket, ticketInfo } = useQueueTicket();
+  const [announcement, setAnnouncement] = useState<Record<string, any>>();
 
   const fetchData = async () => {
     let newConf = {};
@@ -29,21 +30,51 @@ const Template = ({ children, group }: QueueMonitorProps) => {
       name = org.lgu.fullname;
       newConf = { ...general, lguname: name };
     }
-
     const groupInfo = await getGroup(group);
     newConf.title = groupInfo?.title;
-
-setDatas(newConf)
-
+    setDatas(newConf);
   };
 
- 
+  const fetchAnnouncement = async () => {
+    try {
+      const result = await getAnnouncement();
+      setAnnouncement(result?.content || "");
+    } catch (error) {
+      console.error("Failed to fetch announcement:", error);
+    }
+  };
+
+  const totalTickets = ticketInfo.length;
+  const maxMain = Number(groups.windowCount);
+  const reserveSlots = 5;
+
+  // Determine how many go to main vs reserve
+  let mainTickets: Record<string, any>[] = [];
+  let reserveTickets: Record<string, any>[] = [];
+
+  if (totalTickets > maxMain) {
+    mainTickets = ticketInfo.slice(0, maxMain);
+    reserveTickets = ticketInfo.slice(maxMain);
+  } else {
+    mainTickets = ticketInfo;
+    reserveTickets = [];
+  }
+
+  // Pad reserve with empty slots to always show 4
+  const paddedReserveTickets = Array.from(
+    { length: reserveSlots },
+    (_, index) => {
+      return reserveTickets[index] || {}; // Fill with empty object if no ticket
+    }
+  );
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (general.lguname !== "LGU name") {
+      fetchData();
+    }
+    fetchAnnouncement();
+  }, [general.lguname]);
 
-  console.log("dats", datas);
   return (
     <div className="flex flex-col min-h-screen">
       <Header props={datas} color={groups.color} lgulogo={general.logoUrl} />
@@ -59,6 +90,48 @@ setDatas(newConf)
       >
         {children}
       </main>
+
+      {groups.showReserveTicket && (
+        <div
+          className={`grid grid-cols-5 w-full gap-5 px-5 pb-2 ${
+            groups.showVideo ? "pt-5" : "pt-16"
+          } ${groups.videoLayout === "standard" ? "pt-14" : ""}`}
+        >
+          <>
+            {paddedReserveTickets.map((ticket, index) => (
+              <QueueItem
+                key={index}
+                props={ticket || {}}
+                className={`${ticket.ticketno ? "" : "opacity-50"} ${
+                  ticket?.ticketno === blinkingTicket ? "blinking" : ""
+                }`}
+                height="70px"
+                textSize="!text-3xl"
+                borderLine="pt-8"
+                counterCodeWidth="w-auto"
+                hideSectionTitle
+              />
+            ))}
+          </>
+        </div>
+      )}
+
+      {announcement && (
+        <div className="bg-gradient-to-b from-gray-100/80 to-gray-300/60 h-[60px] flex items-center justify-around px-10 relative">
+          <div className="absolute overflow-hidden w-full">
+            <SlideMessage
+              message={
+                typeof announcement === "object"
+                  ? announcement?.content
+                  : announcement
+              }
+              className="text-center w-full text-3xl"
+              duration={22000}
+            />
+          </div>
+        </div>
+      )}
+
       <Footer color={groups.color} />
     </div>
   );

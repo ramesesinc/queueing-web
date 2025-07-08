@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface GroupData {
   id: string;
   color: string;
+  showReserveTicket: boolean;
   showVideo: boolean;
   videoUrl: string;
   videoposition: string;
@@ -41,6 +42,7 @@ interface DataContextValue {
   handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handlePositionChange: (name: string, value: string) => void;
+toggleReserveTicket: () => void;
   toggleVideo: () => void;
   resetData: () => void;
   groupId: string;
@@ -55,23 +57,24 @@ interface DataProviderProps {
 const defaultGroup: GroupData = {
   id: "tc",
   color: "#ffa58f",
+  showReserveTicket: false,
   showVideo: true,
   videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
-  videoposition: "main-right",
+  videoposition: "main-left",
   videoLayout: "standard",
-  windowposition: "main-left",
+  windowposition: "main-right",
   xyAxis: "vertical",
-  rowCount: "3",
-  columnCount: "3",
+  rowCount: "2",
+  columnCount: "2",
   windowCount: "4",
-  bgUrl: "/images/lgu-logo.png",
+  bgUrl: "/images/default-background.png",
   bgSize: "auto" as const
 };
 
 const defaultGeneral: GeneralData = {
   logoUrl: "/images/lgu-logo.png",
   fontFamily: "Arial",
-  lguname: "",
+  lguname: "LGU name",
   slidemessage: "EtracsQueue is a complete enterprise software system for customer",
   buzz: "/sound/take_number_sound.mp3",
 };
@@ -90,6 +93,7 @@ const DataContext = createContext<DataContextValue>({
   handleSelect: () => {},
   handleSubmit: () => {},
   handlePositionChange: () => {},
+  toggleReserveTicket: () => {},
   toggleVideo: () => {},
   resetData: () => {},
   groupId: "tc",
@@ -212,6 +216,13 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
     }
   };
 
+    const toggleReserveTicket = () => {
+    setGroups((prev) => ({
+      ...prev,
+      showReserveTicket: !prev.showReserveTicket,
+    }));
+  };
+
   const toggleVideo = () => {
     setGroups((prev) => ({
       ...prev,
@@ -264,10 +275,15 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
   
   
 
-  const resetData = () => {
-    setGroups(defaultGroup);
-    setGeneral(defaultGeneral);
-  };
+ const resetData = () => {
+  setGroups(defaultGroup);
+  setGeneral({
+    ...defaultGeneral,
+    lguname: "", // override to empty string
+  });
+};
+
+
 
   const setGroupId = (groupId: string) => {
     setCurrentGroupId(groupId);
@@ -289,6 +305,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
         handleSubmit,
         handlePositionChange,
         handleBgSizeChange,
+        toggleReserveTicket,
         toggleVideo,
         resetData,
         groupId: currentGroupId,

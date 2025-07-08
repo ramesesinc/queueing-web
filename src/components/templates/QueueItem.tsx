@@ -39,8 +39,12 @@ const QueueItem: React.FC<QueueItemProps> = ({
   return (
     <div className={className}>
       <div
-        className={`bg-white rounded-xl shadow-md border-2 p-2 h-32 flex items-center justify-center h-[${height}] w-[${width}]`}
-        style={itemStyle}
+        className={`bg-white rounded-xl shadow-md border-2 p-2 h-[124px] flex items-center justify-center `}
+         style={{
+    ...itemStyle,
+    height: height,
+    width: width,
+  }}
       >
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center text-gray-400 w-full">

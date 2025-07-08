@@ -14,10 +14,8 @@ export const getGroups = async ({
   const data: Record<string, any> = {
     objid: group.objid,
     title: group.title,
-    lguname: lguname,
   };
 
-  console.log("getGroups", data)
   return data;
 };
 
@@ -42,7 +40,6 @@ export const getQueueGroup = async () => {
     ...(groups || []) // Spread the actual group array
   ];
 
-  console.log("groupsdata", groupsdata);
 
   return groupsdata;
 };

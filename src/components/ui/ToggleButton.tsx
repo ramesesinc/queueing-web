@@ -44,8 +44,8 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
       className={`flex items-center flex-col ${className}`}
     >
       <h1>{caption}</h1>
-      <button
-        className={`relative w-8 h-[15px] ${
+      <div
+        className={`relative w-8 h-[15px] cursor-pointer ${
           isActive ? "bg-sky-200" : "bg-gray-300"
         }  rounded-full outline-none focus:outline-none text-[5px]`}
         onClick={handleClick}
@@ -55,7 +55,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
         >
           <p className="hover:bg-gray-500 hover:bg-opacity-30 rounded-full py-[11px] px-[11px] absolute left-[-3px] top-[-3px] z-[1px]"></p>
         </span>
-      </button>
+      </div>
       <p
         className={`text-[7px] uppercase pt-1 ${
           isActive ? "text-sky-300" : "text-black"

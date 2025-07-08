@@ -6,7 +6,7 @@ import { lookupService } from "@/lib/client";
 import { useCallback, useEffect, useState } from "react";
 import QueueGroup from "./QueueGroup";
 import QueueVideo from "./QueueVideo";
-import QueueItem from "./QueueItem";
+import { useQueueTicket } from "@/context/QueueTicketContext";
 
 type QueueMonitorProps = {
   group: string;
@@ -14,10 +14,9 @@ type QueueMonitorProps = {
 
 const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const [data, setData] = useState<Record<string, any>>({});
-  const [ticketinfo, setTicketInfo] = useState<any[]>([]);
   const [ticketQueue, setTicketQueue] = useState<any[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [blinkingTicket, setBlinkingTicket] = useState<string | null>(null);
+  const { blinkingTicket, ticketInfo, setTicketInfo, setBlinkingTicket}= useQueueTicket();
   const { groups, general } = useData();
   const svc = lookupService("QueueService");
 
@@ -101,9 +100,8 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
       } else if (data.type === "BUZZ_NUMBER") {
         // Process buzz and text-to-speech immediately
         await playBuzz();
-         await setBlinkingTicket(data.ticketno);
+        await setBlinkingTicket(data.ticketno);
         await textToSpeech(data.countercode, data.ticketno);
-       
 
         setTimeout(() => {
           setBlinkingTicket(null); // Stop the blinking effect after 5 seconds
@@ -120,45 +118,20 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const isVideoLeft = groups.videoposition === "main-left";
   const isQueueGroupRight = groups.windowposition === "main-right";
 
-  const totalTickets = ticketinfo.length;
-  const maxMain = Number(groups.windowCount);
-  const reserveSlots = 5;
-
-  // Determine how many go to main vs reserve
-  let mainTickets: Record<string, any>[] = [];
-  let reserveTickets: Record<string, any>[] = [];
-
-  if (totalTickets > maxMain) {
-    // Show the first `windowCount` in main, rest in reserve
-    mainTickets = ticketinfo.slice(0, maxMain);
-    reserveTickets = ticketinfo.slice(maxMain);
-  } else {
-    mainTickets = ticketinfo;
-    reserveTickets = [];
-  }
-
-  // Pad reserve with empty slots to always show 4
-  const paddedReserveTickets = Array.from(
-    { length: reserveSlots },
-    (_, index) => {
-      return reserveTickets[index] || {}; // Fill with empty object if no ticket
-    }
-  );
-
-
   return (
-    <div className="flex flex-col min-hscreen">
+    <div className={`flex flex-col min-hscreen "}`}>
       {/* Main content */}
       <div className="flex-grow flex w-full gap-4 px-4 py-2">
         {/* Left Video */}
         {groups.showVideo && isVideoLeft && (
-          <div className="w-1/2 flex justify-center items-start pt-2">
+          <div className="w-1/2 flex justify-center items-start">
             <QueueVideo
               componentType={
                 groups.showVideo ? `${groups.videoposition}` : "none"
               }
               videoLink={groups.videoUrl}
               layoutType={groups.videoLayout}
+              rowCount={groups.rowCount || groups.windowCount}
             />
           </div>
         )}
@@ -169,9 +142,9 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
             !groups.showVideo ? "w-full" : "w-1/2"
           }`}
         >
-          {ticketinfo.length > 0 ? (
+          {ticketInfo.length > 0 ? (
             <QueueGroup
-              props={ticketinfo}
+              props={ticketInfo}
               componentType={groups.windowposition}
               orientation={groups.xyAxis}
               columnCount={groups.columnCount}
@@ -181,7 +154,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
             />
           ) : (
             <QueueGroup
-              props={ticketinfo}
+              props={ticketInfo}
               componentType={groups.windowposition}
               orientation={groups.xyAxis}
               columnCount={groups.columnCount}
@@ -194,37 +167,17 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
 
         {/* Right Video */}
         {groups.showVideo && !isVideoLeft && (
-          <div className="w-1/2 flex justify-center items-start pt-2">
+          <div className="w-1/2 flex justify-center items-start">
             <QueueVideo
               componentType={
                 groups.showVideo ? `${groups.videoposition}` : "none"
               }
               videoLink={groups.videoUrl}
               layoutType={groups.videoLayout}
+              rowCount={groups.rowCount}
             />
           </div>
         )}
-      </div>
-
-      <div
-        className={`grid grid-cols-5 w-full gap-5 px-5 pb-2 ${groups.showVideo ? "pt-20" : "pt-32"} ${
-          groups.videoLayout === "standard" ? "pt-14" : ""
-        }`}
-      >
-        {paddedReserveTickets.map((ticket, index) => (
-          <QueueItem
-            key={index}
-            props={ticket || {}}
-            className={`${ticket.ticketno ? "" : "opacity-50"} ${
-              ticket?.ticketno === blinkingTicket ? "blinking" : ""
-            }`}
-            height="70px"
-            textSize="!text-3xl"
-            borderLine="pt-8"
-            counterCodeWidth="w-auto"
-            hideSectionTitle
-          />
-        ))}
       </div>
     </div>
   );

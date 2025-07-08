@@ -6,7 +6,7 @@
 /* styles/globals.css */
 @keyframes slide-left-to-right {
   0% {
-    transform: translateX(100%);
+    transform: translateX(250%);
   }
   100% {
     transform: translateX(-100%);

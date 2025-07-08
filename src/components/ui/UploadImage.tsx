@@ -56,12 +56,12 @@ const ImageUpload = ({
       />
 
       <div className="flex gap-2">
-        <button
+        <div
           onClick={handleRemoveImage}
-          className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-400 transition duration-200"
+          className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-400 transition duration-200 cursor-pointer"
         >
           Remove
-        </button>
+        </div>
       </div>
     </div>
   );
