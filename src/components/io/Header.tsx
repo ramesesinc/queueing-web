@@ -26,10 +26,10 @@ const Header = ({props, color, lgulogo, fontFamily}:{props: any, color?: string,
         />
       </div>
       <div className="flex flex-col" style={{ fontFamily: props.fontfamily }}>
-        <Text className="uppercase text-[18px] leading-[15px]">
+        <Text className="uppercase text-[22px] leading-[20px]">
           {props.title}
         </Text>
-        <Text className="font-normal uppercase text-[14px] leading-[20px]">
+        <Text className="font-normal uppercase text-[18px] leading-[20px]">
           {props.lguname}
         </Text>
       </div>
