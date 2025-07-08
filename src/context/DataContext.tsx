@@ -59,7 +59,7 @@ const defaultGroup: GroupData = {
   color: "#ffa58f",
   showReserveTicket: false,
   showVideo: true,
-  videoUrl: "https://www.youtube.com/watch?v=4TMIekzi-rk&t=5675s",
+  videoUrl: "https://www.youtube.com/watch?v=x2gi5nLZFwY",
   videoposition: "main-left",
   videoLayout: "standard",
   windowposition: "main-right",
