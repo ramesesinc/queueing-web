@@ -1,10 +1,9 @@
 "use client";
-
-import { getAnnouncement } from "@/actions/QueueService";
 import QueueMonitor from "@/components/templates/QueueMonitor";
 import Template from "@/components/templates/Template";
 import { DataProvider, useData } from "@/context/DataContext";
 import { lookupService } from "@/lib/client";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Page = ({ params }: { params: { group: string } }) => {
@@ -29,7 +28,7 @@ const Page = ({ params }: { params: { group: string } }) => {
   const matchedGroup = data.find((item) => item.objid.toLowerCase() === group);
 
   if (!matchedGroup) {
-    return <div className="text-center text-red-500 mt-10 text-2xl">Not Found</div>;
+notFound();
   }
 
   return (
