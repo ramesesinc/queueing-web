@@ -8,7 +8,7 @@ const QueueGroup = ({
   componentType,
   orientation,
   columnCount = 1,
-  rowCount = 1,
+  rowCount = 4,
   windowCount = 4,
   blinkingTicket,
 }: {

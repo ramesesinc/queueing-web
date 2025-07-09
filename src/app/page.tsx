@@ -1,7 +1,6 @@
 "use client";
 
 import Sidebar from "@/components/templates/Sidebar";
-import Buttons from "@/components/ui/Button";
 import Button from "@mui/material/Button";
 import ColorPicker from "@/components/ui/ColorPicker";
 import FontFamilyPicker from "@/components/ui/FontFamilyPicker";
@@ -17,7 +16,7 @@ import Text from "@/components/ui/Text";
 import Buzz from "@/components/ui/Buzz";
 import VideoLayout from "@/components/ui/VideoLayout";
 import CircularProgress from "@mui/material/CircularProgress";
-import { resolve } from "path";
+
 
 export default function Home() {
   const [selectedItem, setSelectedItem] = useState<ReactElement | null>(null);

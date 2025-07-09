@@ -4,23 +4,11 @@
 
 
 /* styles/globals.css */
-@keyframes slide-left-to-right {
-  0% {
-    transform: translateX(250%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
 
 * {
   box-sizing: border-box;
 }
 
-
-.animate-slide {
-  animation: slide-left-to-right linear infinite;
-}
 
 @keyframes blink {
   0%, 100% { opacity: 1; }

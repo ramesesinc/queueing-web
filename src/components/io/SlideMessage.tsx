@@ -1,5 +1,5 @@
 // components/SlideMessage.tsx
-import { useEffect, useState } from "react";
+import Marquee from "react-fast-marquee";
 
 type SlideMessageProps = {
   message: string;
@@ -12,16 +12,14 @@ const SlideMessage = ({
   className,
   duration = 5000,
 }: SlideMessageProps) => {
+
+  const color = ""
+
   return (
-    <div
-      className={`whitespace-nowrap w-max p-4 text-black rounded-lg animate-slide text-start ${className}`}
-      style={{ animationDuration: `${duration}ms` }}
-    >
-      {message}
-    </div>
+    <Marquee speed={duration} gradientWidth={100} gradient gradientColor="#f3f4f6cc">
+      <h1 className={`${className}`}>{message}</h1>
+    </Marquee>
   );
 };
-
-
 
 export default SlideMessage;

@@ -4,19 +4,43 @@ import { getAnnouncement } from "@/actions/QueueService";
 import QueueMonitor from "@/components/templates/QueueMonitor";
 import Template from "@/components/templates/Template";
 import { DataProvider, useData } from "@/context/DataContext";
-const page = ({ params }: { params: { group: string } }) => {
+import { lookupService } from "@/lib/client";
+import { useEffect, useState } from "react";
+
+const Page = ({ params }: { params: { group: string } }) => {
   const { group } = params;
   const { general } = useData();
+  const svc = lookupService("QueueService");
+  const [data, setData] = useState<Record<string, any>[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const res = await svc?.invoke("getQueueGroup");
+      setData(res || []);
+      setLoading(false);
+    };
+
+    fetchGroups();
+  }, []);
+
+  if (loading) return null; // Or show a loader/spinner
+
+  const matchedGroup = data.find((item) => item.objid.toLowerCase() === group);
+
+  if (!matchedGroup) {
+    return <div className="text-center text-red-500 mt-10 text-2xl">Not Found</div>;
+  }
 
   return (
     <div style={{ fontFamily: general.fontFamily }}>
       <DataProvider groupId={group}>
         <Template group={group}>
-          <QueueMonitor group={group}/>
+          <QueueMonitor group={group} />
         </Template>
       </DataProvider>
     </div>
   );
 };
 
-export default page;
+export default Page;

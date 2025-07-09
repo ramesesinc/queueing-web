@@ -6,6 +6,7 @@ import TimeDate from "../io/Time&Date";
 import Weather from "../io/Weather";
 import SlideMessage from "../io/SlideMessage";
 import { useData } from "@/context/DataContext";
+import { useQueueTicket } from "@/context/QueueTicketContext";
 
 interface VideoProps {
   src?: string | null;
@@ -32,9 +33,8 @@ const Video: React.FC<VideoProps> = ({
   const [platform, setPlatform] = useState<string | null>(null);
   const [isLocalVideo, setIsLocalVideo] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-
-  const { general } = useData();
-  
+  const { general, groups } = useData();
+  const {announcement} = useQueueTicket();
   const [localVideoList, setLocalVideoList] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -81,12 +81,27 @@ const Video: React.FC<VideoProps> = ({
 
   const parsedRowCount = Number(rowCount);
 
-  const videoHeight =
-    parsedRowCount >= 5
-      ? `${parsedRowCount * 116}px`
-      : layoutType === "standard"
-      ? "58vh"
-      : "50vh";
+const bothAreTrue = groups?.showReserveTicket && announcement;
+const oneIsTrue = groups?.showReserveTicket || announcement;
+const rowHeight = layoutType === "standard" ? 127 : 116;
+
+const videoHeight =
+  parsedRowCount >= 6
+    ? `${parsedRowCount * rowHeight }px`
+    : layoutType === "standard"
+    ? bothAreTrue
+      ? "60vh"
+      : oneIsTrue
+      ? "65vh"
+      : "75vh"
+    : bothAreTrue
+    ? "54vh"
+    : oneIsTrue
+    ? "60vh"
+    : "68vh";
+
+
+
 
   useEffect(() => {
     if (datamessage) {

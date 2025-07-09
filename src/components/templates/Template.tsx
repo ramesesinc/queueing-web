@@ -17,8 +17,7 @@ type QueueMonitorProps = {
 const Template = ({ children, group }: QueueMonitorProps) => {
   const [datas, setDatas] = useState<Record<string, any>>({});
   const { groups, general } = useData();
-  const { blinkingTicket, ticketInfo } = useQueueTicket();
-  const [announcement, setAnnouncement] = useState<Record<string, any>>();
+  const { blinkingTicket, ticketInfo, announcement, setAnnouncement } = useQueueTicket();
 
   const fetchData = async () => {
     let newConf = {};
@@ -117,8 +116,8 @@ const Template = ({ children, group }: QueueMonitorProps) => {
       )}
 
       {announcement && (
-        <div className="bg-gradient-to-b from-gray-100/80 to-gray-300/60 h-[60px] flex items-center justify-around px-10 relative">
-          <div className="absolute overflow-hidden w-full">
+        <div className="bg-gradient-to-b from-gray-100/80 to-gray-300/60 h-[60px] flex items-center justify-around">
+
             <SlideMessage
               message={
                 typeof announcement === "object"
@@ -126,9 +125,9 @@ const Template = ({ children, group }: QueueMonitorProps) => {
                   : announcement
               }
               className="text-center w-full text-3xl"
-              duration={22000}
+              duration={100}
             />
-          </div>
+     
         </div>
       )}
 

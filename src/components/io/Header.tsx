@@ -7,7 +7,7 @@ const Header = ({props, color, lgulogo, fontFamily}:{props: any, color?: string,
   return (
     <div
       id={props.componentType}
-      className="text-white text-center flex items-center justify-between px-5"
+      className="text-white text-center flex items-center justify-between px-5 py-1"
       style={{
         backgroundColor: color,
         fontFamily: fontFamily

@@ -54,9 +54,9 @@ interface DataProviderProps {
   groupId?: string;
 }
 
-const defaultGroup: GroupData = {
-  id: "tc",
-  color: "#ffa58f",
+const createDefaultGroup = (id: string): GroupData => ({
+  id,
+  color: "#335F96",
   showReserveTicket: false,
   showVideo: true,
   videoUrl: "https://www.youtube.com/watch?v=x2gi5nLZFwY",
@@ -64,12 +64,13 @@ const defaultGroup: GroupData = {
   videoLayout: "standard",
   windowposition: "main-right",
   xyAxis: "vertical",
-  rowCount: "2",
-  columnCount: "2",
+  rowCount: "4",
+  columnCount: "1",
   windowCount: "4",
   bgUrl: "/images/default-background.png",
   bgSize: "auto" as const
-};
+});
+
 
 const defaultGeneral: GeneralData = {
   logoUrl: "/images/lgu-logo.png",
@@ -80,7 +81,7 @@ const defaultGeneral: GeneralData = {
 };
 
 const DataContext = createContext<DataContextValue>({
-  groups: defaultGroup,
+  groups: createDefaultGroup("tc"),
   general: defaultGeneral,
   updateLogoUrl: () => {},
   removeLogoUrl: () => {},
@@ -103,7 +104,7 @@ const DataContext = createContext<DataContextValue>({
 export const useData = () => useContext(DataContext);
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = "gen" }) => {
-  const [groups, setGroups] = useState<GroupData>(defaultGroup);
+  const [groups, setGroups] = useState<GroupData>(createDefaultGroup("tc"));
   const [general, setGeneral] = useState<GeneralData>(defaultGeneral);
   const [currentGroupId, setCurrentGroupId] = useState(groupId);
 
@@ -276,6 +277,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children, groupId = 
   
 
  const resetData = () => {
+   const defaultGroup = createDefaultGroup(currentGroupId);
   setGroups(defaultGroup);
   setGeneral({
     ...defaultGeneral,
