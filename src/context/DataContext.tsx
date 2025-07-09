@@ -75,7 +75,7 @@ const defaultGeneral: GeneralData = {
   logoUrl: "/images/lgu-logo.png",
   fontFamily: "Arial",
   lguname: "LGU name",
-  slidemessage: "EtracsQueue is a complete enterprise software system for customer",
+  slidemessage: "",
   buzz: "/sound/take_number_sound.mp3",
 };
 

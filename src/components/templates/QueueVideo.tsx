@@ -225,7 +225,7 @@ const Video: React.FC<VideoProps> = ({
           <div className="bg-gray-200 h-[60px] rounded-b-md flex items-center justify-around px-10 relative">
             <div className="absolute overflow-hidden w-full">
               {/* SlideMessage component placeholder */}
-              {/* <SlideMessage message={message} className="text-center" duration={18000} /> */}
+              <SlideMessage message={message} className="text-center" duration={18000} />
             </div>
           </div>
         </div>
