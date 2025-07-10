@@ -64,10 +64,10 @@ const createDefaultGroup = (id: string): GroupData => ({
   videoLayout: "standard",
   windowposition: "main-right",
   xyAxis: "vertical",
-  rowCount: "4",
+  rowCount: "5",
   columnCount: "1",
-  windowCount: "4",
-  bgUrl: "/images/default-background.png",
+  windowCount: "5",
+  bgUrl: "",
   bgSize: "auto",
 });
 

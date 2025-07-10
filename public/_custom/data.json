@@ -44,21 +44,20 @@
     {
       "id": "tc",
       "color": "#335F96",
-      "showReserveTicket": true,
+      "showReserveTicket": false,
       "showVideo": true,
       "videoUrl": [
-        "http://192.168.2.15:2180/videos/sample.mp4",
-        "http://192.168.2.15:2180/videos/video-1.mp4"
+        "https://www.youtube.com/watch?v=x2gi5nLZFwY"
       ],
       "videoposition": "main-left",
       "videoLayout": "standard",
       "windowposition": "main-right",
       "xyAxis": "vertical",
-      "rowCount": "2",
-      "columnCount": "2",
-      "bgUrl": "/images/default-background.png",
+      "rowCount": "3",
+      "columnCount": "1",
+      "bgUrl": "",
       "bgSize": "auto",
-      "windowCount": "4"
+      "windowCount": "5"
     }
   ]
 }

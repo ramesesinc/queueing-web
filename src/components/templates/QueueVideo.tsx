@@ -36,26 +36,16 @@ const Video: React.FC<VideoProps> = ({
   const currentLink = videoLinks[currentIndex] || "";
 
   const datamessage = general.slidemessage;
-  const parsedRowCount = Number(rowCount);
+  // const parsedRowCount = Number(rowCount);
 
   const bothAreTrue = groups?.showReserveTicket && announcement;
   const oneIsTrue = groups?.showReserveTicket || announcement;
-  const rowHeight = layoutType === "standard" ? 127 : 116;
+  // const rowHeight = layoutType === "standard" ? 144 : 122;
 
-  const videoHeight =
-    parsedRowCount >= 6
-      ? `${parsedRowCount * rowHeight}px`
-      : layoutType === "standard"
-      ? bothAreTrue
-        ? "60vh"
-        : oneIsTrue
-        ? "65vh"
-        : "75vh"
-      : bothAreTrue
-      ? "54vh"
-      : oneIsTrue
-      ? "60vh"
-      : "68vh";
+const parsedRowCount = Number(rowCount) || 1;
+const rowHeight = layoutType === "standard" ? 144 : 122;
+const videoHeight = `${parsedRowCount * rowHeight}px`;
+
 
   useEffect(() => {
     if (datamessage) {
@@ -239,11 +229,6 @@ useEffect(() => {
           >
             {renderVideoElement()}
           </div>
-          <TimeDate
-            componentType={undefined}
-            className="mt-6"
-            fontFamily={fontFamily}
-          />
         </div>
       ) : (
         <div className="flex flex-col border border-gray-300 rounded-lg shadow-lg w-full max-w-7xl mx-auto">

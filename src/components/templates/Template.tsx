@@ -76,7 +76,7 @@ const Template = ({ children, group }: QueueMonitorProps) => {
   }, [general.lguname]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <Header props={datas} color={groups.color} lgulogo={general.logoUrl} />
       <main
         className="flex-1"

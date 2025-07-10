@@ -121,7 +121,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
   const isQueueGroupRight = groups.windowposition === "main-right";
 
   return (
-    <div className={`flex flex-col min-hscreen "}`}>
+    <div className={`flex flex-col }`}>
       {/* Main content */}
       <div className="flex-grow flex w-full gap-4 px-4 py-2">
         {/* Left Video */}
@@ -140,7 +140,7 @@ const QueueMonitor = ({ group }: QueueMonitorProps) => {
 
         {/* Queue Group */}
         <div
-          className={`pt-10 ${isQueueGroupRight ? "ml-auto" : ""} ${
+          className={`pt-2 ${isQueueGroupRight ? "ml-auto" : ""} ${
             !groups.showVideo ? "w-full" : "w-1/2"
           }`}
         >
