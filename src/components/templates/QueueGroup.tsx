@@ -74,8 +74,7 @@ const QueueGroup = ({
           <QueueItem
             key={index}
             props={ticket}
-            className={ticket?.ticketno === blinkingTicket ? "blinking" : ""}
-          />
+         blinkingTicket={ticket?.ticketno === blinkingTicket ? "blinking" : ""}          />
         ))}
       </div>
     </div>
